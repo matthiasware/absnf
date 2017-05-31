@@ -1,0 +1,3 @@
+todo:
+- datastructues with cublas
+- 
