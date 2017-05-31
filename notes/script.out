@@ -1,0 +1,20 @@
+\BOOKMARK [1][-]{section.1}{TODO}{}% 1
+\BOOKMARK [1][-]{section.2}{ABS-Normalform}{}% 2
+\BOOKMARK [2][-]{subsubsection.2.0.1}{Assumptions}{section.2}% 3
+\BOOKMARK [3][-]{subsubsection.2.0.2}{Goal}{subsubsection.2.0.1}% 4
+\BOOKMARK [3][-]{subsubsection.2.0.3}{Questions}{subsubsection.2.0.1}% 5
+\BOOKMARK [2][-]{subsection.2.1}{Linearization}{section.2}% 6
+\BOOKMARK [2][-]{subsection.2.2}{Anwendung}{section.2}% 7
+\BOOKMARK [2][-]{subsection.2.3}{Representation of Picewisefunctions with MAX-MIN}{section.2}% 8
+\BOOKMARK [2][-]{subsection.2.4}{Representation of MAX-MIN functions with abs functions}{section.2}% 9
+\BOOKMARK [2][-]{subsection.2.5}{Absnormalform}{section.2}% 10
+\BOOKMARK [2][-]{subsection.2.6}{Example}{section.2}% 11
+\BOOKMARK [3][-]{subsubsection.2.6.1}{ABS-Normalization}{subsection.2.6}% 12
+\BOOKMARK [3][-]{subsubsection.2.6.2}{Straight-Line Code}{subsection.2.6}% 13
+\BOOKMARK [3][-]{subsubsection.2.6.3}{ABS-Equation-System}{subsection.2.6}% 14
+\BOOKMARK [1][-]{section.3}{Evaluation}{}% 15
+\BOOKMARK [1][-]{section.4}{Gradient}{}% 16
+\BOOKMARK [1][-]{section.5}{Solve}{}% 17
+\BOOKMARK [1][-]{section.6}{Calculations}{}% 18
+\BOOKMARK [2][-]{subsection.6.1}{Gradient of abs\(\)}{section.6}% 19
+\BOOKMARK [1][-]{section.7}{Example ABS}{}% 20
