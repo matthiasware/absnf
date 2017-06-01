@@ -4,7 +4,7 @@
 namespace utils
 {
 	void pp();
-		enum MATRIXOPT
+	enum MATRIXOPT
 	{
 		NONE,
 		PDF,
@@ -13,41 +13,77 @@ namespace utils
 		UPER,
 		SYMM
 	};
+	enum VALUEOP
+	{
+		REAL,
+		INT
+	};
 	template <typename T>
 	void fillRandMatrixNone(T *matrix, int rows, int cols,
 							std::mt19937 gen,
-						    int first, int last)
+						    int first, int last,
+						    VALUEOP vo=REAL)
 	{
 		std::uniform_real_distribution<> dis(first, last);
-		for(int i=0; i<rows; i++)
+		if(vo == REAL)
 		{
-			for(int j=0; j<cols; j++)
+			for(int i=0; i<rows; i++)
 			{
-				int idx = i * cols + j;
-				matrix[idx] = (T) dis(gen);
+				for(int j=0; j<cols; j++)
+				{
+					int idx = i * cols + j;
+					matrix[idx] = (T) dis(gen);
+				}
+			}
+		}
+		else if(vo == INT)
+		{
+			for(int i=0; i<rows; i++)
+			{
+				for(int j=0; j<cols; j++)
+				{
+					int idx = i * cols + j;
+					matrix[idx] = (T) (int) dis(gen);
+				}
 			}
 		}
 	}
 	template <typename T>
 	void fillRandMatrixLower(T *matrix, int rows, int cols,
 							 std::mt19937 gen,
-							 int first, int last)
+							 int first, int last,
+							 VALUEOP vo=REAL)
 	{
 		std::uniform_real_distribution<> dis(first, last);
-		for(int i=0; i<rows; i++)
+		if(vo==REAL)
 		{
-			for(int j=0; j<=i; j++)
+			for(int i=0; i<rows; i++)
 			{
-				int idx = i * cols + j;
-				matrix[idx] = (T) dis(gen);
+				for(int j=0; j<i; j++)
+				{
+					int idx = i * cols + j;
+					matrix[idx] = (T) dis(gen);
+				}
 			}
+		}
+		else if(vo == INT)
+		{
+			for(int i=0; i<rows; i++)
+			{
+				for(int j=0; j<i; j++)
+				{
+					int idx = i * cols + j;
+					matrix[idx] = (T) (int) dis(gen);
+				}
+			}			
 		}
 	}
 	template <typename T>
 	void fillRandMatrix(T *matrix, int rows, int cols, 
 						int first=0, int last=10,
 						int seed=0,
-						MATRIXOPT mo=NONE)
+						MATRIXOPT mo=NONE,
+						VALUEOP vo=REAL)
 	{
 		std::mt19937 gen;
 		if(seed > 0)
@@ -60,21 +96,21 @@ namespace utils
 		switch(mo)
 		{
 			case MATRIXOPT::NONE : 
-				fillRandMatrixNone(matrix, rows, cols, gen, first, last);
+				fillRandMatrixNone(matrix, rows, cols, gen, first, last, vo);
 				break;
 			case MATRIXOPT::LOWER : 
-				fillRandMatrixLower(matrix, rows, cols, gen, first, last);
+				fillRandMatrixLower(matrix, rows, cols, gen, first, last, vo);
 				break;
 			default: 
 				throw "NOT IMPLEMENTED";
-				break;
 		}
 
 	}
 	template <typename T>
 	void fillRandVector(T *vector, int size, 
 					    int first=0, int last=10,
-					    int seed=0)
+					    int seed=0,
+					    VALUEOP vo=REAL)
 	{
 		std::mt19937 gen;
 		if(seed > 0)
@@ -85,10 +121,21 @@ namespace utils
 			gen.seed(rd());
 		}
 		std::uniform_real_distribution<> dis(first, last);
-		for (int i=0; i<size; i++)
+		if(vo == REAL)
 		{
-			vector[i] = (T) dis(gen);
+			for (int i=0; i<size; i++)
+			{
+				vector[i] = (T) dis(gen);
+			}
 		}
+		else if(vo == INT)
+		{
+			for (int i=0; i<size; i++)
+			{
+				vector[i] = (T) (int) dis(gen);
+			}
+		}
+
 	}
 	template <typename T>
 	void printf_matrix(T *A, int cols, int rows)
