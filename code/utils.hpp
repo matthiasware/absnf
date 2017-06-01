@@ -138,6 +138,14 @@ namespace utils
 
 	}
 	template <typename T>
+	void fillVector(T *vector, int size, T value)
+	{
+		for(int i=0; i<size; i++)
+		{
+			vector[i] = value;
+		}
+	}
+	template <typename T>
 	void printf_matrix(T *A, int cols, int rows)
 	{
 		std::cout << "[\n";
