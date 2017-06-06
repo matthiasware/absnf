@@ -2,6 +2,7 @@
 #include "utils.hpp"
 
 #define t_def double
+#define IDX2C(i,j,ld) (((j)*(ld))+(i))
 
 __global__ void vvAdd(double *u, double *v, double *z, int size)
 {
@@ -27,7 +28,7 @@ int main()
 	utils::fillRandVector(h_a, s, 0, 5, 1, utils::VALUEOP::INT);
 	utils::fillRandVector(h_dx, n, 0, 5, 2, utils::VALUEOP::INT);
 	utils::fillRandMatrixCM(h_Z, s, n, 0, 5, 3, utils::MATRIXOPT::NONE, utils::VALUEOP::INT);
-	utils::fillRandMatrixCM(h_L, s, s, 1, 5, 4, utils::MATRIXOPT::LOWER, utils::VALUEOP::INT);
+	utils::fillRandMatrix(h_L, s, s, 1, 5, 4, utils::MATRIXOPT::LOWER, utils::VALUEOP::INT);
 
 	// DEVICE MEMORY
 	t_def *d_a; cudaMalloc((void **)&d_a, s*sizeof(t_def));
@@ -50,7 +51,9 @@ int main()
 	utils::printf_vector(h_dx, n, "dx");
 
 	utils::printf_matrix_C2R(h_Z, s, n, "Z");
-	utils::printf_matrix_C2R(h_L, s, s, "L");
+	utils::printf_vector(h_Z, s*n);
+	utils::printf_matrix(h_L, s, s, "L");
+	utils::printf_vector(h_L, s*s);
 
 	// CUBLAS
 	cublasHandle_t handle;
@@ -74,6 +77,20 @@ int main()
 	blockSize = 256;
 	gridSize = ceil((float)s/blockSize);
 	vvAdd <<< gridSize, blockSize >>>(d_a, d_dz, d_dz, s);
+
+	for(int i=0; i<s; i++)
+	{
+		// dz[i] = dz[i] + L[i] x abs_dz
+		// abs_dz[i] = |dz_i|
+
+		cublasDgemv(handle, CUBLAS_OP_N,
+					1, s,
+					&alpha,
+					(d_Z + i * s), 1,
+					d_abs_dz, 1,
+					&beta,
+					d_dz, 1);
+	}
 
 	//COPY DATA TO HOST
 	cudaMemcpy(h_dz, d_dz, s*sizeof(t_def), cudaMemcpyDeviceToHost);
