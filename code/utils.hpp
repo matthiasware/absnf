@@ -1,5 +1,6 @@
 #include <random>
 #include <iostream>
+#define IDX2C(i,j,ld) (((j)*(ld))+(i))
 
 namespace utils
 {
@@ -79,6 +80,36 @@ namespace utils
 		}
 	}
 	template <typename T>
+	void fillRandMatrixLowerCM(T *matrix, int rows, int cols,
+							 std::mt19937 gen,
+							 int first, int last,
+							 VALUEOP vo=REAL)
+	{
+		std::uniform_real_distribution<> dis(first, last);
+		if(vo==REAL)
+		{
+			for(int i=0; i<rows; i++)
+			{
+				for(int j=0; j<i; j++)
+				{
+					int idx = IDX2C(i,j, rows);
+					matrix[idx] = (T) dis(gen);
+				}
+			}
+		}
+		else if(vo == INT)
+		{
+			for(int i=0; i<rows; i++)
+			{
+				for(int j=0; j<i; j++)
+				{
+					int idx = IDX2C(i,j, rows);
+					matrix[idx] = (T) (int) dis(gen);
+				}
+			}			
+		}
+	}
+	template <typename T>
 	void fillRandMatrix(T *matrix, int rows, int cols, 
 						int first=0, int last=10,
 						int seed=0,
@@ -100,6 +131,35 @@ namespace utils
 				break;
 			case MATRIXOPT::LOWER : 
 				fillRandMatrixLower(matrix, rows, cols, gen, first, last, vo);
+				break;
+			default: 
+				throw "NOT IMPLEMENTED";
+		}
+
+	}
+	// FILLS MATRIX IN COLUMN MAJOR
+	template <typename T>
+	void fillRandMatrixCM(T *matrix, int rows, int cols, 
+						int first=0, int last=10,
+						int seed=0,
+						MATRIXOPT mo=NONE,
+						VALUEOP vo=REAL)
+	{
+		std::mt19937 gen;
+		if(seed > 0)
+			gen.seed(seed);
+		else
+		{
+			std::random_device rd;
+			gen.seed(rd());
+		}
+		switch(mo)
+		{
+			case MATRIXOPT::NONE : 
+				fillRandMatrixNone(matrix, rows, cols, gen, first, last, vo);
+				break;
+			case MATRIXOPT::LOWER : 
+				fillRandMatrixLowerCM(matrix, rows, cols, gen, first, last, vo);
 				break;
 			default: 
 				throw "NOT IMPLEMENTED";
@@ -146,8 +206,12 @@ namespace utils
 		}
 	}
 	template <typename T>
-	void printf_matrix(T *A, int cols, int rows)
+	void printf_matrix(T *A, int rows, int cols, const std::string& name = "")
 	{
+		if (name.size() > 0)
+		{
+			std::cout << name << std::endl;
+		}
 		std::cout << "[\n";
 		for(int i=0; i<rows; i++)
 		{
@@ -162,9 +226,35 @@ namespace utils
 		}
 		std::cout << "]\n";
 	}
+	// PRINTS COLUMN MAJOR MATRIX
 	template <typename T>
-	void printf_vector(T *A, int cols)
+	void printf_matrix_C2R(T *A, int rows, int cols, const std::string& name = "")
 	{
+		if (name.size() > 0)
+		{
+			std::cout << name << std::endl;
+		}
+		std::cout << "[\n";
+		for(int i=0; i<rows; i++)
+		{
+			std::cout << "[";
+			for(int j=0; j<cols; j++)
+			{
+				int idx = IDX2C(i,j,rows);
+				std::cout << A[idx] << ",";
+			}
+			std::cout << "]";	
+			std::cout << "\n";
+		}
+		std::cout << "]\n";
+	}
+	template <typename T>
+	void printf_vector(T *A, int cols, const std::string& name = "")
+	{
+		if (name.size() > 0)
+		{
+			std::cout << name << std::endl;
+		}
 		std::cout << "[";
 		for(int i=0; i<cols; i++)
 		{
