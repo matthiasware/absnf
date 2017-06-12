@@ -16,3 +16,4 @@ Programming
 
 Math
 - Gradient, how does it work?
+- Signum function? at 0?
