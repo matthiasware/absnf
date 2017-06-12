@@ -1,17 +1,18 @@
 #include <cublas_v2.h>
 #include "utils.hpp"
+#include "cuutils.h"
 
 #define t_def double
 #define IDX2C(i,j,ld) (((j)*(ld))+(i))
 
-__global__ void vvAdd(t_def *u, t_def *v, t_def *z, int size)
-{
-	int id = blockIdx.x*blockDim.x+threadIdx.x;
-	if(id < size)
-	{
-		z[id] = u[id] + v[id];
-	}
-}
+// __global__ void vvAdd(t_def *u, t_def *v, t_def *z, int size)
+// {
+// 	int id = blockIdx.x*blockDim.x+threadIdx.x;
+// 	if(id < size)
+// 	{
+// 		z[id] = u[id] + v[id];
+// 	}
+// }
 
 __global__ void absEl(t_def *source, t_def *target)
 {
@@ -37,20 +38,20 @@ void eval(cublasHandle_t &handle,
 	int blockSize, gridSize;
 	blockSize = 256;
 	gridSize = ceil((float)s/blockSize);
-	vvAdd <<< gridSize, blockSize >>>(a, dz, dz, s);
+	cuutils::vvAdd <<< gridSize, blockSize >>>(a, dz, dz, s);
 
 	// dz = dz + L * |dz|
 	for(int i=0; i<s; i++)
 	{
 		cublasDgemv(handle, CUBLAS_OP_N, 1, i, &alpha, (L + i * s), 1,
 					abs_dz, 1, &beta, &dz[i], 1);
-		absEl <<<1,1>>> (&dz[i], &abs_dz[i]);
+		absEl <<<1,1>>> (&dz[i], &abs_dz[i]); // TODO NOT NECESSARY
 	}
 	// dy = J * dx
 	cublasDgemv(handle, CUBLAS_OP_N, m, n, &alpha,
 				J, m, dx, 1, &beta, dy, 1);
 	// dy = dy + b
-	vvAdd <<< gridSize, blockSize >>>(b, dy, dy, m);
+	cuutils::vvAdd <<< gridSize, blockSize >>>(b, dy, dy, m);
 
 	// dy = dy + Y * |dz|
 	cublasDgemv(handle, CUBLAS_OP_N, m, s, &alpha,

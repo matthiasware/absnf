@@ -167,6 +167,11 @@ namespace utils
 
 	}
 	template <typename T>
+	void createDiagonalMatrixFromVector(T *matrix, int size, T *vector)
+	{
+
+	}
+	template <typename T>
 	void fillRandVector(T *vector, int size, 
 					    int first=0, int last=10,
 					    int seed=0,
