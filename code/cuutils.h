@@ -15,35 +15,16 @@ namespace cuutils
 		int id = blockIdx.x*blockDim.x+threadIdx.x;
 		if(id < size)
 		{
-			if(v_source[id] == 0)
-			{
-				v_target[id] = (T) 0;
-			}
-			else if(v_source[id] > - v_source[id])
-			{
-				v_target[id] = (T) 1;
-			}
-			else
-			{
-				v_target[id] = (T) -1;
-			}
+			v_target[id] = (T(0)  < v_source[id]) - (v_source[id] < T(0));
 		}
 	}
 	template <typename T>
-	__global__ void makeDiagMatrixFromVector(T *matrix, T *vector, int size)
+	__global__ void abs(T *v_source, T *v_target, int size)
 	{
 		int id = blockIdx.x*blockDim.x+threadIdx.x;
-		if (id < size)
+		if(id < size)
 		{
-			if(true)
-			{
-				matrix[id] = 0;
-			}
-			else
-			{
-				matrix[id] = 
-
-			}
-		}
+			v_target[id] = (T) fabs(v_source[id]);
+		}	
 	}
 }

@@ -4,20 +4,10 @@
 
 #define t_def double
 #define IDX2C(i,j,ld) (((j)*(ld))+(i))
-
-// __global__ void vvAdd(t_def *u, t_def *v, t_def *z, int size)
-// {
-// 	int id = blockIdx.x*blockDim.x+threadIdx.x;
-// 	if(id < size)
-// 	{
-// 		z[id] = u[id] + v[id];
-// 	}
-// }
-
-__global__ void absEl(t_def *source, t_def *target)
-{
-	*target = (t_def) fabs(*source);
-}
+#define MAX_BLOCKSIZE 1024
+#define MIN_BLOCKSIZE 32
+#define BLOCKSIZE 512
+#define GRIDSIZE 64
 
 void eval(cublasHandle_t &handle,
 		  t_def *a, t_def *b, 
@@ -29,9 +19,11 @@ void eval(cublasHandle_t &handle,
 		  t_def *abs_dz)
 
 {
-	// dz = Z * dx
+	
 	double alpha = 1;
 	double beta = 1;
+	// dz = Z * dx
+	// dz = alpha * (Z * dx) + beta * dz
 	cublasDgemv(handle, CUBLAS_OP_N, s, n, &alpha,
 				Z, s, dx, 1, &beta, dz, 1);
 	// dz = dz + a
@@ -45,19 +37,22 @@ void eval(cublasHandle_t &handle,
 	{
 		cublasDgemv(handle, CUBLAS_OP_N, 1, i, &alpha, (L + i * s), 1,
 					abs_dz, 1, &beta, &dz[i], 1);
-		absEl <<<1,1>>> (&dz[i], &abs_dz[i]); // TODO NOT NECESSARY
+		// TODO MAKE SMARTER
+		cuutils::abs <<<1,1>>>(&dz[i], &abs_dz[i], 1);
 	}
+	// dy = b
+	cudaMemcpy(dy, b, m*sizeof(t_def), cudaMemcpyDeviceToDevice);
 	// dy = J * dx
 	cublasDgemv(handle, CUBLAS_OP_N, m, n, &alpha,
 				J, m, dx, 1, &beta, dy, 1);
-	// dy = dy + b
-	cuutils::vvAdd <<< gridSize, blockSize >>>(b, dy, dy, m);
 
 	// dy = dy + Y * |dz|
+	// dy = beta * dy + alpha(Y*abs_dz)
 	cublasDgemv(handle, CUBLAS_OP_N, m, s, &alpha,
 				Y, m, abs_dz, 1, &beta, dy, 1);	
 }
 
+// test
 int main()
 {
 	int n=4, s=3, m=2;

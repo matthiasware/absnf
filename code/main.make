@@ -1,4 +1,4 @@
-all : utils.o cuutils.o test_cuutils eval
+all : utils.o cuutils.o test_cuutils eval devinfo
 
 utils.o: utils.cpp
 	g++ -std=c++11 -c utils.cpp -o utils.o
@@ -11,3 +11,6 @@ test_cuutils: test_cuutils.cu utils.o
 
 eval: eval.cu utils.o cuutils.o
 	nvcc -std=c++11 eval.cu utils.o cuutils.o -lcublas -o eval
+
+devinfo: device_info.cu
+	nvcc -std=c++11 device_info.cu -o devinfo

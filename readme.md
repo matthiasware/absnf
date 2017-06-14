@@ -1,10 +1,10 @@
 ### TODO
-- CUBLAS datastructures
-- eval function
+- chose block and thread size depending on s,m,n
 - block size
 - row column major storage converter
 - row colum major print
 - unittests
+- Device choser
 
 ### QA
 Programming
