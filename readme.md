@@ -17,3 +17,17 @@ Programming
 Math
 - Gradient, how does it work?
 - Signum function? at 0?
+
+
+# Threads and Blocks
+vector a,b |a| = 1000
+gpumpus: 4, 100 threads each
+
+add <<<1, 1000>>> (a,b)
+add <<<1000, 1>>> (a,b)
+add <<<4, 250>>> (a,b)
+
+get device information generically
+
+
+-> get blocksize, devide tasks, s.t. they are qually devided on blocks

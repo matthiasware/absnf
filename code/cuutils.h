@@ -33,9 +33,17 @@ namespace cuutils
 	__global__ void makeDiagMatrixFromVector(T *matrix, T *vector, int size)
 	{
 		int id = blockIdx.x*blockDim.x+threadIdx.x;
-		if(true)
+		if (id < size)
 		{
-			matrix[id] = 0;
+			if(true)
+			{
+				matrix[id] = 0;
+			}
+			else
+			{
+				matrix[id] = 
+
+			}
 		}
 	}
 }
