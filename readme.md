@@ -1,4 +1,6 @@
 ### TODO
+- handle case, that blocksize > max_blocksize!!!
+- handle case, that we allocate too much memory
 - chose block and thread size depending on s,m,n
 - block size
 - row column major storage converter
@@ -20,14 +22,4 @@ Math
 
 
 # Threads and Blocks
-vector a,b |a| = 1000
-gpumpus: 4, 100 threads each
-
-add <<<1, 1000>>> (a,b)
-add <<<1000, 1>>> (a,b)
-add <<<4, 250>>> (a,b)
-
-get device information generically
-
-
--> get blocksize, devide tasks, s.t. they are qually devided on blocks
+- why not using max thread per block?

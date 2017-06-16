@@ -4,10 +4,7 @@
 
 #define t_def double
 #define IDX2C(i,j,ld) (((j)*(ld))+(i))
-#define MAX_BLOCKSIZE 1024
-#define MIN_BLOCKSIZE 32
-#define BLOCKSIZE 512
-#define GRIDSIZE 64
+#define BLOCKSIZE 1024
 
 void eval(cublasHandle_t &handle,
 		  t_def *a, t_def *b, 
@@ -26,11 +23,9 @@ void eval(cublasHandle_t &handle,
 	// dz = alpha * (Z * dx) + beta * dz
 	cublasDgemv(handle, CUBLAS_OP_N, s, n, &alpha,
 				Z, s, dx, 1, &beta, dz, 1);
+
 	// dz = dz + a
-	int blockSize, gridSize;
-	blockSize = 256;
-	gridSize = ceil((float)s/blockSize);
-	cuutils::vvAdd <<< gridSize, blockSize >>>(a, dz, dz, s);
+	cuutils::vvAdd <<<(s + BLOCKSIZE - 1) / BLOCKSIZE, BLOCKSIZE >>>(a, dz, dz, s);
 
 	// dz = dz + L * |dz|
 	for(int i=0; i<s; i++)

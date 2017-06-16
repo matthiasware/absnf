@@ -6,6 +6,7 @@ namespace utils
 	{
 		std::cout << "UTILS" << std::endl;
 	}
+	// void calcGridBlockDims()
 // 	void printf_matrix(double *A, int rows, int cols, const std::string& name = "")
 // 	{
 // 	if 
