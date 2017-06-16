@@ -1,4 +1,5 @@
 ### TODO
+- CONSIDER MAX-RAM!!!
 - handle case, that blocksize > max_blocksize!!!
 - handle case, that we allocate too much memory
 - chose block and thread size depending on s,m,n
@@ -7,9 +8,12 @@
 - row colum major print
 - unittests
 - Device choser
+- write optimizer for blocksize, gridsize
+- add support for multiple gpus
 
 ### QA
 Programming
+- speed vs memory
 - python3 libraries numpy ect.
 - abs of one value,transfer to cpu?
 - implement on my own or use cublas?

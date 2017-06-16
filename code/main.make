@@ -1,4 +1,4 @@
-all : utils.o cuutils.o test_cuutils eval devinfo
+all : utils.o cuutils.o test_cuutils eval devinfo gradient
 
 utils.o: utils.cpp
 	g++ -std=c++11 -c utils.cpp -o utils.o
@@ -14,3 +14,6 @@ eval: eval.cu utils.o cuutils.o
 
 devinfo: device_info.cu
 	nvcc -std=c++11 device_info.cu -o devinfo
+
+gradient: gradient.cu utils.o cuutils.o
+	nvcc -std=c++11 gradient.cu utils.o cuutils.o -lcublas -o gradient

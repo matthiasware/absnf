@@ -4,7 +4,7 @@
 
 #define t_def double
 #define IDX2C(i,j,ld) (((j)*(ld))+(i))
-#define BLOCKSIZE 1024
+// #define BLOCKSIZE 1024
 
 void eval(cublasHandle_t &handle,
 		  t_def *a, t_def *b, 
@@ -24,15 +24,19 @@ void eval(cublasHandle_t &handle,
 	cublasDgemv(handle, CUBLAS_OP_N, s, n, &alpha,
 				Z, s, dx, 1, &beta, dz, 1);
 
+	int gridsize, blocksize;
+	cuutils::getGridBlockSize(&gridsize, &blocksize);
 	// dz = dz + a
-	cuutils::vvAdd <<<(s + BLOCKSIZE - 1) / BLOCKSIZE, BLOCKSIZE >>>(a, dz, dz, s);
+	// Does not scale:
+	// cuutils::vvAdd <<<(s + BLOCKSIZE - 1) / BLOCKSIZE, BLOCKSIZE >>>(a, dz, dz, s);
+	cuutils::vvAdd <<<gridsize, blocksize >>>(a, dz, dz, s);
 
 	// dz = dz + L * |dz|
 	for(int i=0; i<s; i++)
 	{
 		cublasDgemv(handle, CUBLAS_OP_N, 1, i, &alpha, (L + i * s), 1,
 					abs_dz, 1, &beta, &dz[i], 1);
-		// TODO MAKE SMARTER
+		// TODO: MAKE SMARTER
 		cuutils::abs <<<1,1>>>(&dz[i], &abs_dz[i], 1);
 	}
 	// dy = b
@@ -46,6 +50,60 @@ void eval(cublasHandle_t &handle,
 	cublasDgemv(handle, CUBLAS_OP_N, m, s, &alpha,
 				Y, m, abs_dz, 1, &beta, dy, 1);	
 }
+void __global__ initTss(t_def *Tss, t_def *L, t_def *dz, int s, int size)
+{
+	int j = blockIdx.x;
+	int i = threadIdx.x;
+	int id = j*s + i;
+	while(id < size)
+	{
+		if(i < s)
+		{
+			if(i == j)
+			{
+				Tss[id] = 1;
+			}
+			else if(j > i)
+			{
+				Tss[id] = 0;
+			}
+			else
+			{
+				Tss[id] = L[id] * (double(0) < dz[j]) - (dz[j] < double(0));
+				printf("L[%i, %i],%d\n",i,j,L[id]);
+			}
+			i += blockDim.x;
+		}
+		else
+		{
+			i = threadIdx.x;
+			j = j + gridDim.x;
+		}
+		id = j*s + i;
+	}
+}
+
+// void gradient(cublasHandle_t &handle,
+// 		  	  t_def *a, t_def *b, 
+// 		  	  t_def *Z, t_def *L, 
+// 		  	  t_def *J, t_def *Y,
+// 		  	  t_def *dz,
+// 		  	  int m, int n, int s,
+// 		  	  t_def *Gamma,
+// 		  	  t_def *gamma)
+// {
+// 	t_def *Temp_ss; cudaMalloc((void **)&Temp_ss, s*s*sizeof(t_def));
+// 	t_def *Temp_ms; cudaMalloc((void **)&Temp_ms, m*s*sizeof(t_def));
+// 	// Tss = diag(sign(dz)) (I-L(diag(sign(dz))))^{-1}
+// 	double alpha = 1;
+// 	double beta = 1;
+// 		// Strsm
+// 	// Tms = Y*Tss
+// 	// gamma = b + Tms*a
+// 	// Gamma = J + Tms*Z
+
+
+// }
 
 // test
 int main()
@@ -63,6 +121,11 @@ int main()
 	t_def *h_b = (t_def *)malloc(m*sizeof(t_def));
 	t_def *h_J = (t_def *)malloc(m*n*sizeof(t_def));
 	t_def *h_Y = (t_def *)malloc(m*s*sizeof(t_def));
+	//
+	t_def *h_gamma = (t_def *)malloc(m*sizeof(t_def));
+	t_def *h_Gamma = (t_def *)malloc(m*n*sizeof(t_def));
+	t_def *h_sigma = (t_def *)malloc(s*sizeof(t_def));
+	t_def *h_Tss = (t_def *)malloc(s*s*sizeof(t_def));
 
 
 	// HOST MEMORY
@@ -91,6 +154,12 @@ int main()
 	t_def *d_b; cudaMalloc((void **)&d_b, m*sizeof(t_def));
 	t_def *d_J; cudaMalloc((void **)&d_J, m*n*sizeof(t_def));
 	t_def *d_Y; cudaMalloc((void **)&d_Y, m*s*sizeof(t_def));
+	//
+	t_def *d_Gamma; cudaMalloc((void **)&d_Gamma, m*n*sizeof(t_def));
+	t_def *d_gamma; cudaMalloc((void **)&d_gamma, m*sizeof(t_def));
+	t_def *d_sigma; cudaMalloc((void **)&d_sigma, s*sizeof(t_def));
+	t_def *d_K; cudaMalloc((void **)&d_K, m*s*sizeof(t_def));
+	t_def *d_Tss; cudaMalloc((void **)&d_Tss, s*s*sizeof(t_def));
 
 
 	//COPY DATA TO DEVICE
@@ -107,6 +176,9 @@ int main()
 	cudaMemcpy(d_Y, h_Y,  m*s*sizeof(t_def), cudaMemcpyHostToDevice);
 
 	// COUT
+	std::cout << "-----------------------------------" << std::endl;
+	std::cout << "INPUT EVAL" << std::endl;
+	std::cout << "-----------------------------------" << std::endl;
 	utils::printf_vector(h_a, s, "a");
 	utils::printf_vector(h_b, m, "b");
 	std::cout << "-------------" << std::endl;
@@ -114,7 +186,7 @@ int main()
 	utils::printf_vector(h_dy, m, "dy");
 	std::cout << "-------------" << std::endl;
 	utils::printf_matrix_C2R(h_Z, s, n, "Z");
-	utils::printf_matrix(h_L, s, s, "L");
+	utils::printf_matrix_C2R(h_L, s, s, "L");
 	utils::printf_matrix_C2R(h_J, m, n, "J");
 	utils::printf_matrix_C2R(h_Y, m, s, "Y");
 	std::cout << "-------------" << std::endl;
@@ -133,7 +205,9 @@ int main()
 		 d_abs_dz);
 
 	// RESULTS
-	std::cout << "-------------" << std::endl;
+	std::cout << "-----------------------------------" << std::endl;
+	std::cout << "RESULTS EVAL" << std::endl;
+	std::cout << "-----------------------------------" << std::endl;
 	cudaMemcpy(h_dz, d_dz, s*sizeof(t_def), cudaMemcpyDeviceToHost);
 	utils::printf_vector(h_dz, s, "dz");
 
@@ -145,16 +219,47 @@ int main()
 	cudaMemcpy(h_dy, d_dy, m*sizeof(t_def), cudaMemcpyDeviceToHost);
 	utils::printf_vector(h_dy, m, "dy");
 
+	std::cout << "------------------------------------------------------" << std::endl;
+	std::cout << "GRADIENT" << std::endl;
+	std::cout << "------------------------------------------------------" << std::endl;
+	int gridsize, blocksize;
+	cuutils::getGridBlockSize(&gridsize, &blocksize);
+	initTss <<<gridsize, blocksize >>>(d_Tss,d_L, d_dz, s, s*s);
+	cudaMemcpy(h_Tss, d_Tss, s*s*sizeof(t_def), cudaMemcpyDeviceToHost);
+	utils	::printf_matrix_C2R(h_Tss,s, s, "Tss");
+
 //  http://cuda-programming.blogspot.de/2013/01/thread-and-block-heuristics-in-cuda.html
 
 	// FREE STUFF
-	free(h_a); free(h_L); free(h_Z);
-	free(h_dz); free(h_dx);
-	cudaFree(d_a);
+	free(h_a); 
+	free(h_b);
+	free(h_Z);
+	free(h_L);
+	free(h_dx);
+	free(h_dz);
+	free(h_abs_dz);
+	free(h_Gamma);
+	free(h_gamma);
+	free(h_Y);
+	free(h_J);
+	free(h_sigma);
+	free(h_Tss);
+
+	cudaFree(d_a); 
+	cudaFree(d_b);
 	cudaFree(d_Z);
 	cudaFree(d_L);
 	cudaFree(d_dx);
 	cudaFree(d_dz);
+	cudaFree(d_abs_dz);
+	cudaFree(d_Gamma);
+	cudaFree(h_gamma);
+	cudaFree(d_dy);
+	cudaFree(d_Y);
+	cudaFree(d_J);
+	cudaFree(d_sigma);
+	cudaFree(d_Tss);
+
 
 	cublasDestroy(handle);
 	return 0;
