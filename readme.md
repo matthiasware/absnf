@@ -13,6 +13,7 @@
 
 ### QA
 Programming
+- header vs cpp
 - speed vs memory
 - python3 libraries numpy ect.
 - abs of one value,transfer to cpu?

@@ -1,10 +1,12 @@
+#ifndef __UTILS_H_INCLUDED__
+#define __UTILS_H_INCLUDED__
 #include <random>
 #include <iostream>
+#include <string.h>
 #define IDX2C(i,j,ld) (((j)*(ld))+(i))
 
 namespace utils
 {
-	void pp();
 	enum MATRIXOPT
 	{
 		NONE,
@@ -19,6 +21,20 @@ namespace utils
 		REAL,
 		INT
 	};
+	template <typename T>
+	void printf_vector(T *A, int cols, const std::string& name = "")
+	{
+		if (name.size() > 0)
+		{
+			std::cout << name << std::endl;
+		}
+		std::cout << "[";
+		for(int i=0; i<cols; i++)
+		{
+			std::cout << A[i] << ",";
+		}
+		std::cout << "]\n";
+	}
 	template <typename T>
 	void fillRandMatrixNone(T *matrix, int rows, int cols,
 							std::mt19937 gen,
@@ -167,11 +183,6 @@ namespace utils
 
 	}
 	template <typename T>
-	void createDiagonalMatrixFromVector(T *matrix, int size, T *vector)
-	{
-
-	}
-	template <typename T>
 	void fillRandVector(T *vector, int size, 
 					    int first=0, int last=10,
 					    int seed=0,
@@ -201,6 +212,55 @@ namespace utils
 			}
 		}
 
+	}
+	template <typename T>
+	void rowColConversion(T *m_source, T *m_target, int rows, int cols)
+	{
+		for(int i=0; i<rows; i++)
+		{
+			for(int j=i; j<cols; j++)
+			{
+				m_target[j*rows+i] = m_source[i*cols+j];
+			}
+		}
+	}
+	template <typename T>
+	void rowColConversion(T *matrix, int rows, int cols, bool rm=true)
+	{
+		if(!rm)
+		{
+			cols ^= rows;
+			rows ^= cols;
+			cols ^= rows;
+		}
+		int size = rows*cols;
+		bool bitmap[size];
+		memset(bitmap, false, size*sizeof(bool));
+		bitmap[0] = bitmap[size-1] = true;
+		int i_start;
+		int i_now;
+		int i_next;
+		T data_now;
+		T data_temp;
+		for(int k=1; k<size; k++)
+		{
+			if(!bitmap[k])
+			{
+				i_start = k;
+				i_now = i_start;
+				data_now = matrix[i_start];
+				do
+				{
+					i_next = (i_now*rows)%(size-1);
+					data_temp = matrix[i_next];
+					matrix[i_next] = data_now;
+					bitmap[i_next] = true;
+					data_now = data_temp;
+					i_now = i_next;
+				}
+				while(i_next != i_start);
+			}
+		}
 	}
 	template <typename T>
 	void fillVector(T *vector, int size, T value)
@@ -254,17 +314,25 @@ namespace utils
 		std::cout << "]\n";
 	}
 	template <typename T>
-	void printf_vector(T *A, int cols, const std::string& name = "")
+	int vectors_equals(T* a, T* b, int size, bool verbose=false)
 	{
-		if (name.size() > 0)
+		if(verbose)
 		{
-			std::cout << name << std::endl;
+			std::cout << "COMPARING: " << std::endl;
+			utils::printf_vector(a, size);
+			utils::printf_vector(b, size);
+
 		}
-		std::cout << "[";
-		for(int i=0; i<cols; i++)
+		for(int i=0; i<size; i++)
 		{
-			std::cout << A[i] << ",";
+			if(a[i] != b[i])
+			{	
+				std::cout << a[i] << " != " << b[i] << std::endl;
+				return false;
+			}
 		}
-		std::cout << "]\n";
+		return true;
 	}
 };
+
+#endif // __UTILS_H_INCLUDED

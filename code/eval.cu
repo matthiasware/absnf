@@ -1,111 +1,10 @@
 #include <cublas_v2.h>
 #include "utils.hpp"
-#include "cuutils.h"
+// #include "cuutils.h"
+#include "absnf.h"
 
 #define t_def double
-#define IDX2C(i,j,ld) (((j)*(ld))+(i))
-// #define BLOCKSIZE 1024
 
-void eval(cublasHandle_t &handle,
-		  t_def *a, t_def *b, 
-		  t_def *Z, t_def *L, 
-		  t_def *J, t_def *Y,
-		  t_def *dx,
-		  int m, int n, int s,
-		  t_def *dz, t_def *dy,
-		  t_def *abs_dz)
-
-{
-	
-	double alpha = 1;
-	double beta = 1;
-	// dz = Z * dx
-	// dz = alpha * (Z * dx) + beta * dz
-	cublasDgemv(handle, CUBLAS_OP_N, s, n, &alpha,
-				Z, s, dx, 1, &beta, dz, 1);
-
-	int gridsize, blocksize;
-	cuutils::getGridBlockSize(&gridsize, &blocksize);
-	// dz = dz + a
-	// Does not scale:
-	// cuutils::vvAdd <<<(s + BLOCKSIZE - 1) / BLOCKSIZE, BLOCKSIZE >>>(a, dz, dz, s);
-	cuutils::vvAdd <<<gridsize, blocksize >>>(a, dz, dz, s);
-
-	// dz = dz + L * |dz|
-	for(int i=0; i<s; i++)
-	{
-		cublasDgemv(handle, CUBLAS_OP_N, 1, i, &alpha, (L + i * s), 1,
-					abs_dz, 1, &beta, &dz[i], 1);
-		// TODO: MAKE SMARTER
-		cuutils::abs <<<1,1>>>(&dz[i], &abs_dz[i], 1);
-	}
-	// dy = b
-	cudaMemcpy(dy, b, m*sizeof(t_def), cudaMemcpyDeviceToDevice);
-	// dy = J * dx
-	cublasDgemv(handle, CUBLAS_OP_N, m, n, &alpha,
-				J, m, dx, 1, &beta, dy, 1);
-
-	// dy = dy + Y * |dz|
-	// dy = beta * dy + alpha(Y*abs_dz)
-	cublasDgemv(handle, CUBLAS_OP_N, m, s, &alpha,
-				Y, m, abs_dz, 1, &beta, dy, 1);	
-}
-void __global__ initTss(t_def *Tss, t_def *L, t_def *dz, int s, int size)
-{
-	int j = blockIdx.x;
-	int i = threadIdx.x;
-	int id = j*s + i;
-	while(id < size)
-	{
-		if(i < s)
-		{
-			if(i == j)
-			{
-				Tss[id] = 1;
-			}
-			else if(j > i)
-			{
-				Tss[id] = 0;
-			}
-			else
-			{
-				Tss[id] = L[id] * (double(0) < dz[j]) - (dz[j] < double(0));
-				printf("L[%i, %i],%d\n",i,j,L[id]);
-			}
-			i += blockDim.x;
-		}
-		else
-		{
-			i = threadIdx.x;
-			j = j + gridDim.x;
-		}
-		id = j*s + i;
-	}
-}
-
-// void gradient(cublasHandle_t &handle,
-// 		  	  t_def *a, t_def *b, 
-// 		  	  t_def *Z, t_def *L, 
-// 		  	  t_def *J, t_def *Y,
-// 		  	  t_def *dz,
-// 		  	  int m, int n, int s,
-// 		  	  t_def *Gamma,
-// 		  	  t_def *gamma)
-// {
-// 	t_def *Temp_ss; cudaMalloc((void **)&Temp_ss, s*s*sizeof(t_def));
-// 	t_def *Temp_ms; cudaMalloc((void **)&Temp_ms, m*s*sizeof(t_def));
-// 	// Tss = diag(sign(dz)) (I-L(diag(sign(dz))))^{-1}
-// 	double alpha = 1;
-// 	double beta = 1;
-// 		// Strsm
-// 	// Tms = Y*Tss
-// 	// gamma = b + Tms*a
-// 	// Gamma = J + Tms*Z
-
-
-// }
-
-// test
 int main()
 {
 	int n=4, s=3, m=2;
@@ -196,13 +95,13 @@ int main()
 	cublasHandle_t handle;
 	cublasCreate(&handle);
 
-	eval(handle, d_a, d_b,
-		 d_Z, d_L,
-		 d_J, d_Y,
-		 d_dx,
-		 m, n, s,
-		 d_dz, d_dy,
-		 d_abs_dz);
+	absnf::eval_core(handle, d_a, d_b,
+		 			 d_Z, d_L,
+		 			 d_J, d_Y,
+		 			 d_dx,
+		 			 m, n, s,
+		 			 d_dz, d_dy,
+		 			 d_abs_dz);
 
 	// RESULTS
 	std::cout << "-----------------------------------" << std::endl;
@@ -222,11 +121,11 @@ int main()
 	std::cout << "------------------------------------------------------" << std::endl;
 	std::cout << "GRADIENT" << std::endl;
 	std::cout << "------------------------------------------------------" << std::endl;
-	int gridsize, blocksize;
-	cuutils::getGridBlockSize(&gridsize, &blocksize);
-	initTss <<<gridsize, blocksize >>>(d_Tss,d_L, d_dz, s, s*s);
-	cudaMemcpy(h_Tss, d_Tss, s*s*sizeof(t_def), cudaMemcpyDeviceToHost);
-	utils	::printf_matrix_C2R(h_Tss,s, s, "Tss");
+	// int gridsize, blocksize;
+	// cuutils::getGridBlockSize(&gridsize, &blocksize);
+	// initTss <<<gridsize, blocksize >>>(d_Tss,d_L, d_dz, s, s*s);
+	// cudaMemcpy(h_Tss, d_Tss, s*s*sizeof(t_def), cudaMemcpyDeviceToHost);
+	// utils	::printf_matrix_C2R(h_Tss,s, s, "Tss");
 
 //  http://cuda-programming.blogspot.de/2013/01/thread-and-block-heuristics-in-cuda.html
 

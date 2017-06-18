@@ -1,19 +1,20 @@
-all : utils.o cuutils.o test_cuutils eval devinfo gradient
+# all : utils.o cuutils.o absnf.o test_cuutils eval devinfo gradient
+all : eval test_eval devinfo test_utils
 
-utils.o: utils.cpp
-	g++ -std=c++11 -c utils.cpp -o utils.o
+# test_cuutils: test_cuutils.cu utils.h
+# 	nvcc -std=c++11 test_cuutils.cu -o tests/test_cuutils
 
-cuutils.o: cuutils.cu
-	nvcc -std=c++11  -c cuutils.cu -o cuutils.o
+eval: eval.cu utils.hpp absnf.h
+	nvcc -std=c++11 eval.cu -lcublas -o eval
 
-test_cuutils: test_cuutils.cu utils.o
-	nvcc -std=c++11 test_cuutils.cu cuutils.o utils.o -o tests/test_cuutils
+test_eval: test_eval.cu absnf.h utils.hpp
+	nvcc -std=c++11 test_eval.cu -lcublas -o test_eval
 
-eval: eval.cu utils.o cuutils.o
-	nvcc -std=c++11 eval.cu utils.o cuutils.o -lcublas -o eval
+test_utils: test_utils.cpp utils.hpp
+	g++ -std=c++11 test_utils.cpp -o test_utils
 
 devinfo: device_info.cu
 	nvcc -std=c++11 device_info.cu -o devinfo
 
-gradient: gradient.cu utils.o cuutils.o
-	nvcc -std=c++11 gradient.cu utils.o cuutils.o -lcublas -o gradient
+# gradient: gradient.cu utils.o cuutils.o
+# 	nvcc -std=c++11 gradient.cu utils.o cuutils.o -lcublas -o gradient
