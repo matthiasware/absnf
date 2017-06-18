@@ -95,13 +95,13 @@ int main()
 	cublasHandle_t handle;
 	cublasCreate(&handle);
 
-	absnf::eval_core(handle, d_a, d_b,
-		 			 d_Z, d_L,
-		 			 d_J, d_Y,
-		 			 d_dx,
-		 			 m, n, s,
-		 			 d_dz, d_dy,
-		 			 d_abs_dz);
+	// absnf::eval_core(handle, d_a, d_b,
+	// 	 			 d_Z, d_L,
+	// 	 			 d_J, d_Y,
+	// 	 			 d_dx,
+	// 	 			 m, n, s,
+	// 	 			 d_dz, d_dy,
+	// 	 			 d_abs_dz);
 
 	// RESULTS
 	std::cout << "-----------------------------------" << std::endl;
@@ -128,6 +128,12 @@ int main()
 	// utils	::printf_matrix_C2R(h_Tss,s, s, "Tss");
 
 //  http://cuda-programming.blogspot.de/2013/01/thread-and-block-heuristics-in-cuda.html
+
+	std::cout << "------------------------------------------------------" << std::endl;
+	utils::printf_vector(h_Z, s*n, "Z");
+	utils::printf_vector(h_L, s*s, "L");
+	utils::printf_vector(h_J, m*n, "J");
+	utils::printf_vector(h_Y, m*s, "Y");
 
 	// FREE STUFF
 	free(h_a); 

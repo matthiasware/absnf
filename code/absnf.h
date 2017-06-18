@@ -16,42 +16,47 @@ namespace absnf
 			  	   T *dz, T *dy,
 			  	   T *abs_dz)
 
-	{
+	{ 
 		
 		double alpha = 1;
-		double beta = 1;
+		double beta = 0; // saves init of dz
 		// dz = Z * dx
 		// dz = alpha * (Z * dx) + beta * dz
-		cublasDgemv(handle, CUBLAS_OP_N, s, n, &alpha,
+		cublasDgemv(handle, CUBLAS_OP_T, s, n, &alpha,
 					Z, s, dx, 1, &beta, dz, 1);
-
 		int gridsize, blocksize;
 		cuutils::getGridBlockSize(&gridsize, &blocksize);
 		// dz = dz + a
-		// Does not scale:
-		// cuutils::vvAdd <<<(s + BLOCKSIZE - 1) / BLOCKSIZE, BLOCKSIZE >>>(a, dz, dz, s);
 		cuutils::vvAdd <<<gridsize, blocksize >>>(a, dz, dz, s);
 
 		// dz = dz + L * |dz|
-		for(int i=0; i<s; i++)
-		{
-			cublasDgemv(handle, CUBLAS_OP_N, 1, i, &alpha, (L + i * s), 1,
-						abs_dz, 1, &beta, &dz[i], 1);
-			// TODO: MAKE SMARTER
-			cuutils::abs <<<1,1>>>(&dz[i], &abs_dz[i], 1);
-		}
-		// dy = b
-		cudaMemcpy(dy, b, m*sizeof(T), cudaMemcpyDeviceToDevice);
-		// dy = J * dx
-		cublasDgemv(handle, CUBLAS_OP_N, m, n, &alpha,
-					J, m, dx, 1, &beta, dy, 1);
+		beta = 1;
+		cuutils::printf_vector(L, s*s, "L");
+		cublasDdot(handle, s,
+					   dz, 1,
+					   dz, 1,
+					   &abs_dz[0]);
+		// for(int i=0; i<s; i++)
+		// {
+		// 	cublasDdot(handle, s,
+		// 			   &L[i*s], 1,
+		// 			   abs_dz, 1,
+		// 			   &dz[i]);
+		// 	cuutils::abs <<<1,1>>>(&dz[i], &abs_dz[i], 1);
+		// }
+		// cuutils::printf_vector(dz, s, "dz");
+	// 	cuutils::printf_vector(abs_dz, s, "abs_dz");
+	// // dy = b
+	// 	cudaMemcpy(dy, b, m*sizeof(T), cudaMemcpyDeviceToDevice);
+	// // dy = J * dx
+	// 	cublasDgemv(handle, CUBLAS_OP_N, m, n, &alpha,
+	// 				J, m, dx, 1, &beta, dy, 1);
 
-		// dy = dy + Y * |dz|
-		// dy = beta * dy + alpha(Y*abs_dz)
-		cublasDgemv(handle, CUBLAS_OP_N, m, s, &alpha,
-					Y, m, abs_dz, 1, &beta, dy, 1);	
+	// // dy = dy + Y * |dz|
+	// // dy = beta * dy + alpha(Y*abs_dz)
+	// 	cublasDgemv(handle, CUBLAS_OP_N, m, s, &alpha,
+	// 				Y, m, abs_dz, 1, &beta, dy, 1);	
 	};
-
 	template <typename T>
 	void eval(T *h_a, T *h_b, 
 			  T *h_Z, T *h_L, 
@@ -135,4 +140,19 @@ namespace absnf
 		}
 	}
 }
+
+
+		// cublasDgeam(handle,
+		// 	CUBLAS_OP_T,
+		// 	CUBLAS_OP_T,
+		// 	n, s,
+		// 	&alpha,
+		// 	Z,
+		// 	s,
+		// 	&beta,
+		// 	Z,
+		// 	s,
+		// 	Z_rm,
+		// 	n);
 #endif // __ABSNF_H_INCLUDED__
+
