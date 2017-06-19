@@ -123,56 +123,90 @@ namespace absnf
 		cudaFree(d_dy);
 	}
 	template <typename T>
+	void __device__ initTssValue(T *Tss, T *L, T *dz, int i, int j, int id)
+	{
+		if(i==j)
+		{
+			Tss[id] = 1;
+		}
+		else if(j>i)
+		{
+			Tss[id] = 0;
+		}
+		else
+		{
+			Tss[id] = 0 - L[id] * ((double(0) < dz[j]) - (dz[j] < double(0)));
+		}
+	}
+	template <typename T>
 	void __global__ initTss(T *Tss, T *L, T *dz, int s, int size)
 	{
-		int j = blockIdx.x;
 		int i = threadIdx.x;
-		int id = j*s + i;
-		while(id < size)
+		int j = blockIdx.x;
+		int id = i*s + j;
+		while(id < size && j < s)
 		{
-			if(i < s)
+			if(i<s)
 			{
-				if(i == j)
-				{
-					Tss[id] = 1;
-				}
-				else if(j > i)
-				{
-					Tss[id] = 0;
-				}
-				else
-				{
-					Tss[id] = L[id] * (double(0) < dz[j]) - (dz[j] < double(0));
-				}
-				i += blockDim.x;
+				initTssValue(Tss,L,dz,i,j,id);
+				i+=blockDim.x;
 			}
 			else
 			{
-				i = threadIdx.x;
+				i = i%s;
 				j = j + gridDim.x;
 			}
-			id = j*s + i;
+			id = i*s + j;
 		}
 	}
+	template <typename T>
+	void gradient(T *h_a, T *h_b, 
+			  	  T *h_Z, T *h_L, 
+			  	  T *h_J, T *h_Y,
+			  	  T* h_dz,
+			  	  int m, int n, int s,
+			  	  T *h_gamma, T *h_Gamma)
+	{
+		T *d_a; cudaMalloc((void **)&d_a, s*sizeof(T));
+		T *d_b; cudaMalloc((void **)&d_b, m*sizeof(T));
+		T *d_Z; cudaMalloc((void **)&d_Z, s*n*sizeof(T));
+		T *d_L; cudaMalloc((void **)&d_L, s*s*sizeof(T));
+		T *d_J; cudaMalloc((void **)&d_J, m*n*sizeof(T));
+		T *d_Y; cudaMalloc((void **)&d_Y, m*s*sizeof(T));		
+		T *d_dz; cudaMalloc((void **)&d_dz, s*sizeof(T));
+		T *d_gamma; cudaMalloc((void **)&d_gamma, m*sizeof(T));
+		T *d_Gamma; cudaMalloc((void **)&d_Gamma, m*n*sizeof(T));
+		T *d_Tss; cudaMalloc((void **)&d_Tss, s*s*sizeof(T));
+
+		cudaMemcpy(d_a, h_a,  s*sizeof(T), cudaMemcpyHostToDevice);
+		cudaMemcpy(d_b, h_b,  m*sizeof(T), cudaMemcpyHostToDevice);
+		cudaMemcpy(d_Z, h_Z,  s*n*sizeof(T), cudaMemcpyHostToDevice);
+		cudaMemcpy(d_L, h_L,  s*s*sizeof(T), cudaMemcpyHostToDevice);
+		cudaMemcpy(d_J, h_J,  m*n*sizeof(T), cudaMemcpyHostToDevice);
+		cudaMemcpy(d_Y, h_Y,  m*s*sizeof(T), cudaMemcpyHostToDevice);
+		cudaMemcpy(d_dz, h_dz, s*sizeof(T), cudaMemcpyHostToDevice);
+
+		cublasHandle_t handle;
+		cublasCreate(&handle);
+		//  ----------------------------------
+
+
+		// ----------------------------------
+		cudaMemcpy(h_gamma, d_gamma, m*sizeof(T), cudaMemcpyDeviceToHost);
+		cudaMemcpy(h_Gamma, d_Gamma, m*n*sizeof(T), cudaMemcpyDeviceToHost);
+
+		cudaFree(d_a); 
+		cudaFree(d_b);
+		cudaFree(d_Z);
+		cudaFree(d_L);
+		cudaFree(d_J);
+		cudaFree(d_Y);
+		cudaFree(d_dz);
+		cudaFree(d_gamma);
+		cudaFree(d_Gamma);
+		cudaFree(d_Tss);
+	}
 }
-
-
-		// cublasDgeam(handle,
-		// 	CUBLAS_OP_T,
-		// 	CUBLAS_OP_T,
-		// 	n, s,
-		// 	&alpha,
-		// 	Z,
-		// 	s,
-		// 	&beta,
-		// 	Z,
-		// 	s,
-		// 	Z_rm,
-		// 	n);
-
-		// int gridsize, blocksize;
-		// cuutils::getGridBlockSize(&gridsize, &blocksize);
-		// cuutils::vvAdd <<<gridsize, blocksize >>>(a, dz, dz, s);
 
 #endif // __ABSNF_H_INCLUDED__
 

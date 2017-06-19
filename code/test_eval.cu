@@ -35,6 +35,52 @@ bool test_eval_Singular(t_def *h_a, t_def *h_b,
 		return false;
 	return true;
 }
+bool test_initTss_Singular(t_def *h_L, 
+			   			   t_def *h_dz,
+						   int s,
+			   			   t_def *h_Tss_expected)
+{
+	t_def *h_Tss = (t_def *)malloc(s*s*sizeof(t_def));
+	t_def *d_L; cudaMalloc((void **)&d_L, s*s*sizeof(t_def));
+	t_def *d_dz; cudaMalloc((void **)&d_dz, s*sizeof(t_def));
+	t_def *d_Tss; cudaMalloc((void **)&d_Tss, s*s*sizeof(t_def));
+
+	cudaMemcpy(d_L, h_L,  s*s*sizeof(t_def), cudaMemcpyHostToDevice);
+	cudaMemcpy(d_dz, h_dz, s*sizeof(t_def), cudaMemcpyHostToDevice);
+
+	cublasHandle_t handle;
+	cublasCreate(&handle);
+
+	int gridsize, blocksize;
+	cuutils::getGridBlockSize(&gridsize, &blocksize);
+	absnf::initTss <<<gridsize, blocksize >>>(d_Tss,d_L, d_dz, s, s*s);
+	cudaMemcpy(h_Tss, d_Tss, s*s*sizeof(t_def), cudaMemcpyDeviceToHost);
+
+	if(!utils::vectors_equals(h_Tss, h_Tss_expected, s*s, true))
+		return false;
+
+
+	cudaFree(d_L);
+	cudaFree(d_dz);
+	cudaFree(d_Tss);
+	free(h_Tss);
+	return true;
+}
+bool test_initTss()
+{
+	int s=4;
+	std::vector<t_def> L = {0, 0, 0, 0,
+						    4, 0, 0, 0,
+						    8, 9, 0, 0,
+						    2, 1, 7, 0};
+	std::vector<t_def> dz = {-1, 0, 1, -1};
+	std::vector<t_def> Tss_expected = {1, 0, 0, 0,
+									   4, 1, 0, 0,
+									   8, 0, 1, 0,
+									   2, 0, -7, 1};
+	test_initTss_Singular(&L[0], &dz[0], s, &Tss_expected[0]);
+	return true;
+}
 bool test_eval()
 {
 	int n=4;
@@ -69,25 +115,26 @@ bool test_eval()
 			               &dx[0], m, n, s, &dz_expected[0], &dy_expected[0]))
 		return false;
 
-	n = 5;
-	s = 4;
-	m = 3;
-	a = {0, 4, -3, 10};
-	b = {-8, 11, 7};
-	Z = {-4,  0, -4,  1 ,-1,
-		  3,  0, -2, -3, -21,
-		 -3, -4, -4, -1,  33,
-		 -9,  0, -5,  3,  4};
-	L = {0, 0, 0, 0,
-	     4, 0, 0, 0,
-	     8, 9, 0, 0,
-	     2, 1, 7, 0};
-	J = {0, 0, 2, 1, 3,
-	     4, 2, 0, 1, 2,
-	     1, 3, -2, 1, 8};
-	Y = {0, 0, 2, 1,
-		 4, 2, 0, 4,
-		 1, 4, 7, 4};
+
+	// n = 5;
+	// s = 4;
+	// m = 3;
+	// a = {0, 4, -3, 10};
+	// b = {-8, 11, 7};
+	// Z = {-4,  0, -4,  1 ,-1,
+	// 	  3,  0, -2, -3, -21,
+	// 	 -3, -4, -4, -1,  33,
+	// 	 -9,  0, -5,  3,  4};
+	// L = {0, 0, 0, 0,
+	//      4, 0, 0, 0,
+	//      8, 9, 0, 0,
+	//      2, 1, 7, 0};
+	// J = {0, 0, 2, 1, 3,
+	//      4, 2, 0, 1, 2,
+	//      1, 3, -2, 1, 8};
+	// Y = {0, 0, 2, 1,
+	// 	 4, 2, 0, 4,
+	// 	 1, 4, 7, 4};
 
 
 	return true;
@@ -97,5 +144,52 @@ bool test_eval()
 int main()
 {	
 	test_eval();
+	test_initTss();
 	return 0;
 }
+// bool test_initTss_Singular(t_def *h_a, t_def *h_b, 
+// 			   			   t_def *h_Z, t_def *h_L, 
+// 			   			   t_def *h_J, t_def *h_Y,
+// 			   			   t_def *h_dz,
+// 			   			   int m, int n, int s,
+// 			   			   t_def *h_Tss_expected)
+// {
+// 	t_def *h_Tss = (t_def *)malloc(s*s*sizeof(t_def));
+// 	t_def *d_a; cudaMalloc((void **)&d_a, s*sizeof(t_def));
+// 	t_def *d_b; cudaMalloc((void **)&d_b, m*sizeof(t_def));
+// 	t_def *d_Z; cudaMalloc((void **)&d_Z, s*n*sizeof(t_def));
+// 	t_def *d_L; cudaMalloc((void **)&d_L, s*s*sizeof(t_def));
+// 	t_def *d_J; cudaMalloc((void **)&d_J, m*n*sizeof(t_def));
+// 	t_def *d_Y; cudaMalloc((void **)&d_Y, m*s*sizeof(t_def));		
+// 	t_def *d_dz; cudaMalloc((void **)&d_dz, s*sizeof(t_def));
+// 	t_def *d_Tss; cudaMalloc((void **)&d_Tss, s*s*sizeof(t_def));
+
+// 	cudaMemcpy(d_a, h_a,  s*sizeof(t_def), cudaMemcpyHostToDevice);
+// 	cudaMemcpy(d_b, h_b,  m*sizeof(t_def), cudaMemcpyHostToDevice);
+// 	cudaMemcpy(d_Z, h_Z,  s*n*sizeof(t_def), cudaMemcpyHostToDevice);
+// 	cudaMemcpy(d_L, h_L,  s*s*sizeof(t_def), cudaMemcpyHostToDevice);
+// 	cudaMemcpy(d_J, h_J,  m*n*sizeof(t_def), cudaMemcpyHostToDevice);
+// 	cudaMemcpy(d_Y, h_Y,  m*s*sizeof(t_def), cudaMemcpyHostToDevice);
+// 	cudaMemcpy(d_dz, h_dz, s*sizeof(t_def), cudaMemcpyHostToDevice);
+
+// 	cublasHandle_t handle;
+// 	cublasCreate(&handle);
+// 	//  ----------------------------------
+// 	int gridsize, blocksize;
+// 	cuutils::getGridBlockSize(&gridsize, &blocksize);
+// 	absnf::initTss <<<gridsize, blocksize >>>(d_Tss,d_L, d_dz, s, s*s);
+// 	cudaMemcpy(h_Tss, d_Tss, s*s*sizeof(t_def), cudaMemcpyDeviceToHost);
+
+// 	// ----------------------------------
+
+// 	cudaFree(d_a); 
+// 	cudaFree(d_b);
+// 	cudaFree(d_Z);
+// 	cudaFree(d_L);
+// 	cudaFree(d_J);
+// 	cudaFree(d_Y);
+// 	cudaFree(d_dz);
+// 	cudaFree(d_Tss);
+// 	free(h_Tss);
+// 	return true;
+// }
