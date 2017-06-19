@@ -13,7 +13,6 @@ bool test_eval_Singular(t_def *h_a, t_def *h_b,
 {
 	// convert to column major storage
 	utils::rowColConversion(h_Z, s, n, true);
-	// utils::rowColConversion(h_L, s, s, true);
 	utils::rowColConversion(h_J, m, n, true);
 	utils::rowColConversion(h_Y, m, s, true);
 
@@ -30,13 +29,14 @@ bool test_eval_Singular(t_def *h_a, t_def *h_b,
 			    h_dz, h_dy);
 
 	// compare results
-	// utils::vectors_equals(h_dz, h_dz_expected, s, true);
-	// utils::vectors_equals(h_dy, h_dy_expected, m, true);
+	if(!utils::vectors_equals(h_dz, h_dz_expected, s, false))
+		return false;
+	if(!utils::vectors_equals(h_dy, h_dy_expected, m, false))
+		return false;
 	return true;
 }
-int test_eval()
+bool test_eval()
 {
-	int errors = 0;
 	int n=4;
 	int s=3;
 	int m=2;
@@ -65,10 +65,32 @@ int test_eval()
 	// m
 	std::vector<t_def> dy_expected = {64, 26};
 
-	test_eval_Singular(&a[0], &b[0], &Z[0], &L[0], &J[0], &Y[0], 
-			           &dx[0], m, n, s, &dz_expected[0], &dy_expected[0]);
+	if(!test_eval_Singular(&a[0], &b[0], &Z[0], &L[0], &J[0], &Y[0], 
+			               &dx[0], m, n, s, &dz_expected[0], &dy_expected[0]))
+		return false;
 
-	return errors;
+	n = 5;
+	s = 4;
+	m = 3;
+	a = {0, 4, -3, 10};
+	b = {-8, 11, 7};
+	Z = {-4,  0, -4,  1 ,-1,
+		  3,  0, -2, -3, -21,
+		 -3, -4, -4, -1,  33,
+		 -9,  0, -5,  3,  4};
+	L = {0, 0, 0, 0,
+	     4, 0, 0, 0,
+	     8, 9, 0, 0,
+	     2, 1, 7, 0};
+	J = {0, 0, 2, 1, 3,
+	     4, 2, 0, 1, 2,
+	     1, 3, -2, 1, 8};
+	Y = {0, 0, 2, 1,
+		 4, 2, 0, 4,
+		 1, 4, 7, 4};
+
+
+	return true;
 }
 
 

@@ -5,12 +5,25 @@
 namespace cuutils
 {
 	template <typename T>
-	void printf_vector(T *d_v, int size, const std::string& name = "")
+	void transpose_matrix(cublasHandle_t &handle, T* Z, int s, int n)
 	{
-		T *h_v = (T *) malloc(size*sizeof(T));
-		cudaMemcpy(h_v, d_v, size*sizeof(T),cudaMemcpyDeviceToHost);
-		utils::printf_vector(h_v, size, name);
-		free(h_v);
+		double alpha = 1;
+		double beta = 1;
+		T* Z_rm; cudaMalloc((void **)&Z_rm, s*n*sizeof(T));
+		cudaMemcpy(Z_rm, Z, s*n*sizeof(T), cudaMemcpyDeviceToDevice);
+		cublasDgeam(handle,
+			CUBLAS_OP_T,
+			CUBLAS_OP_T,
+			n, s,
+			&alpha,
+			Z_rm,
+			s,
+			&beta,
+			Z_rm,
+			s,
+			Z,
+			n);
+		cudaFree(Z_rm);
 	}
 	template <typename T>
 	__global__ void vvAdd(T *u, T *v, T *z, int size)

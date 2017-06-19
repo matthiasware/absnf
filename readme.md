@@ -1,4 +1,5 @@
 ### TODO
+- Write MEMORY calculation, before starting the functions
 - CONSIDER MAX-RAM!!!
 - handle case, that blocksize > max_blocksize!!!
 - handle case, that we allocate too much memory

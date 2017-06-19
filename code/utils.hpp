@@ -314,7 +314,7 @@ namespace utils
 		std::cout << "]\n";
 	}
 	template <typename T>
-	int vectors_equals(T* a, T* b, int size, bool verbose=false)
+	bool vectors_equals(T* a, T* b, int size, bool verbose=false)
 	{
 		if(verbose)
 		{
