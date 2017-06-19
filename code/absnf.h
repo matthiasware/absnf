@@ -123,6 +123,11 @@ namespace absnf
 		cudaFree(d_dy);
 	}
 	template <typename T>
+	T __device__ sign(T *val)
+	{
+		return (T(0) < *val) - (*val < T(0));
+	}
+	template <typename T>
 	void __device__ initTssValue(T *Tss, T *L, T *dz, int i, int j, int id)
 	{
 		if(i==j)
@@ -135,7 +140,8 @@ namespace absnf
 		}
 		else
 		{
-			Tss[id] = 0 - L[id] * ((double(0) < dz[j]) - (dz[j] < double(0)));
+			// Tss[id] = 0 - L[id] * ((double(0) < dz[j]) - (dz[j] < double(0)));
+			Tss[id] = 0 - L[id] * sign(&dz[j]);
 		}
 	}
 	template <typename T>
@@ -158,6 +164,26 @@ namespace absnf
 			}
 			id = i*s + j;
 		}
+	}
+	template <typename T>
+	void __global__ getTriangularInverse(cublasHandle_t &handle,
+					  		   			 T *A, T *I, int s)
+	{
+		double alpha = 1;
+		double beta = 1;
+		// cublasStrsm_v2(handle,CUBLAS_SIDE_LEFT,CUBLAS_FILL_MODE_UPPER,
+		// 			   CUBLAS_OP_N,CUBLAS_DIAG_NON_UNIT,
+		// 			   nCols,nCols,&t_alphA,D_L,nCols,D_B,nCols);
+		// stores inverse of Tss in I
+		cublasDtrsm(handle,
+					CUBLAS_SIDE_LEFT,
+				    CUBLAS_FILL_MODE_LOWER,
+				    CUBLAS_OP_T,
+				    CUBLAS_DIAG_UNIT,
+				    s,s,
+				    &alpha,
+				    A,s,
+				    &beta,s);
 	}
 	template <typename T>
 	void gradient(T *h_a, T *h_b, 
@@ -189,6 +215,9 @@ namespace absnf
 		cublasHandle_t handle;
 		cublasCreate(&handle);
 		//  ----------------------------------
+		int gridsize, blocksize;
+		cuutils::getGridBlockSize(&gridsize, &blocksize);
+		initTss <<<gridsize, blocksize >>>(d_Tss,d_L, d_dz, s, s*s);		
 
 
 		// ----------------------------------
