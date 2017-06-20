@@ -1,4 +1,7 @@
 ### TODO
+- function for cudamalloc + copy
+- function for copy host to device
+- function for copy device to host
 - use classes for core functions
 - Write MEMORY calculation, before starting the functions
 - CONSIDER MAX-RAM!!!
@@ -30,3 +33,16 @@ Math
 
 # Threads and Blocks
 - why not using max thread per block?
+
+# Vortrag
+- Content
+- Aufgabenbeschreibung
+- ABSNF
+- Aufgabe 1)
+- Aufgabe 2)
+- Aufgabe 3)
+- Application
+- Numerical tests
+- Cool Snippets
+- Common Problems: grids vs blocks
+- Room for improvements

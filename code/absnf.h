@@ -436,6 +436,8 @@ namespace absnf
 		cudaMemcpy(d_J, h_J,  m*n*sizeof(T), cudaMemcpyHostToDevice);
 		cudaMemcpy(d_Y, h_Y,  m*s*sizeof(T), cudaMemcpyHostToDevice);
 		cudaMemcpy(d_dy, h_dy, m*sizeof(T), cudaMemcpyHostToDevice);
+		cudaMemcpy(d_dx, h_dx, n*sizeof(T), cudaMemcpyHostToDevice); // start values
+		cudaMemcpy(d_dz, h_dz, s*sizeof(T), cudaMemcpyHostToDevice); // start values
 
 		cublasHandle_t handle;
 		cublasCreate(&handle);
