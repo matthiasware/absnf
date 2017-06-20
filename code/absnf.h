@@ -412,11 +412,51 @@ namespace absnf
 	void solve(T *h_a, T *h_b,
 			   T *h_Z, T *h_L,
 			   T *h_J, T *h_Y,
-			   T *dy,
+			   T *h_dy,
 			   int m, int n, int s,
 			   T *h_dx, T *h_dz)
 	{
+		T *d_a; cudaMalloc((void **)&d_a, s*sizeof(T));
+		T *d_b; cudaMalloc((void **)&d_b, m*sizeof(T));
+		T *d_Z; cudaMalloc((void **)&d_Z, s*n*sizeof(T));
+		T *d_L; cudaMalloc((void **)&d_L, s*s*sizeof(T));
+		T *d_J; cudaMalloc((void **)&d_J, m*n*sizeof(T));
+		T *d_I; cudaMalloc((void **)&d_J, m*n*sizeof(T));
+		T *d_Y; cudaMalloc((void **)&d_Y, m*s*sizeof(T));		
+		T *d_dy; cudaMalloc((void **)&d_dy, m*sizeof(T));
+		T *d_dz; cudaMalloc((void **)&d_dz, s*sizeof(T));
+		T *d_dx; cudaMalloc((void **)&d_dx, n*sizeof(T));
+		T *d_S; cudaMalloc((void **)&d_S, s*s*sizeof(T));
+		T *d_c; cudaMalloc((void **)&d_c, s*sizeof(T));
 
+		cudaMemcpy(d_a, h_a,  s*sizeof(T), cudaMemcpyHostToDevice);
+		cudaMemcpy(d_b, h_b,  m*sizeof(T), cudaMemcpyHostToDevice);
+		cudaMemcpy(d_Z, h_Z,  s*n*sizeof(T), cudaMemcpyHostToDevice);
+		cudaMemcpy(d_L, h_L,  s*s*sizeof(T), cudaMemcpyHostToDevice);
+		cudaMemcpy(d_J, h_J,  m*n*sizeof(T), cudaMemcpyHostToDevice);
+		cudaMemcpy(d_Y, h_Y,  m*s*sizeof(T), cudaMemcpyHostToDevice);
+		cudaMemcpy(d_dy, h_dy, m*sizeof(T), cudaMemcpyHostToDevice);
+
+		cublasHandle_t handle;
+		cublasCreate(&handle);
+		// ----------------------------------
+
+		// ----------------------------------
+		cudaMemcpy(h_dx, d_dx, m*sizeof(T), cudaMemcpyDeviceToHost);
+		cudaMemcpy(h_dz, d_dz, s*sizeof(T), cudaMemcpyDeviceToHost);
+
+		cudaFree(d_a); 
+		cudaFree(d_b);
+		cudaFree(d_Z);
+		cudaFree(d_L);
+		cudaFree(d_J);
+		cudaFree(d_I);
+		cudaFree(d_Y);
+		cudaFree(d_dy);
+		cudaFree(d_dz);
+		cudaFree(d_dx);
+		cudaFree(d_S);
+		cudaFree(d_c);
 	}
 }
 
