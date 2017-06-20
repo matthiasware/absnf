@@ -70,25 +70,45 @@ bool test_initTss_Singular(t_def *h_L,
 bool test_getTriangularInverse_Singular(t_def *h_A, t_def *h_I_expected, int s)
 {
 	bool success = true;
-	t_def *h_I = (t_def *)malloc(s*s*sizeof(t_def));
+	t_def *h_I_actual = (t_def *)malloc(s*s*sizeof(t_def));
 	t_def *d_A; cudaMalloc((void **)&d_A, s*s*sizeof(t_def));
 	t_def *d_I; cudaMalloc((void **)&d_I, s*s*sizeof(t_def));
 
 	cudaMemcpy(d_A, h_A, s*s*sizeof(t_def), cudaMemcpyHostToDevice);
 	// ..............
-
+	int gridsize, blocksize;
+	cuutils::getGridBlockSize(&gridsize, &blocksize);
+	absnf::initIdentity<<<gridsize, blocksize>>>(d_I, s);
 	// ..............
-	cudaMemcpy(h_I, d_I, s*s*sizeof(t_def), cudaMemcpyDeviceToHost);
-	utils::printf_vector(h_I, s*s, "Inverse");
-
+	cublasHandle_t handle;
+	cublasCreate(&handle);
+	absnf::getTriangularInverse(handle, d_A, d_I, s);
+	// ..............
+	cudaMemcpy(h_I_actual, d_I, s*s*sizeof(t_def), cudaMemcpyDeviceToHost);
+	if(!utils::vectors_equals(h_I_actual, h_I_expected, s*s))
+		success = false;
+	// utils::printf_vector(h_I_actual,s*s, "Inverse");
 	cudaFree(d_A);
 	cudaFree(d_I);
-	free(h_I);
+	free(h_I_actual);
 	return success;
 }
 bool test_getTriangularInverse()
 {
-	return true;
+	bool success = true;
+	int s=4;
+	std::vector<t_def> h_matrix = {1, 0, 0, 0,
+								   4, 1, 0, 0,
+								   8, 0, 1, 0,
+								   2, 0, -7, 1};
+	std::vector<t_def> h_I_expected = { 1, 0, 0, 0,
+								       -4, 1, 0, 0,
+								       -8, 0, 1, 0,
+								       -58,0, 7, 1};
+    // utils::rowColConversion(&h_matrix[0], s, s, true);
+	test_getTriangularInverse_Singular(&h_matrix[0], &h_I_expected[0], s);
+
+	return success;
 }
 bool test_initTss()
 {
@@ -104,6 +124,32 @@ bool test_initTss()
 									   2, 0, -7, 1};
 	test_initTss_Singular(&L[0], &dz[0], s, &Tss_expected[0]);
 	return true;
+}
+bool test_initIdentity()
+{
+	bool success = true;
+	int s=4;
+	std::vector<t_def> h_I_expected = {1,0,0,0,
+							 0,1,0,0,
+							 0,0,1,0,
+							 0,0,0,1};
+	t_def *h_I_actual = (t_def *) malloc(s*s*sizeof(t_def));
+	t_def *d_I; cudaMalloc((void **)&d_I, s*s*sizeof(t_def));
+
+	//  ----------------------------------
+	int gridsize, blocksize;
+	cuutils::getGridBlockSize(&gridsize, &blocksize);
+	absnf::initIdentity<<<gridsize,blocksize>>>(d_I, s);
+	//  ----------------------------------
+
+	cudaMemcpy(h_I_actual, d_I, s*s*sizeof(t_def), cudaMemcpyDeviceToHost);
+	if(!utils::vectors_equals(h_I_actual, &h_I_expected[0], s*s, false))
+		success = false;
+
+	cudaFree(d_I);
+	free(h_I_actual);
+	return success;
+
 }
 bool test_eval()
 {
@@ -169,6 +215,8 @@ int main()
 {	
 	test_eval();
 	test_initTss();
+	test_initIdentity();
+	test_getTriangularInverse();
 	return 0;
 }
 // bool test_initTss_Singular(t_def *h_a, t_def *h_b, 

@@ -145,6 +145,7 @@ namespace absnf
 		}
 	}
 	template <typename T>
+	// row major or column major?
 	void __global__ initTss(T *Tss, T *L, T *dz, int s, int size)
 	{
 		int i = threadIdx.x;
@@ -166,24 +167,66 @@ namespace absnf
 		}
 	}
 	template <typename T>
-	void __global__ getTriangularInverse(cublasHandle_t &handle,
+	void __global__ initIdentity(T *I, int s)
+	{
+		int i = threadIdx.x;
+		int j = blockIdx.x;
+		int id = i*s + j;
+		while(id < s*s && j < s)
+		{
+			if(i<s)
+			{
+				if(i == j)
+				{
+					I[id] = 1;
+				}
+				else
+				{
+					I[id] = 0;
+				}
+				i+=blockDim.x;
+			}
+			else
+			{
+				i = i%s;
+				j = j + gridDim.x;
+			}
+			id = i*s + j;
+		}		
+	}
+	template <typename T>
+	/** Calculates Inverse of matrix A
+	 	results are written to I
+	 	@param A: device mem 
+	 			  lower triangular matrix (s*s)
+	 			  row major
+	 	@param I: device mem (s*s)
+	 			  Identity matrix
+	 			  result (s*s) row major inverse of A
+	*/
+	void getTriangularInverse(cublasHandle_t &handle,
 					  		   			 T *A, T *I, int s)
 	{
 		double alpha = 1;
-		double beta = 1;
 		// cublasStrsm_v2(handle,CUBLAS_SIDE_LEFT,CUBLAS_FILL_MODE_UPPER,
 		// 			   CUBLAS_OP_N,CUBLAS_DIAG_NON_UNIT,
 		// 			   nCols,nCols,&t_alphA,D_L,nCols,D_B,nCols);
 		// stores inverse of Tss in I
-		cublasDtrsm(handle,
-					CUBLAS_SIDE_LEFT,
-				    CUBLAS_FILL_MODE_LOWER,
-				    CUBLAS_OP_T,
-				    CUBLAS_DIAG_UNIT,
-				    s,s,
-				    &alpha,
-				    A,s,
-				    &beta,s);
+		// cuutils::printf_vector(A,s*s, "L");
+		// cuutils::printf_vector(I,s*s, "I");
+
+		cublasStatus_t stat = cublasDtrsm(
+								handle,
+						      	CUBLAS_SIDE_LEFT,
+				    	      	CUBLAS_FILL_MODE_UPPER,
+				    		  	CUBLAS_OP_N,
+				    		  	CUBLAS_DIAG_UNIT,
+				    		  	s,s,
+				    	   	  	&alpha,
+				    	      	A,
+				    		  	s,
+				    	      	I,
+				    	      	s);
 	}
 	template <typename T>
 	void gradient(T *h_a, T *h_b, 

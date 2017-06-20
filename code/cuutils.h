@@ -4,6 +4,14 @@
 #include "utils.hpp"
 namespace cuutils
 {
+	 	template <typename T>
+	void printf_vector(T *d_v, int size, const std::string& name = "")
+	{
+		T *h_v = (T *) malloc(size*sizeof(T));
+		cudaMemcpy(h_v, d_v, size*sizeof(T),cudaMemcpyDeviceToHost);
+		utils::printf_vector(h_v, size, name);
+		free(h_v);
+	}
 	template <typename T>
 	void transpose_matrix(cublasHandle_t &handle, T* Z, int s, int n)
 	{
