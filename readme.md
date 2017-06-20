@@ -1,4 +1,5 @@
 ### TODO
+- use classes for core functions
 - Write MEMORY calculation, before starting the functions
 - CONSIDER MAX-RAM!!!
 - handle case, that blocksize > max_blocksize!!!

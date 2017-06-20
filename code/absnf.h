@@ -20,19 +20,22 @@ namespace absnf
 			  	   T *abs_dz)
 
 	{ 
-		
-	// dz = a
+		//  ----------------------------------
+		// dz = a
+		//  ----------------------------------
 		cudaMemcpy(dz, a, s*sizeof(T), cudaMemcpyDeviceToDevice);
-		
-	// dz = Z * dx + dz
-	// dz = alpha * (Z * dx) + beta * dz
+		//  ----------------------------------		
+		// dz = Z * dx + dz
+		// dz = alpha * (Z * dx) + beta * dz
+		//  ----------------------------------
 		double alpha = 1;
 		double beta = 1;
 		cublasDgemv(handle, CUBLAS_OP_N, s, n, &alpha,
 					Z, s, dx, 1, &beta, dz, 1);
-
-	// dz = dz + a
-	// dz = dz + L * |dz|
+		//  ----------------------------------
+		// dz = dz + a
+		// dz = dz + L * |dz|
+		//  ----------------------------------
 		for(int i=0; i<s; i++)
 		{
 			cublasDgemv(handle, CUBLAS_OP_N,
@@ -44,32 +47,39 @@ namespace absnf
 						&dz[i], 1);
 			cuutils::abs <<<1,1>>>(&dz[i], &abs_dz[i], 1);
 		}
-	// dy = b
+		//  ----------------------------------
+		// dy = b
+		//  ----------------------------------
 		cudaMemcpy(dy, b, m*sizeof(T), cudaMemcpyDeviceToDevice);
-	// dy = J * dx
+		//  ----------------------------------
+		// dy = J * dx
+		//  ----------------------------------
 		cublasDgemv(handle, CUBLAS_OP_N, m, n, &alpha,
 					J, m, dx, 1, &beta, dy, 1);
-
-	// dy = dy + Y * |dz|
-	// dy = beta * dy + alpha(Y*abs_dz)
+		//  ----------------------------------
+		// dy = dy + Y * |dz|
+		// dy = beta * dy + alpha(Y*abs_dz)
+		//  ----------------------------------
 		cublasDgemv(handle, CUBLAS_OP_N, m, s, &alpha,
 					Y, m, abs_dz, 1, &beta, dy, 1);	
 	};
 	/** Evaluation of ABS-NF-Function
 		Assumes sufficient memoy to available on the device
 	
-		@param h_a: host mem a (1*s)
-		@param h_b: host mem b (1*m)
-		@param h_Z: host mem Z (s*n), column-major
-		@param h_L: host mem L (s*s), row-major
-		@param h_J: host mem L (m*n), column-major
-		@param h_Y: host mem Y (m*s), column-major
-		@param h_dx: host mem dx, (1*n)
+		INPUT:
+		@param h_a: host mem (1*s)
+		@param h_b: host mem (1*m)
+		@param h_Z: host mem (s*n), column-major
+		@param h_L: host mem (s*s), row-major
+		@param h_J: host mem (m*n), column-major
+		@param h_Y: host mem (m*s), column-major
+		@param h_dx: host mem (1*n)
 		@param m
 		@param n
 		@param s
-		@param h_dz: (result) host mem dz (1*s)
-		@param h_dy: (result) host mem dy (1*m)
+		OUTPUT:
+		@param h_dz: host mem (1*s)
+		@param h_dy: host mem (1*m)
 
 	*/
 	template <typename T>
@@ -195,6 +205,28 @@ namespace absnf
 		}		
 	}
 	template <typename T>
+	void __global__ multWithDz(T *A, T *dz, int s)
+	{
+		int i = threadIdx.x;
+		int j = blockIdx.x;
+		int id = i*s + j;
+		while(id < s*s && j < s)
+		{
+			if(i<s)
+			{
+				if(A[id] != T(0)) 
+					A[id] = A[id] * sign(&dz[j]);
+				i+=blockDim.x;
+			}
+			else
+			{
+				i = i%s;
+				j = j + gridDim.x;
+			}
+			id = i*s + j;
+		}			
+	}
+	template <typename T>
 	/** Calculates Inverse of matrix A
 	 	results are written to I
 	 	@param A: device mem 
@@ -229,6 +261,42 @@ namespace absnf
 				    	      	s);
 	}
 	template <typename T>
+	void mmp(cublasHandle_t &handle, T *d_Y, T* d_I, T *d_K, int m, int s)
+	{	
+		cuutils::printf_vector(d_Y ,m*s, "Y");
+		cuutils::printf_vector(d_I ,s*s, "I");
+
+		double alpha = 1;
+		double beta = 0;
+		cublasDgemm(handle,
+					CUBLAS_OP_N,
+					CUBLAS_OP_T,
+					m,s,s,
+					&alpha,
+					d_Y,
+					m,
+					d_I,
+					s,
+					&beta,
+					d_K,
+					m);
+	}
+	/** Calculates the gradient
+		No checks for memory availability are done
+
+		INPUT:
+		@param h_a host mem (1*s)
+		@param h_b host mem (1*m)
+		@param h_Z host mem (s*n) column major
+		@param h_L host mem (s*s) row major
+		@param h_J host mem (m*n) column major
+		@param h_dz host mem (1*s)
+		OUTPUT:
+		@param h_gamma host mem (1*m)
+		@paran h_Gamma host mem (m*n) column major
+
+	*/
+	template <typename T>
 	void gradient(T *h_a, T *h_b, 
 			  	  T *h_Z, T *h_L, 
 			  	  T *h_J, T *h_Y,
@@ -246,6 +314,8 @@ namespace absnf
 		T *d_gamma; cudaMalloc((void **)&d_gamma, m*sizeof(T));
 		T *d_Gamma; cudaMalloc((void **)&d_Gamma, m*n*sizeof(T));
 		T *d_Tss; cudaMalloc((void **)&d_Tss, s*s*sizeof(T));
+		T *d_I; cudaMalloc((void **)&d_I, s*s*sizeof(T));
+		T *d_K; cudaMalloc((void **)&d_K, m*s*sizeof(T));
 
 		cudaMemcpy(d_a, h_a,  s*sizeof(T), cudaMemcpyHostToDevice);
 		cudaMemcpy(d_b, h_b,  m*sizeof(T), cudaMemcpyHostToDevice);
@@ -258,10 +328,68 @@ namespace absnf
 		cublasHandle_t handle;
 		cublasCreate(&handle);
 		//  ----------------------------------
+		//  d_Tss = diag(1) - L * diag(sign(dz))
+		//  ----------------------------------
 		int gridsize, blocksize;
 		cuutils::getGridBlockSize(&gridsize, &blocksize);
-		initTss <<<gridsize, blocksize >>>(d_Tss,d_L, d_dz, s, s*s);		
-
+		initTss <<<gridsize, blocksize >>>(d_Tss,d_L, d_dz, s, s*s);
+		//  ----------------------------------
+		//  d_I = diag(1) // room for improvement, operations can be merged
+		//  ----------------------------------		
+		initIdentity <<<gridsize, blocksize >>> (d_I, s);
+		//  ----------------------------------
+		//  d_I = d_Tss * X
+		//  ----------------------------------	
+		getTriangularInverse(handle, d_Tss, d_I, s);
+		//  ----------------------------------
+		//	d_I = d_I * diag(sign(dz))
+		//  ----------------------------------
+		multWithDz <<<gridsize, blocksize >>>(d_I, d_dz, s);
+		//  ----------------------------------
+		//	d_K = d_Y * d_I
+		//  ----------------------------------
+		double alpha = 1;
+		double beta = 0;
+		cublasDgemm(handle,
+					CUBLAS_OP_N,
+					CUBLAS_OP_T,	// d_I is in row major format
+					m,s,s,
+					&alpha,
+					d_Y,
+					m,
+					d_I,
+					s,
+					&beta,
+					d_K,
+					m);
+		// cuutils::printf_vector(d_K, m*s, "K");
+		//  ----------------------------------
+		//	d_gamma = d_b
+		//  d_Gamma = J
+		//  ----------------------------------
+		cudaMemcpy(d_gamma, d_b, m*sizeof(T), cudaMemcpyDeviceToDevice);
+		cudaMemcpy(d_Gamma, d_J, m*n*sizeof(T), cudaMemcpyDeviceToDevice);
+		//  ----------------------------------
+		//	d_gamma = d_gamma + K*a
+		//  ----------------------------------
+		beta = 1;
+		cublasDgemv(handle, CUBLAS_OP_N, m, s, &alpha,
+					d_K, m, d_a, 1, &beta, d_gamma, 1);
+		//  ----------------------------------
+		//  d_Gamma = d_Gamma + K*Z
+		//  ----------------------------------
+		cublasDgemm(handle,
+					CUBLAS_OP_N,
+					CUBLAS_OP_N,	// d_I is in row major format
+					m,n,s,
+					&alpha,
+					d_K,
+					m,
+					d_Z,
+					s,
+					&beta,
+					d_Gamma,
+					m);
 
 		// ----------------------------------
 		cudaMemcpy(h_gamma, d_gamma, m*sizeof(T), cudaMemcpyDeviceToHost);
@@ -277,6 +405,8 @@ namespace absnf
 		cudaFree(d_gamma);
 		cudaFree(d_Gamma);
 		cudaFree(d_Tss);
+		cudaFree(d_I);
+		cudaFree(d_K);
 	}
 }
 
