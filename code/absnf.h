@@ -408,6 +408,16 @@ namespace absnf
 		cudaFree(d_I);
 		cudaFree(d_K);
 	}
+	template <typename T>
+	void solve(T *h_a, T *h_b,
+			   T *h_Z, T *h_L,
+			   T *h_J, T *h_Y,
+			   T *dy,
+			   int m, int n, int s,
+			   T *h_dx, T *h_dz)
+	{
+
+	}
 }
 
 #endif // __ABSNF_H_INCLUDED__
