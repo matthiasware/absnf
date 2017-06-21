@@ -1,0 +1,47 @@
+\section{Solve}
+\subsubsection{ABS-Equation-System}
+
+As a last step we bring the function in the form of a linear equation system.
+
+\begin{flalign*}
+	\begin{pmatrix}
+		\Delta z \\
+		\Delta y
+	\end{pmatrix}
+	= 
+	\begin{pmatrix}
+		a \\
+		b
+	\end{pmatrix}
+	+
+	\begin{pmatrix}
+		Z & L \\
+		J & Y 
+	\end{pmatrix}
+	\times
+	\begin{pmatrix}
+		\Delta x \\
+		|\Delta z|
+	\end{pmatrix}
+\end{flalign*}
+We assume:
+\begin{flalign*}
+	\Delta y = 0
+\end{flalign*}
+otherwise use
+\begin{flalign*}
+	b' = b - \Delta y
+\end{flalign*}
+
+\begin{flalign*}
+	\Delta y &= b + J \Delta x + Y |\Delta z| \\
+	0 &= b + J \Delta x + Y |\Delta z| \\
+	- b - Y |\Delta z| &= J \Delta x \\
+	b - Y |\Delta z| &= J \Delta x (-1) \\
+	J^{-1}(b - Y |\Delta z|) &= - \Delta x \\
+	\Delta x = - J^{-1}(b - Y |\Delta z|)
+\end{flalign*}
+
+\begin{flalign*}
+	\Delta z = a + Z \Delta x + L |\Delta z|
+\end{flalign*}

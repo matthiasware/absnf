@@ -46,3 +46,4 @@ Math
 - Cool Snippets
 - Common Problems: grids vs blocks
 - Room for improvements
+- Lesson learned: prototyping
