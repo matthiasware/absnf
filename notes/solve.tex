@@ -43,5 +43,25 @@ otherwise use
 \end{flalign*}
 
 \begin{flalign*}
-	\Delta z = a + Z \Delta x + L |\Delta z|
+	\Delta z &= a + Z \Delta x + L |\Delta z| \\
+	&= a + Z \Big( - J^{-1}(b - Y |\Delta z|) \Big) +  L |\Delta z| \\
+	&= a + Z \Big( -J^{-1}b + J^{-1}Y|\Delta z| \Big) +  L |\Delta z| \\
+	&= a - ZJ^{-1}b + Z J^{-1}Y|\Delta z| +  L |\Delta z| \\
+	&= a - ZJ^{-1}b + (Z J^{-1}Y + L)|\Delta z|
+\end{flalign*}
+\begin{flalign*}
+\Delta z &= a - ZJ^{-1}b + (Z J^{-1}Y + L)|\Delta z| \\
+\Delta z &= c + S|\Delta z| \\
+c		 &= a - ZJ^{-1}b \\
+S		 &= (Z J^{-1}Y + L)
+\end{flalign*}
+
+\subsection{Useless}
+\begin{flalign*}
+	a' = a - \Delta z
+\end{flalign*}
+\begin{flalign*}
+	0 &= a' - ZJ^{-1}b + (Z J^{-1}Y + L)|\Delta z| \\
+	- a' + ZJ^{-1}b &= (Z J^{-1}Y + L)|\Delta z| \\
+	(Z J^{-1}Y + L)^{-1} (-a' + ZJ^{-1}b) &= |\Delta z|
 \end{flalign*}
