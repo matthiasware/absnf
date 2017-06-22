@@ -1,0 +1,253 @@
+%------------------------------------------------------------------------
+\begin{frame}
+\frametitle{Cookies}
+\framesubtitle{Client Side Storage}
+\begin{columns}[T] % align columns
+\begin{column}{.48\textwidth}
+
+\begin{center}
+{\Huge Cookies}
+\end{center}
+
+\end{column}%
+\hfill%
+\begin{column}{.48\textwidth}
+\color{blue}\rule{\linewidth}{4pt}
+
+	\setbeamertemplate{enumerate items}[default]
+	\begin{enumerate}
+		\item Same Origin Policy (SOP)
+		\item \textbf{Cookies}
+		\item WebStorage
+		\item Application Cache
+		\item IndexedDB
+	\end{enumerate}
+\end{column}%
+\end{columns}
+\end{frame}
+%------------------------------------------------------------------------
+
+\begin{frame}
+\frametitle{Cookies}
+\framesubtitle{Client Side Storage}
+Cookies:
+	\begin{itemize}
+		\item <1> Key-Value Speicher
+		\item 1994 Netscape Navigator 2.0 
+		\item Erweiterung zum ursprünglichen HTTP-Protokoll
+		\item Standard RFC 6265
+	\end{itemize}
+	\begin{textblock*}{6cm}(2cm,8cm) % {block width} (coords)
+		\includegraphics[height=2cm,width=4cm]{img/cm.png}
+	\end{textblock*}
+\end{frame}
+%------------------------------------------------------------------------
+
+\begin{frame}
+\frametitle{Cookies - Aufbau}
+\framesubtitle{Client Side Storage}
+	\begin{center}
+		{\Large
+		Cookie :: \textcolor{orange}{Name} = \textcolor{blue}{Wert} \textcolor{purple}{\{;Attribut\}*} \\
+		\vspace{5 mm}
+		\textcolor{orange}{id} = \textcolor{blue}{96dde37} \textcolor{purple}{;Domain=dom.net;Expires=2016}
+		}
+	\end{center}
+	Attribute:
+	\begin{itemize}
+		\item <1> Max-Age :: Anzahl der Millisekunden bis zur Zerstörung
+		\item <1> Domain ::  Domain / Sub-Domain der Gültigkeit
+		\item <1> Expires ::  Verfallsdatum
+		\item <1> Path :: Pfadbeschränkung
+		\item <1> Secure ::  Flag, Beschränkung auf HTTPS
+		\item <1> Version :: Version
+		\item <1> Discard ::  Flag, Zerstörung nach Ablauf der Session
+	\end{itemize}
+\end{frame}
+%------------------------------------------------------------------------
+
+\begin{frame}
+\frametitle{Cookies - Limits}
+\framesubtitle{Client Side Storage}
+	\begin{itemize}
+		\item Es gilt die SOP
+		\item Limits:
+		\begin{itemize}
+			\item 4KB/Cookie
+			\item 50 Cookies /Domain
+			\item 3000 Cookies total
+		\end{itemize} 
+		\item Speicherung und Übertragung unverschlüsselt.
+		\item Übertragung aller Cookies bei jedem Request/Response
+	\end{itemize}
+\end{frame}
+%------------------------------------------------------------------------
+
+\begin{frame}
+\frametitle{Cookies - Deklaration}
+\framesubtitle{Client Side Storage}
+
+	Es gibt zwei Möglichkeiten zum Setzten von Cookies:
+	\begin{itemize}
+		\item HTTP-Header
+		\item Programmatisch
+	\end{itemize}
+\end{frame}
+
+%------------------------------------------------------------------------
+
+\begin{frame}[fragile]
+\frametitle{Cookies per Javascript}
+\framesubtitle{Client Side Storage}
+
+	Browser API:
+	
+	\begin{lstlisting}
+	// get all cookies
+	var allCookies = document.cookie;
+		
+	//set a new cookie
+	document.cookie = newCookie;	
+	\end{lstlisting}
+	
+	Hilfsfunktion zum Setzen eines Cookies:
+	\begin{lstlisting}
+	function setCookie(name, value, expdays) {
+	  var d = new Date();
+	  d.setTime(d.getTime() + (expdays*24*60*60*1000));
+	  var expires = "expires="+d.toUTCString();
+	  document.cookie = name + "=" + value + "; " + expires;
+	}
+	\end{lstlisting}
+	
+\end{frame}
+%------------------------------------------------------------------------
+
+\begin{frame}[fragile]
+\frametitle{Cookies per Javascript}
+\framesubtitle{Client Side Storage}
+
+	Filtern von Cookies:
+			
+	\begin{lstlisting}
+	function getCookie(name) {
+	  var cookie = name + "=";
+	  var cookies = document.cookie.split(';');
+	  for(var i=0; i<cookies.length; i++) {
+	    var c = cookies[i];
+	    while (c.charAt(0)==' '){
+	      c=c.substring(1);
+	      if (c.indexOf(cookie) == 0){
+	        return c.substring(cookie.length, c.length);
+	      }	
+	    }
+	  }
+	  return "";
+	}
+	\end{lstlisting}
+\end{frame}
+%------------------------------------------------------------------------
+
+\begin{frame}[fragile]
+\frametitle{Cookies per Javascript}
+\framesubtitle{Client Side Storage}
+
+	Löschen eines Cookies:
+			
+	\begin{lstlisting}
+	function deleteCookie(name) {
+	  if(getCookie(name)){
+	   document.cookie = name + "=" + ";expires=Thu, 01 Jan 1970 00:00:01 GMT;";
+	  }
+	}
+	\end{lstlisting}
+\end{frame}
+
+%------------------------------------------------------------------------
+
+\begin{frame}
+\frametitle{Cookies - Anwendungsmöglichkeiten}
+\framesubtitle{Client Side Storage}
+
+	Anwendungsmöglichkeiten von Cookies:
+	\begin{itemize}
+		\item Session Management
+		\item Warenkörbe ...
+		\item Nutzer-Präferenzen
+		\item Webseiten Konfigurationen
+		\item Tracking
+	\end{itemize}
+\end{frame}
+
+%------------------------------------------------------------------------
+
+\begin{frame}
+\frametitle{Cookies - Beispiel: Tracker basteln!	 }
+\framesubtitle{Client Side Storage}
+
+	Tracking:
+	\begin{itemize}
+		\item Nutzer requestübergreifend identifizieren
+		\item Zustandslosigkeit von HTTP überwinden
+		\item Webseitenübergreifend
+	\end{itemize}
+	Gründe:
+	\begin{itemize}
+		\item Surfverhalten
+		\item Produktplatzierung
+		\item Nutzerprofile anlegen
+	\end{itemize}
+\end{frame}
+
+%------------------------------------------------------------------------
+\begin{frame}
+\frametitle{Cookies - Beispiel: Tracker basteln!	 }
+\framesubtitle{Client Side Storage}
+
+	Brainstorming - Was brauchen wir?
+	\begin{itemize}
+		\item Origin-Domain zum verteilen unserer Tracking Scripte \\
+		\item Willige Webseiten 
+		\item Session ID für die Nutzer der Webseiten
+		\item Möglichkeit zum Einbetten unsere Tracking Scripte: \\
+			(Addware, Buttons, Bilder ect...)
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{Cookies - Anwendungsmöglichkeiten}
+\framesubtitle{Client Side Storage}
+
+	\begin{center}
+		\large [Demo]
+	\end{center}
+\end{frame}
+%------------------------------------------------------------------------
+
+\begin{frame}
+\frametitle{Cookies - Tracking	 }
+\framesubtitle{Client Side Storage}
+
+	Professionelle Tracking und Webanalytik	 Software:
+	\begin{itemize}
+		\item google analytics
+		\item piwik 
+		\item eAnalytics
+		\item ...
+	\end{itemize}
+\end{frame}
+%------------------------------------------------------------------------
+
+\begin{frame}
+\frametitle{Cookies - Zusammenfassung	 }
+\framesubtitle{Client Side Storage}
+
+	Zusammenfassung:
+	\begin{itemize}
+		\item Beschränkter Speicher
+		\item Werden in jedem Request/Response versendet
+		\item Probleme beim Speichern sensibler Daten
+		\item Wegen unsachgemäßer Nutzung nicht mehr zum Realgebrauch verwendbar!
+	\end{itemize}
+\end{frame}

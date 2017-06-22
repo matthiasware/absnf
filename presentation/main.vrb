@@ -1,0 +1,8 @@
+\frametitle{IndexedDB}
+\framesubtitle{Client Side Storage}
+	Browser Support
+	\begin{center}
+		\includegraphics[height=5cm,width=11cm]{img/indexedDB-support.png}
+		\\
+		\includegraphics[height=0.5cm,width=5cm]{img/legende.png}
+	\end{center}

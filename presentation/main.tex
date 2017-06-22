@@ -1,0 +1,154 @@
+\documentclass{beamer}
+
+%-----------------------------------------------------------------
+%	Packages
+%-----------------------------------------------------------------
+\usepackage[utf8]{inputenc}	% für Umlaute ect.
+\usepackage{fancyhdr} % für header
+\usepackage{lastpage} % für footer
+\usepackage{extramarks} % für header und footer
+\usepackage{amsthm} % math stuff
+\usepackage{amsmath} % math stuff
+\usepackage{amssymb} % math stuff
+\usepackage{color}
+\usepackage{listings} % code listings
+\usepackage{graphicx} % für graphics
+\usepackage{color}
+\usepackage{tikz}
+\usepackage[absolute,overlay]{textpos} %to translate graphics through space
+\usepackage{soul}
+\usepackage{hyperref}
+
+
+%-----------------------------------------------------------------
+%	Title
+%-----------------------------------------------------------------
+\title{ABS-Normal Form}
+\subtitle{Eine Implementierung mit CUDA}
+\author[Matthias Mitterreiter]{\includegraphics[height=3cm,width=4cm]{img/badge-nvidia-cuda-cpp}  \\ Matthias Mitterreiter}
+\institute{Seminar Parallel Computing - FSU Jena \\
+%\vspace{0.5cm}
+{\scriptsize Prof. Martin Bücker, Dr. Torsten Bosse, Dipl-Inf. Ralf Seidler}}
+\date{\today}
+
+%-----------------------------------------------------------------
+%	Settings
+%-----------------------------------------------------------------
+
+
+\mode<presentation>
+{
+	\usetheme{Warsaw}
+	\usecolortheme{crane}
+}
+
+
+%---------------------------------------------------
+%	Colors
+%---------------------------------------------------
+
+\definecolor{listing-background}{RGB}{77,77,77}
+\definecolor{manifest-green}{RGB}{0, 179, 0}
+\definecolor{orange}{RGB}{255,127,0}
+\definecolor{green}{RGB}{57, 230, 0}
+\definecolor{blue}{RGB}{26, 117, 255}
+\definecolor{yellow}{RGB}{254, 255, 102}
+\definecolor{red}{RGB}{255,77,77}
+\definecolor{blue2}{RGB}{51, 204, 255}
+\definecolor{lightgray}{rgb}{.9,.9,.9}
+\definecolor{darkgray}{rgb}{.4,.4,.4}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+
+%---------------------------------------------------
+%	Syntax Highlighting
+%---------------------------------------------------
+
+\lstdefinelanguage{manifest}{
+  keywords={CACHE, NETWORK, FALLBACK,MANIFEST},
+  morecomment=[s]{/*}{*/},
+  morecomment=[l]{\#}, 
+  morestring=[b]',
+  morestring=[b]",
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  keywordstyle=\color{manifest-green}\bfseries,
+  ndkeywordstyle=\color{black}\bfseries,
+  identifierstyle=\color{black},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  sensitive=true
+}
+
+\lstdefinelanguage{JavaScript}{
+  keywords={CACHE, NETWORK, FALLBACK,MANIFEST, break, case, catch, continue, debugger, default, delete, do, else, false, finally, for, function, if, in, instanceof, new, null, return, switch, this, throw, true, try, typeof, var, void, while, with},
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]',
+  morestring=[b]",
+  ndkeywords={class, export, boolean, throw, implements, import, this},
+  keywordstyle=\color{blue}\bfseries,
+  ndkeywordstyle=\color{darkgray}\bfseries,
+  identifierstyle=\color{black},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{red}\ttfamily,
+  sensitive=true
+}
+
+\lstset{
+   language=JavaScript,
+   backgroundcolor=\color{lightgray},
+   extendedchars=true,
+   basicstyle=\footnotesize\ttfamily,
+   showstringspaces=false,
+   showspaces=false,
+   numbers=left,
+   numberstyle=\footnotesize,
+   numbersep=7pt,
+   tabsize=2,
+   breaklines=true,
+   showtabs=false,
+   captionpos=b,
+   literate={\ \ }{{\ }}1
+}
+
+% An environment for stpes, cases ect. 
+% From: http://tex.stackexchange.com/questions/32798/a-step-by-step-environment
+\newenvironment{steps}[1]{\begin{enumerate}[label=#1 \arabic*]}{\end{enumerate}}
+\makeatletter%
+\def\step{%
+	\@ifnextchar[ \@step{\@noitemargtrue\@step[\@itemlabel]}}
+\def\@step[#1]{\item[#1]\mbox{}\\\hspace*{\dimexpr-\labelwidth-\labelsep}}
+\makeatother
+
+%-----------------------------------------------------------------------------
+%	Theoreme
+%-----------------------------------------------------------------------------
+\newtheorem{mydef}{Definition}
+\newtheorem*{mydef*}{Definition}
+\newtheorem{mybei}{Beispiel}
+\newtheorem*{mybei*}{Beispiel}\usepackage{tikz}
+\newtheorem{mysatz}{Satz}
+\newtheorem*{mysatz*}{Satz}
+\newtheorem{mybew}{Beweis}
+\newtheorem*{mybew*}{Beweis}
+\newtheorem{myfolg}{Folgerung}
+\newtheorem*{myfolg*}{Folgerung}
+\newtheorem{mybemerk}{Bemerkung}
+\newtheorem*{mybemerk*}{Bemerkung}
+
+
+%-------------------------------------------------
+%	Beamer
+%-------------------------------------------------
+%\definecolor{craneorange}{rgb}{0.68,1,1}
+%\definecolor{craneblue}{gray}{0.85}
+\begin{document}
+
+\maketitle
+
+\addtobeamertemplate{frametitle}{}{%
+\begin{tikzpicture}[remember picture,overlay]
+\node[anchor=north east,yshift=1pt] at (current page.north east) {\includegraphics[height=0.8cm]{img/badge-nvidia-cuda-cpp}};
+\end{tikzpicture}}
+	\include{intro}
+	\include{problems}
+\end{document}

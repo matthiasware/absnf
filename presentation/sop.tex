@@ -1,0 +1,82 @@
+%------------------------------------------------------------------------
+\begin{frame}
+\frametitle{Same Origin Policy}
+\framesubtitle{Client Side Storage}
+\begin{columns}[T] % align columns
+\begin{column}{.48\textwidth}
+
+\begin{center}
+{\Huge Same Origin Policy}
+\end{center}
+
+\end{column}%
+\hfill%
+\begin{column}{.48\textwidth}
+\color{blue}\rule{\linewidth}{4pt}
+
+	\setbeamertemplate{enumerate items}[default]
+	\begin{enumerate}
+		\item \textbf{Same Origin Policy (SOP)}
+		\item Cookies
+		\item WebStorage
+		\item Application Cache
+		\item IndexedDB
+	\end{enumerate}
+\end{column}%
+\end{columns}
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}
+\frametitle{Same Origin Policy}
+\framesubtitle{Client Side Storage}
+
+	Same Origin Policy (SOP):
+	\begin{itemize}
+		\item <1> Sicherheitskonzept in Browsern
+		\item <1> 1996 Netscape Navigator 2.0
+		\item <1> Standard: RFC 6454
+		\item <1> Browser hindert Scripte daran, auf Ressourcen zuzugreifen, die nicht den gleichen Origin (Ursprung) habe. 
+		\item <1> Betrifft JavaScript, Flash, CSS, XHR,...
+	\end{itemize}
+
+\end{frame}
+
+%-------------------------------------------------------------------
+\begin{frame}
+\frametitle{Same Origin Policy}
+\framesubtitle{Client Side Storage}
+\begin{center}
+	{\huge
+	\textcolor{green}{https}://\textcolor{blue}{www.uni-jena.de}:\textcolor{orange}{443} \\
+	\vspace{5 mm}
+	Origin :: \{\textcolor{green}{protocoll},
+	\textcolor{blue}{domain},\textcolor{orange}{port}\}
+	}
+\end{center}
+
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}
+\frametitle{Same Origin Policy - Beispiel}
+\framesubtitle{Client Side Storage}
+
+Eine Funktion aus der Datei
+	\textcolor{green}{https}://\textcolor{blue}{www.uni-jena.de}:\textcolor{orange}{443}/javascript.js \\
+	
+versucht auf Elemente der folgenden Seiten zuzugreifen. Funktioniert das? \\
+\begin{table}[]
+\scalebox{0.7}{
+	\begin{tabular}{|l|l|l|l|l|}
+	\hline
+	URL & Protokoll & Domain & Port & Ergebnis \\ \hline
+	https://www.uni-jena.de & \textcolor{green}{https} & \textcolor{blue}{www.uni-jena.de} & \textcolor{orange}{443} & Ja \\ \hline
+	https://www.uni-jena.de/studs/grades & \textcolor{green}{https} & \textcolor{blue}{www.uni-jena.de}  & \textcolor{orange}{443} & Ja \\ \hline
+	https://www.uni-jena.de:80/ & \textcolor{green}{https} & \textcolor{blue}{www.uni-jena.de} & \textcolor{red}{80} & Nein \\ \hline
+	http://www.uni-jena.de & \textcolor{red}{http} & \textcolor{blue}{www.uni-jena.de} & \textcolor{red}{80} & Nein \\ \hline
+	https://www.fmi.uni-jena.de & \textcolor{green}{https} & \textcolor{red}{www.fmi.uni-jena.de} & \textcolor{orange}{443} & Nein \\ \hline
+	ftp://ftp.uni-jena.de & \textcolor{red}{ftp} & \textcolor{red}{ftp.uni-jena.de} & \textcolor{red}{21} & Nein \\	\hline
+	\end{tabular}
+}
+\end{table}
+
+\end{frame}
