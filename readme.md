@@ -48,6 +48,8 @@ Math
 - Room for improvements
 - Lesson learned: prototyping
 
+- clock
+
 https://stackoverflow.com/questions/28794010/solving-linear-systems-ax-b-with-cuda?noredirect=1&lq=1
 https://stackoverflow.com/questions/22399794/qr-decomposition-to-solve-linear-systems-in-cuda
 http://docs.nvidia.com/cuda/cublas/index.html#axzz4kNclpKOl
