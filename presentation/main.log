@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.5.28)  22 JUN 2017 17:47
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.5.28)  23 JUN 2017 19:55
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1397,27 +1397,37 @@ Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 31.
  [3
 
 ]
-File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
- <use img/badge-nvidia-cuda-cpp.png>
-Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 38.
-(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+LaTeX Font Info:    Try loading font information for U+msa on input line 44.
 
-[4
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Try loading font information for U+msb on input line 44.
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 44.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [4
 
 ]
 File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
  <use img/badge-nvidia-cuda-cpp.png>
-Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 46.
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 52.
 (pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
- [5
+
+[5
 
 ])
 \openout2 = `problems.aux'.
 
  (./problems.tex
 File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
-
-<use img/badge-nvidia-cuda-cpp.png>
+ <use img/badge-nvidia-cuda-cpp.png>
 Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 9.
 (pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
  [6
@@ -1434,7 +1444,8 @@ Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 9.
 \tf@snm=\write8
 \openout8 = `main.snm'.
 
- 
+
+
 AED: lastpage setting LastPage
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 154.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 154.
@@ -1451,21 +1462,24 @@ LaTeX Font Warning: Size substitutions with differences
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 154.
  ) 
 Here is how much of TeX's memory you used:
- 21674 strings out of 494901
- 417212 string characters out of 6178617
+ 21725 strings out of 494901
+ 418100 string characters out of 6178617
  494511 words of memory out of 5000000
- 24471 multiletter control sequences out of 15000+600000
- 6376 words of font info for 23 fonts, out of 8000000 for 9000
+ 24504 multiletter control sequences out of 15000+600000
+ 11182 words of font info for 41 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  48i,16n,62p,384b,712s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmss9.pfb>
-Output written on main.pdf (6 pages, 306315 bytes).
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmss9.pfb></usr/share/texlive/texmf-dist
+/fonts/type1/public/amsfonts/cm/cmssi10.pfb></usr/share/texlive/texmf-dist/font
+s/type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on main.pdf (6 pages, 331528 bytes).
 PDF statistics:
- 210 PDF objects out of 1000 (max. 8388607)
- 181 compressed objects within 2 object streams
+ 222 PDF objects out of 1000 (max. 8388607)
+ 190 compressed objects within 2 object streams
  13 named destinations out of 1000 (max. 500000)
  84 words of extra memory for PDF output out of 10000 (max. 10000000)
 

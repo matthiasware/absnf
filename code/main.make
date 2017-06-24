@@ -1,5 +1,5 @@
 # all : utils.o cuutils.o absnf.o test_cuutils eval devinfo gradient
-all : test_absnf devinfo test_utils
+all : test_absnf devinfo test_utils solve
 
 # test_cuutils: test_cuutils.cu utils.h
 # 	nvcc -std=c++11 test_cuutils.cu -o tests/test_cuutils
@@ -12,3 +12,6 @@ test_utils: test_utils.cpp utils.hpp
 
 devinfo: device_info.cu
 	nvcc -std=c++11 device_info.cu -o devinfo
+
+solve: solve.cu
+	nvcc -std=c++11 solve.cu -lcublas -lcusolver -o solve 
