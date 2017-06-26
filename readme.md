@@ -1,4 +1,5 @@
 ### TODO
+- calculate workload of functions
 - the calculations of S and c do not use a common QR-Factorization
 - function for cudamalloc + copy
 - function for copy host to device
