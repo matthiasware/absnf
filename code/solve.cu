@@ -156,7 +156,7 @@ void test2()
 template <typename T>
 void solveAXeqB(cublasHandle_t &cublas_handle,
 			    cusolverDnHandle_t &solver_handle,
-			   T *d_A, T *d_B, int m, int s)
+			   T *d_A, T *d_B, int m, int s, bool qr=false)
 {
     int *d_devInfo; cudaMalloc((void **)&d_devInfo, sizeof(int));
     // scaling factors for householder reflectors
@@ -253,6 +253,8 @@ void calculate_c(cublasHandle_t &cublas_handle,
     // c = a
     cudaMemcpy(d_c, d_a, s*sizeof(T), cudaMemcpyDeviceToDevice);
 
+    // cuutils::printf_vector(d_c, s, "S");
+
     // d_b <- J^{-1}*b
     solveAXeqB(cublas_handle, solver_handle, d_J, d_b, m, 1);
 
@@ -270,16 +272,34 @@ void calculate_c(cublasHandle_t &cublas_handle,
                 d_c,
                 1);
 }
+template <typename T>
+void modulus(cublasHandle_t &cublas_handle,
+             T *d_S, T *d_c, T *d_abs_dz, int s, T *d_dz)
+{
+    // d_dz = c
+    cudaMemcpy(d_dz, d_c, s*sizeof(T), cudaMemcpyDeviceToDevice);
+    // d_dz = beta * d_dz + S * d_abs_dz
+    double alpha = 1;
+    double beta = 1;
+    cublasDgemv(cublas_handle,
+                CUBLAS_OP_N,
+                s, s,
+                &alpha,
+                d_S, s,
+                d_abs_dz, 1,
+                &beta,
+                d_dz, 1);
+}
 
 int main()
 {
     int m = 4;
     int s = 3;
     // m x m
-    std::vector<t_def> h_J = {1, 1, 2 ,1,
-                              4, 1, 0, 1,
-                              3, 5, 1, 6,
-                              1, 1, 0, 1};
+    std::vector<t_def> h_J = {100, 1, 2 ,1,
+                              4, 120, 0, 1,
+                              3, 5, 120, 6,
+                              1, 1, 0, 130};
     utils::rowColConversion(&h_J[0], m, m, true);                                
     // m x s                                 
     std::vector<t_def> h_Y = {0, 0, 2,
@@ -301,10 +321,17 @@ int main()
     utils::rowColConversion(&h_Z[0], s, m, true);
 
     // m
-    std::vector<t_def> h_b = {-275, -126, -484, -450};
+    // std::vector<t_def> h_b = {-275, -126, -484, -450};
+    // b = b - y IMPORTANT
+    std::vector<t_def> h_b = {-223, -432, -200, -48};
 
     // s
     std::vector<t_def> h_a = {4, 4, -3};
+
+    // dz_start
+    // t_def *h_dz = (t_def *) malloc(s * sizeof(t_def));
+    // utils::fillRandVector(h_dz, s, -10, 10, 4);
+    t_def h_dz[] = {-1.59449432,  9.28890523,  9.39411967};
 
     // (m x s) = (m x n) x (m * s)
     t_def *d_J; cudaMalloc((void **)&d_J, m*m*sizeof(t_def));
@@ -315,6 +342,10 @@ int main()
     t_def *d_L; cudaMalloc((void **)&d_L, s*s*sizeof(t_def));
     t_def *d_S; cudaMalloc((void **)&d_S, s*s*sizeof(t_def));
     t_def *d_c; cudaMalloc((void **)&d_c, s*sizeof(t_def));
+    t_def *d_dz; cudaMalloc((void **)&d_dz, s*sizeof(t_def));
+    t_def *d_abs_dz; cudaMalloc((void **)&d_abs_dz, s*sizeof(t_def));
+    t_def *d_dz_old; cudaMalloc((void **)&d_dz_old, s*sizeof(t_def));
+    t_def *d_dx; cudaMalloc((void **)&d_dx, m*sizeof(t_def));
 
     cudaMemcpy(d_J, &h_J[0], m*m*sizeof(t_def), cudaMemcpyHostToDevice);
     cudaMemcpy(d_Y, &h_Y[0], m*s*sizeof(t_def), cudaMemcpyHostToDevice);
@@ -322,6 +353,7 @@ int main()
     cudaMemcpy(d_b, &h_b[0], m*sizeof(t_def), cudaMemcpyHostToDevice);
     cudaMemcpy(d_a, &h_a[0], s*sizeof(t_def), cudaMemcpyHostToDevice);
     cudaMemcpy(d_L, &h_L[0], s*s*sizeof(t_def), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_dz, h_dz, s*sizeof(t_def), cudaMemcpyHostToDevice);
 
     // --------------------------------------------------------------
     cublasHandle_t cublas_handle;
@@ -329,12 +361,53 @@ int main()
 
     cusolverDnHandle_t solver_handle;
     cusolverDnCreate(&solver_handle);
-    // --------------------------------------------------------------
-    // calculate_S(cublas_handle, solver_handle,
-    //             d_L, d_Z, d_J, d_Y, m, s, d_S);
+    // Calculate S, c
+    calculate_S(cublas_handle, solver_handle,
+                d_L, d_Z, d_J, d_Y, m, s, d_S);
+    
+    cudaMemcpy(d_J, &h_J[0], m*m*sizeof(t_def), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_Y, &h_Y[0], m*s*sizeof(t_def), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_Z, &h_Z[0], s*m*sizeof(t_def), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_b, &h_b[0], m*sizeof(t_def), cudaMemcpyHostToDevice);
+
     calculate_c(cublas_handle, solver_handle,
                 d_a, d_Z, d_J, d_b, m, s, d_c);
-    // cuutils::printf_vector(d_S, s*s, "S");
+
+    cuutils::printf_vector(d_S, s*s, "d_S");
+    cuutils::printf_vector(d_c, s, "d_c");
+    // --------------------------------------------------------------
+    cuutils::printf_vector(d_dz, s, "dz_start");
+
+    int gridsize, blocksize;
+    cuutils::getGridBlockSize(&gridsize, &blocksize);
+    int maxiter = 100;
+    int i = 0;
+    double tol = 1e-8;
+    double diff = tol + 1;
+    // cuutils::printf_vector(d_dz, s, "d_dz");
+    while(i < maxiter && diff > tol)
+    {
+        // dz_old = dz
+        cudaMemcpy(d_dz_old, d_dz, s*sizeof(t_def), cudaMemcpyDeviceToDevice);
+        // abs_dz = |dz|
+        cuutils::abs<<<gridsize,blocksize>>>(d_dz, d_abs_dz, s);
+        std::cout << "----" << i << "----"  << std::endl;
+        cuutils::printf_vector(d_dz_old, s, "d_dz_old");
+        cuutils::printf_vector(d_abs_dz, s, "d_abs_dz");
+        // dz = calculateDZ()
+        modulus(cublas_handle, d_S, d_c, d_abs_dz, s, d_dz);
+        cuutils::printf_vector(d_dz, s, "d_dz_new");
+        // calculate diff
+        cuutils::vvSub<<<gridsize, blocksize>>>(d_dz, d_dz_old, d_dz_old, s);
+        cublasDnrm2(cublas_handle,
+                    s,
+                    d_dz_old,
+                    1,
+                    &diff);
+        // std::cout << i << ": " << diff << std::endl;
+        i++;
+    }
+    cuutils::printf_vector(d_dz, s, "Result: d_dz");
     // --------------------------------------------------------------
     cusolverDnDestroy(solver_handle);
     cublasDestroy(cublas_handle);
@@ -347,5 +420,9 @@ int main()
     cudaFree(d_L);
     cudaFree(d_S);
     cudaFree(d_c);
+    cudaFree(d_dx);
+    cudaFree(d_dz);
+    cudaFree(d_abs_dz);
+    cudaFree(d_dz_old);
 	return 0;
 }
