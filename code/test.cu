@@ -46,7 +46,9 @@ public:
 	void calculate_eval_workload(int m, int n, int s, int &workload, bool max);
 	void prepare_memory();
 	void eval(T *h_dx, T *h_dz, T *h_dy);
-	void gradient();
+	void eval_core(T *d_dx, T *d_dz, T *d_abs_dz, T *d_dy);
+	void gradient(T *h_dz, T *h_gamma, T *h_Gamma);
+	void gradient_core(T *d_dz, T* d_Tss, T* d_I, T* d_K, T *d_gamma, T *d_Gamma);
 	void solve();
 	void check(cudaError_t code);
 	void check(cublasStatus_t code);
@@ -56,13 +58,13 @@ public:
 template <class T>
 void Absnf<T>::prepare_cublas()
 {
-	if(!m_cublas_handle)
+	if(m_cublas_handle == NULL)
 		check(cublasCreate(&m_cublas_handle));
 }
 template <class T>
 void Absnf<T>::prepare_cusolve()
 {
-	if(!m_solver_handle)
+	if(m_solver_handle == NULL)
 		check(cusolverDnCreate(&m_solver_handle));
 }
 template <class T>
@@ -101,27 +103,27 @@ void Absnf<T>::cuda_err_handler(const char *msg, const char *file, int line, boo
 template <class T>
 void Absnf<T>::prepare_memory()
 {
-	if(m_h_Z && !m_d_Z)
+	if(m_h_Z && m_d_Z == NULL)
 		m_d_Z = cuda_allocate_and_copy(m_h_Z, m_size_s*m_size_n);
 	else
 		throw "cannot allocate device memory for Z";
-	if(m_h_L && !m_d_L)
+	if(m_h_L && m_d_L == NULL)
 		m_d_L = cuda_allocate_and_copy(m_h_L, m_size_s*m_size_s);
 	else
 		throw "cannot allocate device memory for L";
-	if(m_h_J && !m_d_J)
+	if(m_h_J && m_d_J == NULL)
 		m_d_J = cuda_allocate_and_copy(m_h_J, m_size_m*m_size_n);
 	else
 		throw "cannot allocate device memory for J";
-	if(m_h_Y && !m_d_Y)
+	if(m_h_Y && m_d_Y == NULL)
 		m_d_Y = cuda_allocate_and_copy(m_h_Y, m_size_m*m_size_s);
 	else
 		throw "cannot allocate device memory for Y";
-	if(m_h_a && !m_d_a)
+	if(m_h_a && m_d_a == NULL)
 		m_d_a = cuda_allocate_and_copy(m_h_a, m_size_s);
 	else
 		throw "cannot allocate device memory for a";
-	if(m_h_b && !m_d_b)
+	if(m_h_b && m_d_b == NULL)
 		m_d_b = cuda_allocate_and_copy(m_h_b, m_size_m);
 	else
 		throw "cannot allocate device memory for b";
@@ -166,21 +168,111 @@ void Absnf<T>::calculate_eval_workload(int m, int n, int s,
 		throw "not implemented";
 
 };
+template <class T>
+void Absnf<T>::eval_core(T *d_dx, T *d_dz, T *d_abs_dz, T *d_dy)
+{
+	//  ----------------------------------
+	// dz = a
+	//  ----------------------------------
+	check(cudaMemcpy(d_dz, m_d_a, m_size_s*sizeof(T), cudaMemcpyDeviceToDevice));
+	//  ----------------------------------		
+	// dz = Z * dx + dz
+	// dz = alpha * (Z * dx) + beta * dz
+	//  ----------------------------------
+	double alpha = 1;
+	double beta = 1;
+	check(cublasDgemv(m_cublas_handle, CUBLAS_OP_N, 
+					  m_size_s, m_size_n,
+					  &alpha,
+					  m_d_Z, m_size_s,
+					  d_dx, 1,
+					  &beta,
+					  d_dz, 1));
+	//  ----------------------------------
+	// dz = dz + a
+	// dz = dz + L * |dz|
+	//  ----------------------------------
+	for(int i=0; i<m_size_s; i++)
+	{
+		check(cublasDgemv(m_cublas_handle, CUBLAS_OP_N,
+						  1, i,
+						  &alpha,
+						  &m_d_L[i * m_size_s], 1,
+						  d_abs_dz, 1,
+						  &beta,
+						  &d_dz[i], 1));
+		cuutils::abs <<<1,1>>>(&d_dz[i], &d_abs_dz[i], 1);
+	}
+	//  ----------------------------------
+	// dy = b
+	//  ----------------------------------
+	check(cudaMemcpy(d_dy, m_d_b, m_size_m*sizeof(T), cudaMemcpyDeviceToDevice));
+	//  ----------------------------------
+	// dy = J * dx
+	//  ----------------------------------
+	check(cublasDgemv(m_cublas_handle, CUBLAS_OP_N,
+					  m_size_m, m_size_n,
+					  &alpha,
+					  m_d_J, m_size_m,
+					  d_dx, 1,
+					  &beta, d_dy, 1));
+	//  ----------------------------------
+	// dy = dy + Y * |dz|
+	// dy = beta * dy + alpha(Y*abs_dz)
+	//  ----------------------------------
+	check(cublasDgemv(m_cublas_handle, CUBLAS_OP_N,
+					  m_size_m, m_size_s,
+					  &alpha,
+					  m_d_Y, m_size_m,
+					  d_abs_dz, 1,
+					  &beta,
+					  d_dy, 1));
+}
 
 template <class T>
 void Absnf<T>::eval(T *h_dx, T *h_dz, T *h_dy)
 {
 	prepare_memory();
+	prepare_cublas();
 	T *d_dy = cuda_allocate(m_size_m);
 	T *d_dz = cuda_allocate(m_size_s);
+	T *d_abs_dz = cuda_allocate(m_size_s);
 	T *d_dx = cuda_allocate_and_copy(h_dx, m_size_n);
 
+	eval_core(d_dx, d_dz, d_abs_dz, d_dy);
 
 	cuda_download_and_free(h_dy, d_dy, m_size_m);
 	cuda_download_and_free(h_dz, d_dz, m_size_s);
-	cudaFree(d_dx);
-}
 
+	check(cudaFree(d_dx));
+	check(cudaFree(d_abs_dz));
+}
+template <class T>
+void Absnf<T>::gradient_core(T *d_dz, T* d_Tss, T* d_I, T* d_K, T *d_gamma, T *d_Gamma)
+{
+
+}
+template <class T>
+void Absnf<T>::gradient(T *h_dz, T *h_gamma, T *h_Gamma)
+{
+	prepare_memory();
+	prepare_cublas();
+	T *d_dz = cuda_allocate_and_copy(h_dz, m_size_s);
+	T *d_gamma = cuda_allocate(m_size_m);
+	T *d_Gamma = cuda_allocate(m_size_m * m_size_n);
+	T *d_Tss = cuda_allocate(m_size_s * m_size_s);
+	T *d_I = cuda_allocate(m_size_s * m_size_s);
+	T *d_K = cuda_allocate(m_size_m * m_size_s);
+
+	gradient_core(d_dz, d_Tss, d_I, d_K, d_gamma, d_Gamma);
+
+	cuda_download_and_free(h_gamma, d_gamma, m_size_m);
+	cuda_download_and_free(h_Gamma, d_Gamma, m_size_m * m_size_n);
+	check(cudaFree(d_dz));
+	check(cudaFree(d_Tss));
+	check(cudaFree(d_I));
+	check(cudaFree(d_K));
+}
 int main()
 {
 	int n=4;
@@ -204,11 +296,19 @@ int main()
 	// m * s
 	std::vector<t_def> h_Y = {0, 0, 2,
 							4, 2, 0};
+
+	utils::rowColConversion(&h_Z[0], s, n, true);
+	utils::rowColConversion(&h_J[0], m, n, true);
+	utils::rowColConversion(&h_Y[0], m, s, true);
+
 	t_def *h_dz =(t_def *)malloc(s*sizeof(t_def));
 	t_def *h_dy = (t_def *)malloc(m*sizeof(t_def));
 	std::vector<t_def> h_dx = {-3, 4, 4, 0};
 
 	Absnf<t_def> absnf(&h_Z[0], &h_L[0], &h_J[0], &h_Y[0], &h_a[0], &h_b[0], m, n, s);
+	absnf.eval(&h_dx[0], h_dz, h_dy);
+	utils::printf_vector(h_dy, m, "dy");
+	utils::printf_vector(h_dz, s, "dz");
 	// absnf.eval(&h_dx[0], h_dy, h_dz);
 
 	// try
