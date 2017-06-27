@@ -2,8 +2,60 @@
 #define __CUUTILS_H_INCLUDED__
 #include <stdio.h>
 #include "utils.hpp"
+#include <cublas_v2.h>
+#include <iostream>
+#include <cusolverDn.h>
+#include <sstream>
+
 namespace cuutils
-{
+{	
+	// ---------------------------------------------------
+	//  DECLARATIONS
+	// ---------------------------------------------------
+	void cuda_err_handler(const char *msg, const char *file, int line, bool abort);
+	const char* cublasGetErrorString(cublasStatus_t status);
+	const char* cusolverGetErrorString(cusolverStatus_t error);
+	void check(cudaError_t code);
+	void check(cublasStatus_t code);
+	void check(cusolverStatus_t code);
+	void getGridBlockSize(int *gridsize, int *blocksize);
+
+	template <typename T>
+	T __device__ sign(T *val);
+
+	template <typename T>
+	void printf_vector(T *d_v, int size, const std::string& name = "");
+
+	template <typename T>
+	void transpose_matrix(cublasHandle_t &handle, T* Z, int s, int n);
+
+	template <typename T>
+	__global__ void vvAdd(T *u, T *v, T *z, int size);
+
+	template <typename T>
+	__global__ void vvSub(T *u, T *v, T *z, int size);
+
+	template <typename T>
+	__global__ void makeSignumVector(T *v_source, T *v_target, int size);
+
+	template <typename T>
+	__global__ void abs(T *v_source, T *v_target, int size);
+
+
+	// ---------------------------------------------------
+	//  IMPLEMENTATION
+	// ---------------------------------------------------
+	void cuda_err_handler(const char *msg, const char *file, int line, bool abort=true)
+	{
+	std::stringstream ss;
+	ss << file << "(" << line << ")" << " : " << msg;
+	std::string file_and_line;
+	ss >> file_and_line;
+	if (abort)
+		throw std::runtime_error(file_and_line);
+	else
+		std::cout << "GPUassert: " << file_and_line << std::endl;
+	}
 	const char* cublasGetErrorString(cublasStatus_t status)
 	{
 	    switch(status)
@@ -34,8 +86,28 @@ namespace cuutils
 	    }
     	return "unknown error";
 	}
+	void check(cudaError_t code)
+	{
+		if(code != cudaSuccess)
+			cuda_err_handler(cudaGetErrorString(code), __FILE__, __LINE__);
+	}
+	void check(cublasStatus_t code)
+	{
+		if(code != CUBLAS_STATUS_SUCCESS)
+			cuda_err_handler(cuutils::cublasGetErrorString(code), __FILE__, __LINE__);
+	}
+	void check(cusolverStatus_t code)
+	{
+		if(code != CUSOLVER_STATUS_SUCCESS)
+			cuda_err_handler(cuutils::cusolverGetErrorString(code), __FILE__, __LINE__);
+	}
 	template <typename T>
-	void printf_vector(T *d_v, int size, const std::string& name = "")
+	T __device__ sign(T *val)
+	{
+		return (T(0) < *val) - (*val < T(0));
+	}
+	template <typename T>
+	void printf_vector(T *d_v, int size, const std::string& name)
 	{
 		T *h_v = (T *) malloc(size*sizeof(T));
 		cudaMemcpy(h_v, d_v, size*sizeof(T),cudaMemcpyDeviceToHost);

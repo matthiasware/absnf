@@ -7,6 +7,7 @@
 
 namespace utils
 {
+
 	enum MATRIXOPT
 	{
 		NONE,
@@ -21,8 +22,67 @@ namespace utils
 		REAL,
 		INT
 	};
+	// ---------------------------------------------------
+	//  DECLARATIONS
+	// ---------------------------------------------------
 	template <typename T>
-	void printf_vector(T *A, int cols, const std::string& name = "")
+	void printf_vector(T *A, int cols, const std::string& name = "");
+
+	template <typename T>
+	void printf_matrix(T *A, int rows, int cols, const std::string& name = "");
+
+	template <typename T>
+	void printf_matrix_C2R(T *A, int rows, int cols, const std::string& name = "");
+
+	template <typename T>
+	void fillRandMatrixNone(T *matrix, int rows, int cols, std::mt19937 gen,
+						    int first, int last, VALUEOP vo=REAL);
+
+	template <typename T>
+	void fillRandMatrixLower(T *matrix, int rows, int cols,
+							 std::mt19937 gen, int first, int last, VALUEOP vo=REAL);
+
+	template <typename T>
+	void fillRandMatrixLowerCM(T *matrix, int rows, int cols,
+							 std::mt19937 gen, int first, int last, VALUEOP vo=REAL);
+
+	template <typename T>
+	void fillRandMatrix(T *matrix, int rows, int cols, 
+						int first=0, int last=10,
+						int seed=0,
+						MATRIXOPT mo=NONE,
+						VALUEOP vo=REAL);
+
+	template <typename T>
+	void fillRandMatrixCM(T *matrix, int rows, int cols, 
+						int first=0, int last=10,
+						int seed=0,
+						MATRIXOPT mo=NONE,
+						VALUEOP vo=REAL);
+
+	template <typename T>
+	void fillRandVector(T *vector, int size, 
+					    int first=0, int last=10,
+					    int seed=0,
+					    VALUEOP vo=REAL);
+
+	template <typename T>
+	void fillVector(T *vector, int size, T value);
+
+	template <typename T>
+	void rowColConversion(T *m_source, T *m_target, int rows, int cols);
+
+	template <typename T>
+	void rowColConversion(T *matrix, int rows, int cols, bool rm=true);
+
+	template <typename T>
+	bool vectors_equals(T* a, T* b, int size, bool verbose=false);
+
+	// ---------------------------------------------------
+	//  IMPLEMENTATION
+	// ---------------------------------------------------
+	template <typename T>
+	void printf_vector(T *A, int cols, const std::string& name)
 	{
 		if (name.size() > 0)
 		{
@@ -39,7 +99,7 @@ namespace utils
 	void fillRandMatrixNone(T *matrix, int rows, int cols,
 							std::mt19937 gen,
 						    int first, int last,
-						    VALUEOP vo=REAL)
+						    VALUEOP vo)
 	{
 		std::uniform_real_distribution<> dis(first, last);
 		if(vo == REAL)
@@ -69,7 +129,7 @@ namespace utils
 	void fillRandMatrixLower(T *matrix, int rows, int cols,
 							 std::mt19937 gen,
 							 int first, int last,
-							 VALUEOP vo=REAL)
+							 VALUEOP vo)
 	{
 		std::uniform_real_distribution<> dis(first, last);
 		if(vo==REAL)
@@ -99,7 +159,7 @@ namespace utils
 	void fillRandMatrixLowerCM(T *matrix, int rows, int cols,
 							 std::mt19937 gen,
 							 int first, int last,
-							 VALUEOP vo=REAL)
+							 VALUEOP vo)
 	{
 		std::uniform_real_distribution<> dis(first, last);
 		if(vo==REAL)
@@ -127,10 +187,10 @@ namespace utils
 	}
 	template <typename T>
 	void fillRandMatrix(T *matrix, int rows, int cols, 
-						int first=0, int last=10,
-						int seed=0,
-						MATRIXOPT mo=NONE,
-						VALUEOP vo=REAL)
+						int first, int last,
+						int seed,
+						MATRIXOPT mo,
+						VALUEOP vo)
 	{
 		std::mt19937 gen;
 		if(seed > 0)
@@ -156,10 +216,10 @@ namespace utils
 	// FILLS MATRIX IN COLUMN MAJOR
 	template <typename T>
 	void fillRandMatrixCM(T *matrix, int rows, int cols, 
-						int first=0, int last=10,
-						int seed=0,
-						MATRIXOPT mo=NONE,
-						VALUEOP vo=REAL)
+						int first, int last,
+						int seed,
+						MATRIXOPT mo,
+						VALUEOP vo)
 	{
 		std::mt19937 gen;
 		if(seed > 0)
@@ -184,9 +244,9 @@ namespace utils
 	}
 	template <typename T>
 	void fillRandVector(T *vector, int size, 
-					    int first=0, int last=10,
-					    int seed=0,
-					    VALUEOP vo=REAL)
+					    int first, int last,
+					    int seed,
+					    VALUEOP vo)
 	{
 		std::mt19937 gen;
 		if(seed > 0)
@@ -225,7 +285,7 @@ namespace utils
 		}
 	}
 	template <typename T>
-	void rowColConversion(T *matrix, int rows, int cols, bool rm=true)
+	void rowColConversion(T *matrix, int rows, int cols, bool rm)
 	{
 		if(!rm)
 		{
@@ -271,7 +331,7 @@ namespace utils
 		}
 	}
 	template <typename T>
-	void printf_matrix(T *A, int rows, int cols, const std::string& name = "")
+	void printf_matrix(T *A, int rows, int cols, const std::string& name)
 	{
 		if (name.size() > 0)
 		{
@@ -293,7 +353,7 @@ namespace utils
 	}
 	// PRINTS COLUMN MAJOR MATRIX
 	template <typename T>
-	void printf_matrix_C2R(T *A, int rows, int cols, const std::string& name = "")
+	void printf_matrix_C2R(T *A, int rows, int cols, const std::string& name)
 	{
 		if (name.size() > 0)
 		{
@@ -314,7 +374,7 @@ namespace utils
 		std::cout << "]\n";
 	}
 	template <typename T>
-	bool vectors_equals(T* a, T* b, int size, bool verbose=false)
+	bool vectors_equals(T* a, T* b, int size, bool verbose)
 	{
 		if(verbose)
 		{

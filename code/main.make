@@ -5,16 +5,16 @@ all : test_absnf devinfo test_utils solve test
 # 	nvcc -std=c++11 test_cuutils.cu -o tests/test_cuutils
 
 test_absnf: test_absnf.cu absnf.h utils.hpp
-	nvcc -std=c++11 test_absnf.cu -lcublas -o test_absnf
+	nvcc -std=c++11 -O0 test_absnf.cu -lcublas -o test_absnf
 
 test_utils: test_utils.cpp utils.hpp
-	g++ -std=c++11 test_utils.cpp -o test_utils
+	g++ -std=c++11 -O0 test_utils.cpp -o test_utils
 
 devinfo: device_info.cu
-	nvcc -std=c++11 device_info.cu -o devinfo
+	nvcc -std=c++11 -O0 device_info.cu -o devinfo
 
 solve: solve.cu
-	nvcc -std=c++11 solve.cu -lcublas -lcusolver -o solve 
+	nvcc -std=c++11 -O0 solve.cu -lcublas -lcusolver -o solve 
 
-test: test.cu
-	nvcc -std=c++11 test.cu -lcublas -lcusolver -o test
+test: test.cu absnf.h utils.hpp cuutils.h
+	nvcc -std=c++11 -O0 test.cu -lcublas -lcusolver -o test

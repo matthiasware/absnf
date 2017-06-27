@@ -3,8 +3,46 @@
 #include <cusolverDn.h>
 #include <sstream>
 #include "cuutils.h"
+#include "absnf.h"
 #include <vector>
 #define t_def double
+
+template <class T>
+class CudaData
+{
+public:
+	int size;
+};
+
+template <class T>
+class CudaMatrix
+{
+public:
+	enum MemOrder {ROW_MAJOR, COL_MAJOR};
+	enum Format {NORM, LU, QR};
+	Format m_form_device;
+	MemOrder m_mem_device;
+	int m_rows;
+	int m_cols;
+	int m_elements;
+	int m_size;
+	T *m_d_mem;
+	T *m_h_mem;
+	// functions
+	T *d_mem();
+	T *h_mem();
+	T *h_buffer();
+	T *h_T();
+	T *d_T();
+	void upload();
+	void download();
+	void buffer();
+};
+template <class T>
+class CudaVector
+{
+
+};
 
 template <class T>
 class Absnf {
@@ -12,6 +50,8 @@ public:
 	int m_size_m;
 	int m_size_n;
 	int m_size_s;
+	int m_blocksize;
+	int m_gridsize;
 	// Host memory
 	T *m_h_Z = NULL;
 	T *m_h_L = NULL;
@@ -19,7 +59,7 @@ public:
 	T *m_h_Y = NULL;
 	T *m_h_a = NULL;
 	T *m_h_b = NULL;
-
+	// Device Memory
 	T *m_d_Z = NULL;
 	T *m_d_L = NULL;
 	T *m_d_J = NULL;
@@ -32,7 +72,8 @@ public:
 
 	void prepare_cublas();
 	void prepare_cusolve();
-	void calculate_gradient_workload();
+	void prepare_device();
+	void calculate_gradient_workload(int m, int n, int s, int &workload, bool max);
 	void calculate_solve_workload();
 	T * cuda_allocate(int size);
 	T * cuda_allocate_and_copy(T *h_source, int size);
@@ -46,58 +87,25 @@ public:
 	void calculate_eval_workload(int m, int n, int s, int &workload, bool max);
 	void prepare_memory();
 	void eval(T *h_dx, T *h_dz, T *h_dy);
-	void eval_core(T *d_dx, T *d_dz, T *d_abs_dz, T *d_dy);
 	void gradient(T *h_dz, T *h_gamma, T *h_Gamma);
-	void gradient_core(T *d_dz, T* d_Tss, T* d_I, T* d_K, T *d_gamma, T *d_Gamma);
 	void solve();
-	void check(cudaError_t code);
-	void check(cublasStatus_t code);
-	void check(cusolverStatus_t code);
-	void cuda_err_handler(const char *msg, const char *file, int line, bool abort=true);
 };
+template <class T>
+void Absnf<T>::prepare_device()
+{
+	cuutils::getGridBlockSize(&m_gridsize, &m_blocksize);
+}
 template <class T>
 void Absnf<T>::prepare_cublas()
 {
 	if(m_cublas_handle == NULL)
-		check(cublasCreate(&m_cublas_handle));
+		cuutils::check(cublasCreate(&m_cublas_handle));
 }
 template <class T>
 void Absnf<T>::prepare_cusolve()
 {
 	if(m_solver_handle == NULL)
-		check(cusolverDnCreate(&m_solver_handle));
-}
-template <class T>
-void Absnf<T>::check(cudaError_t code)
-{
-	if(code != cudaSuccess)
-		cuda_err_handler(cudaGetErrorString(code), __FILE__, __LINE__);
-}
-template <class T>
-void Absnf<T>::check(cublasStatus_t code)
-{
-	if(code != CUBLAS_STATUS_SUCCESS)
-		cuda_err_handler(cuutils::cublasGetErrorString(code), __FILE__, __LINE__);
-}
-template <class T>
-void Absnf<T>::check(cusolverStatus_t code)
-{
-	if(code != CUSOLVER_STATUS_SUCCESS)
-		cuda_err_handler(cuutils::cusolverGetErrorString(code), __FILE__, __LINE__);
-}
-
-template <class T>
-void Absnf<T>::cuda_err_handler(const char *msg, const char *file, int line, bool abort)
-{
-
-	std::stringstream ss;
-	ss << file << "(" << line << ")" << " : " << msg;
-	std::string file_and_line;
-	ss >> file_and_line;
-	if (abort)
-		throw std::runtime_error(file_and_line);
-	else
-		std::cout << "GPUassert: " << file_and_line << std::endl;
+		cuutils::check(cusolverDnCreate(&m_solver_handle));
 }
 
 template <class T>
@@ -131,31 +139,31 @@ void Absnf<T>::prepare_memory()
 template <class T>
 void Absnf<T>::cuda_download_and_free(T* h_dest, T* d_source, int size)
 {
-	check(cudaMemcpy(h_dest, d_source, size*sizeof(T), cudaMemcpyDeviceToHost));
-	check(cudaFree(d_source));
+	cuutils::check(cudaMemcpy(h_dest, d_source, size*sizeof(T), cudaMemcpyDeviceToHost));
+	cuutils::check(cudaFree(d_source));
 }
 template <class T>
 T* Absnf<T>::cuda_allocate_and_copy(T *h_source, int size)
 {
 	T *d_p = cuda_allocate(size);
-	check(cudaMemcpy(d_p, h_source,  size*sizeof(T), cudaMemcpyHostToDevice));
+	cuutils::check(cudaMemcpy(d_p, h_source,  size*sizeof(T), cudaMemcpyHostToDevice));
 	return d_p;
 }
 template <class T>
 T* Absnf<T>::cuda_allocate(int size)
 {
 	T *d_p;
-	check(cudaMalloc((void **)&d_p, size*sizeof(T)));
+	cuutils::check(cudaMalloc((void **)&d_p, size*sizeof(T)));
 	return d_p;
 }
 template <class T>
 Absnf<T>::~Absnf()
 {
 	if(m_solver_handle != NULL)
-		check(cusolverDnDestroy(m_solver_handle));
+		cuutils::check(cusolverDnDestroy(m_solver_handle));
 	if(m_cublas_handle != NULL)
-    	check(cublasDestroy(m_cublas_handle));
-	check(cudaThreadExit());
+    	cuutils::check(cublasDestroy(m_cublas_handle));
+	cuutils::check(cudaThreadExit());
 }
 
 template <class T>
@@ -169,64 +177,13 @@ void Absnf<T>::calculate_eval_workload(int m, int n, int s,
 
 };
 template <class T>
-void Absnf<T>::eval_core(T *d_dx, T *d_dz, T *d_abs_dz, T *d_dy)
+void Absnf<T>::calculate_gradient_workload(int m, int n, int s,
+										   int &workload, bool max=true)
 {
-	//  ----------------------------------
-	// dz = a
-	//  ----------------------------------
-	check(cudaMemcpy(d_dz, m_d_a, m_size_s*sizeof(T), cudaMemcpyDeviceToDevice));
-	//  ----------------------------------		
-	// dz = Z * dx + dz
-	// dz = alpha * (Z * dx) + beta * dz
-	//  ----------------------------------
-	double alpha = 1;
-	double beta = 1;
-	check(cublasDgemv(m_cublas_handle, CUBLAS_OP_N, 
-					  m_size_s, m_size_n,
-					  &alpha,
-					  m_d_Z, m_size_s,
-					  d_dx, 1,
-					  &beta,
-					  d_dz, 1));
-	//  ----------------------------------
-	// dz = dz + a
-	// dz = dz + L * |dz|
-	//  ----------------------------------
-	for(int i=0; i<m_size_s; i++)
-	{
-		check(cublasDgemv(m_cublas_handle, CUBLAS_OP_N,
-						  1, i,
-						  &alpha,
-						  &m_d_L[i * m_size_s], 1,
-						  d_abs_dz, 1,
-						  &beta,
-						  &d_dz[i], 1));
-		cuutils::abs <<<1,1>>>(&d_dz[i], &d_abs_dz[i], 1);
-	}
-	//  ----------------------------------
-	// dy = b
-	//  ----------------------------------
-	check(cudaMemcpy(d_dy, m_d_b, m_size_m*sizeof(T), cudaMemcpyDeviceToDevice));
-	//  ----------------------------------
-	// dy = J * dx
-	//  ----------------------------------
-	check(cublasDgemv(m_cublas_handle, CUBLAS_OP_N,
-					  m_size_m, m_size_n,
-					  &alpha,
-					  m_d_J, m_size_m,
-					  d_dx, 1,
-					  &beta, d_dy, 1));
-	//  ----------------------------------
-	// dy = dy + Y * |dz|
-	// dy = beta * dy + alpha(Y*abs_dz)
-	//  ----------------------------------
-	check(cublasDgemv(m_cublas_handle, CUBLAS_OP_N,
-					  m_size_m, m_size_s,
-					  &alpha,
-					  m_d_Y, m_size_m,
-					  d_abs_dz, 1,
-					  &beta,
-					  d_dy, 1));
+	if(max)
+		workload = s+m+(s*n)+(s*s)+(m*n)+(m*s)+n+s+(s*s)+(s*s)+(m*s)+m+(m*n)*sizeof(T);
+	else
+		throw "not implemented";
 }
 
 template <class T>
@@ -234,29 +191,30 @@ void Absnf<T>::eval(T *h_dx, T *h_dz, T *h_dy)
 {
 	prepare_memory();
 	prepare_cublas();
+	prepare_device();
 	T *d_dy = cuda_allocate(m_size_m);
 	T *d_dz = cuda_allocate(m_size_s);
 	T *d_abs_dz = cuda_allocate(m_size_s);
 	T *d_dx = cuda_allocate_and_copy(h_dx, m_size_n);
 
-	eval_core(d_dx, d_dz, d_abs_dz, d_dy);
+	absnf::eval_core(m_cublas_handle,
+					 m_d_a, m_d_b, m_d_Z, m_d_L, m_d_J, m_d_Y,
+					 d_dx, m_size_m, m_size_n, m_size_s,
+					 d_dz, d_dy, d_abs_dz);
 
 	cuda_download_and_free(h_dy, d_dy, m_size_m);
 	cuda_download_and_free(h_dz, d_dz, m_size_s);
 
-	check(cudaFree(d_dx));
-	check(cudaFree(d_abs_dz));
-}
-template <class T>
-void Absnf<T>::gradient_core(T *d_dz, T* d_Tss, T* d_I, T* d_K, T *d_gamma, T *d_Gamma)
-{
-
+	cuutils::check(cudaFree(d_dx));
+	cuutils::check(cudaFree(d_abs_dz));
 }
 template <class T>
 void Absnf<T>::gradient(T *h_dz, T *h_gamma, T *h_Gamma)
 {
 	prepare_memory();
 	prepare_cublas();
+	prepare_device();
+
 	T *d_dz = cuda_allocate_and_copy(h_dz, m_size_s);
 	T *d_gamma = cuda_allocate(m_size_m);
 	T *d_Gamma = cuda_allocate(m_size_m * m_size_n);
@@ -264,14 +222,19 @@ void Absnf<T>::gradient(T *h_dz, T *h_gamma, T *h_Gamma)
 	T *d_I = cuda_allocate(m_size_s * m_size_s);
 	T *d_K = cuda_allocate(m_size_m * m_size_s);
 
-	gradient_core(d_dz, d_Tss, d_I, d_K, d_gamma, d_Gamma);
+	absnf::gradient_core(m_cublas_handle,
+						 m_d_a, m_d_b, m_d_Z, m_d_L, m_d_J, m_d_Y,
+						 d_dz, d_Tss, d_I, d_K,
+						 m_size_m, m_size_n, m_size_s,
+						 m_gridsize, m_blocksize,
+						 d_gamma, d_Gamma);
 
 	cuda_download_and_free(h_gamma, d_gamma, m_size_m);
 	cuda_download_and_free(h_Gamma, d_Gamma, m_size_m * m_size_n);
-	check(cudaFree(d_dz));
-	check(cudaFree(d_Tss));
-	check(cudaFree(d_I));
-	check(cudaFree(d_K));
+	cuutils::check(cudaFree(d_dz));
+	cuutils::check(cudaFree(d_Tss));
+	cuutils::check(cudaFree(d_I));
+	cuutils::check(cudaFree(d_K));
 }
 int main()
 {
@@ -314,7 +277,7 @@ int main()
 	// try
  //  	{
  //    // do something crazy
- //    	absnf.check(cudaSetDevice(-1));
+ //    	absnf.cuutils::check(cudaSetDevice(-1));
  //  	}
  //  	catch(std::runtime_error &e)
  //  	{

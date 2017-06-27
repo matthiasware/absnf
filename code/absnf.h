@@ -2,6 +2,8 @@
 #define __ABSNF_H_INCLUDED__
 
 #include <cublas_v2.h>
+#include <iostream>
+#include <cusolverDn.h>
 #include "cuutils.h"
 
 namespace absnf
@@ -9,6 +11,61 @@ namespace absnf
 	/** Helper for eval
 		All memoy pointer are device pointer
 	*/
+	// ---------------------------------------------------
+	//  DECLARATIONS
+	// ---------------------------------------------------
+	template <typename T>
+	void eval_core(cublasHandle_t &handle, T *a, T *b, T *Z, T *L, 
+			  	   T *J, T *Y, T *dx, int m, int n, int s,
+			  	   T *dz, T *dy, T *abs_dz);
+	template <typename T>
+	void eval(T *h_a, T *h_b, T *h_Z, T *h_L, T *h_J, T *h_Y, T *h_dx, int m, int n, int s,
+			  T *h_dz, T *h_dy);
+	
+	template <typename T>
+	void __device__ initTssValue(T *Tss, T *L, T *dz, int i, int j, int id);
+
+	template <typename T>
+	void __global__ initTss(T *Tss, T *L, T *dz, int s, int size);
+
+	template <typename T>
+	void __global__ initIdentity(T *I, int s);
+
+	template <typename T>
+	void __global__ multWithDz(T *A, T *dz, int s);
+
+	template <typename T>
+	void getTriangularInverse(cublasHandle_t &handle, T *A, T *I, int s);
+
+	template <typename T>
+	void mmp(cublasHandle_t &handle, T *d_Y, T* d_I, T *d_K, int m, int s);
+
+	template <typename T>
+	void gradient(T *h_a, T *h_b, T *h_Z, T *h_L, T *h_J, T *h_Y, T* h_dz,
+			  	  int m, int n, int s, T *h_gamma, T *h_Gamma);
+
+	template <typename T>
+	void gradient_core(cublasHandle_t &handle, T *d_a, T *d_b, T *d_Z, T *d_L,
+					   T *d_J, T *d_Y, T *d_dz, T *d_Tss, T *d_I, T *d_K,
+					   int m, int n, int s, int gridsize, int blocksize,
+					   T *d_gamma, T *d_Gamma);
+	template <typename T>
+	void solveAXeqB(cublasHandle_t &cublas_handle, cusolverDnHandle_t &solver_handle,
+				   T *d_A, T *d_B, int m, int s);
+	template <typename T>
+	void calculate_QR(cusolverDnHandle_t &solver_handle, T *d_A, T *d_TAU,
+	                int *d_devInfo, T *d_work, int h_swork, int m);
+	template <typename T>
+	void solveQRXeqB(cublasHandle_t &cublas_handle, cusolverDnHandle_t &solver_handle,
+	                 T *d_A, T*d_TAU, int *d_devInfo, T *d_work, int h_swork,
+	                 T *d_B, int m, int s);
+	template <typename T>
+	void calculate_S_and_c(cublasHandle_t &cublas_handle, cusolverDnHandle_t &solver_handle,
+	                       T *d_a, T *d_b, T *d_Z, T *d_L, T *d_J, T *d_Y,
+	                       int m, int s, T *d_c, T *d_S);
+	// ---------------------------------------------------
+	//  IMPLEMENTATIONS
+	// ---------------------------------------------------
 	template <typename T>
 	void eval_core(cublasHandle_t &handle,
 			  	   T *a, T *b, 
@@ -23,45 +80,45 @@ namespace absnf
 		//  ----------------------------------
 		// dz = a
 		//  ----------------------------------
-		cudaMemcpy(dz, a, s*sizeof(T), cudaMemcpyDeviceToDevice);
+		cuutils::check(cudaMemcpy(dz, a, s*sizeof(T), cudaMemcpyDeviceToDevice));
 		//  ----------------------------------		
 		// dz = Z * dx + dz
 		// dz = alpha * (Z * dx) + beta * dz
 		//  ----------------------------------
 		double alpha = 1;
 		double beta = 1;
-		cublasDgemv(handle, CUBLAS_OP_N, s, n, &alpha,
-					Z, s, dx, 1, &beta, dz, 1);
+		cuutils::check(cublasDgemv(handle, CUBLAS_OP_N, s, n, &alpha,
+						Z, s, dx, 1, &beta, dz, 1));
 		//  ----------------------------------
 		// dz = dz + a
 		// dz = dz + L * |dz|
 		//  ----------------------------------
 		for(int i=0; i<s; i++)
 		{
-			cublasDgemv(handle, CUBLAS_OP_N,
+			cuutils::check(cublasDgemv(handle, CUBLAS_OP_N,
 					    1, i,
 					    &alpha,
 					    &L[i * s], 1,
 						abs_dz, 1,
 						&beta,
-						&dz[i], 1);
+						&dz[i], 1));
 			cuutils::abs <<<1,1>>>(&dz[i], &abs_dz[i], 1);
 		}
 		//  ----------------------------------
 		// dy = b
 		//  ----------------------------------
-		cudaMemcpy(dy, b, m*sizeof(T), cudaMemcpyDeviceToDevice);
+		cuutils::check(cudaMemcpy(dy, b, m*sizeof(T), cudaMemcpyDeviceToDevice));
 		//  ----------------------------------
 		// dy = J * dx
 		//  ----------------------------------
-		cublasDgemv(handle, CUBLAS_OP_N, m, n, &alpha,
-					J, m, dx, 1, &beta, dy, 1);
+		cuutils::check(cublasDgemv(handle, CUBLAS_OP_N, m, n, &alpha,
+					J, m, dx, 1, &beta, dy, 1));
 		//  ----------------------------------
 		// dy = dy + Y * |dz|
 		// dy = beta * dy + alpha(Y*abs_dz)
 		//  ----------------------------------
-		cublasDgemv(handle, CUBLAS_OP_N, m, s, &alpha,
-					Y, m, abs_dz, 1, &beta, dy, 1);	
+		cuutils::check(cublasDgemv(handle, CUBLAS_OP_N, m, s, &alpha,
+					Y, m, abs_dz, 1, &beta, dy, 1));	
 	};
 	/** Evaluation of ABS-NF-Function
 		Assumes sufficient memoy to available on the device
@@ -133,11 +190,6 @@ namespace absnf
 		cudaFree(d_dy);
 	}
 	template <typename T>
-	T __device__ sign(T *val)
-	{
-		return (T(0) < *val) - (*val < T(0));
-	}
-	template <typename T>
 	void __device__ initTssValue(T *Tss, T *L, T *dz, int i, int j, int id)
 	{
 		if(i==j)
@@ -151,7 +203,7 @@ namespace absnf
 		else
 		{
 			// Tss[id] = 0 - L[id] * ((double(0) < dz[j]) - (dz[j] < double(0)));
-			Tss[id] = 0 - L[id] * sign(&dz[j]);
+			Tss[id] = 0 - L[id] * cuutils::sign(&dz[j]);
 		}
 	}
 	template <typename T>
@@ -215,7 +267,7 @@ namespace absnf
 			if(i<s)
 			{
 				if(A[id] != T(0)) 
-					A[id] = A[id] * sign(&dz[j]);
+					A[id] = A[id] * cuutils::sign(&dz[j]);
 				i+=blockDim.x;
 			}
 			else
@@ -247,18 +299,17 @@ namespace absnf
 		// cuutils::printf_vector(A,s*s, "L");
 		// cuutils::printf_vector(I,s*s, "I");
 
-		cublasStatus_t stat = cublasDtrsm(
-								handle,
-						      	CUBLAS_SIDE_LEFT,
-				    	      	CUBLAS_FILL_MODE_UPPER,
-				    		  	CUBLAS_OP_N,
-				    		  	CUBLAS_DIAG_UNIT,
-				    		  	s,s,
-				    	   	  	&alpha,
-				    	      	A,
-				    		  	s,
-				    	      	I,
-				    	      	s);
+		cuutils::check(cublasDtrsm(handle,
+						  CUBLAS_SIDE_LEFT,
+		    	          CUBLAS_FILL_MODE_UPPER,
+				   	  	  CUBLAS_OP_N,
+				   	  	  CUBLAS_DIAG_UNIT,
+				   	  	  s,s,
+				    	  &alpha,
+				       	  A,
+				   	  	  s,
+				       	  I,
+				    	  s));
 	}
 	template <typename T>
 	void mmp(cublasHandle_t &handle, T *d_Y, T* d_I, T *d_K, int m, int s)
@@ -268,7 +319,7 @@ namespace absnf
 
 		double alpha = 1;
 		double beta = 0;
-		cublasDgemm(handle,
+		cuutils::check(cublasDgemm(handle,
 					CUBLAS_OP_N,
 					CUBLAS_OP_T,
 					m,s,s,
@@ -279,7 +330,7 @@ namespace absnf
 					s,
 					&beta,
 					d_K,
-					m);
+					m));
 	}
 	/** Calculates the gradient
 		No checks for memory availability are done
@@ -409,6 +460,325 @@ namespace absnf
 		cudaFree(d_K);
 	}
 	template <typename T>
+	void gradient_core(cublasHandle_t &handle,
+					   T *d_a, T *d_b, T *d_Z, T *d_L,
+					   T *d_J, T *d_Y, T *d_dz,
+					   T *d_Tss, T *d_I, T *d_K,
+					   int m, int n, int s,
+					   int gridsize, int blocksize,
+					   T *d_gamma, T *d_Gamma)
+	{
+		//  ----------------------------------
+		//  d_Tss = diag(1) - L * diag(sign(dz))
+		//  ----------------------------------
+		initTss <<<gridsize, blocksize >>>(d_Tss,d_L, d_dz, s, s*s);
+		//  ----------------------------------
+		//  d_I = diag(1) // room for improvement, operations can be merged
+		//  ----------------------------------		
+		initIdentity <<<gridsize, blocksize >>> (d_I, s);
+		//  ----------------------------------
+		//  d_I = d_Tss * X
+		//  ----------------------------------	
+		getTriangularInverse(handle, d_Tss, d_I, s);
+		//  ----------------------------------
+		//	d_I = d_I * diag(sign(dz))
+		//  ----------------------------------
+		multWithDz <<<gridsize, blocksize >>>(d_I, d_dz, s);
+		//  ----------------------------------
+		//	d_K = d_Y * d_I
+		//  ----------------------------------
+		double alpha = 1;
+		double beta = 0;
+		cuutils::check(cublasDgemm(handle,
+						  CUBLAS_OP_N,
+						  CUBLAS_OP_T,	// d_I is in row major format
+						  m,s,s,
+						  &alpha,
+						  d_Y,
+						  m,
+						  d_I,
+						  s,
+						  &beta,
+						  d_K,
+						  m));
+		// cuutils::printf_vector(d_K, m*s, "K");
+		//  ----------------------------------
+		//	d_gamma = d_b
+		//  d_Gamma = J
+		//  ----------------------------------
+		cuutils::check(cudaMemcpy(d_gamma, d_b, m*sizeof(T), cudaMemcpyDeviceToDevice));
+		cuutils::check(cudaMemcpy(d_Gamma, d_J, m*n*sizeof(T), cudaMemcpyDeviceToDevice));
+		//  ----------------------------------
+		//	d_gamma = d_gamma + K*a
+		//  ----------------------------------
+		beta = 1;
+		cuutils::check(cublasDgemv(handle, CUBLAS_OP_N, m, s, &alpha,
+						  d_K, m, d_a, 1, &beta, d_gamma, 1));
+		//  ----------------------------------
+		//  d_Gamma = d_Gamma + K*Z
+		//  ----------------------------------
+		cuutils::check(cublasDgemm(handle,
+					CUBLAS_OP_N,
+					CUBLAS_OP_N,	// d_I is in row major format
+					m,n,s,
+					&alpha,
+					d_K,
+					m,
+					d_Z,
+					s,
+					&beta,
+					d_Gamma,
+					m));
+	}
+	template <typename T>
+	void solveAXeqB(cublasHandle_t &cublas_handle,
+				    cusolverDnHandle_t &solver_handle,
+				   T *d_A, T *d_B, int m, int s)
+	{
+	    int *d_devInfo; cudaMalloc((void **)&d_devInfo, sizeof(int));
+	    // scaling factors for householder reflectors
+	    T *d_TAU; cudaMalloc((void **)&d_TAU, m*sizeof(T));
+
+	    // calculate working space
+	    int h_swork = 0; // working space
+	    cusolverDnDgeqrf_bufferSize(solver_handle,
+	                                m,m,
+	                                d_A, m,
+	                                &h_swork);
+	    T *d_work; cudaMalloc((void **)&d_work, sizeof(T)*h_swork);
+
+	    // ----------------------------------
+	    // d_A <-- A=Q*R  d_TAU <--
+	    // ----------------------------------
+	    cusolverDnDgeqrf(solver_handle,
+	                     m,m,
+	                     d_A,
+	                     m,
+	                     d_TAU,
+	                     d_work,
+	                     h_swork,
+	                     d_devInfo);
+	    // ----------------------------------
+	    // d_B <- Q^T B
+	    // ----------------------------------
+	    cusolverDnDormqr(solver_handle,
+	                     CUBLAS_SIDE_LEFT,
+	                     CUBLAS_OP_T,
+	                     m,
+	                     s,
+	                     m,
+	                     d_A,
+	                     m,
+	                     d_TAU,
+	                     d_B,
+	                     m,
+	                     d_work,
+	                     h_swork,
+	                     d_devInfo);
+	    // ----------------------------------
+	    // d_B <- X = R \ Q^T * B
+	    // ----------------------------------
+	    double alpha = 1;
+	    cublasDtrsm(cublas_handle,
+	                CUBLAS_SIDE_LEFT,
+	                CUBLAS_FILL_MODE_UPPER,
+	                CUBLAS_OP_N,
+	                CUBLAS_DIAG_NON_UNIT,
+	                m,
+	                s,
+	                &alpha,
+	                d_A,
+	                m,
+	                d_B,
+	                m);
+
+	    cudaFree(d_devInfo);
+	    cudaFree(d_TAU);
+	}
+	template <typename T>
+	void calculate_QR(cusolverDnHandle_t &solver_handle,
+	                T *d_A, T *d_TAU,
+	                int *d_devInfo, T *d_work, int h_swork, int m)
+	{
+	    cusolverDnDgeqrf(solver_handle,
+	                     m,m,
+	                     d_A,
+	                     m,
+	                     d_TAU,
+	                     d_work,
+	                     h_swork,
+	                     d_devInfo);    
+	}
+	template <typename T>
+	void solveQRXeqB(cublasHandle_t &cublas_handle,
+	                 cusolverDnHandle_t &solver_handle,
+	                 T *d_A, T*d_TAU, 
+	                 int *d_devInfo, T *d_work, int h_swork,
+	                 T *d_B, int m, int s)
+	{
+	    // ----------------------------------
+	    // d_B <- Q^T B
+	    // ----------------------------------
+	    cusolverDnDormqr(solver_handle,
+	                     CUBLAS_SIDE_LEFT,
+	                     CUBLAS_OP_T,
+	                     m,
+	                     s,
+	                     m,
+	                     d_A,
+	                     m,
+	                     d_TAU,
+	                     d_B,
+	                     m,
+	                     d_work,
+	                     h_swork,
+	                     d_devInfo);
+	    // ----------------------------------
+	    // d_B <- X = R \ Q^T * B
+	    // ----------------------------------
+	    double alpha = 1;
+	    cublasDtrsm(cublas_handle,
+	                CUBLAS_SIDE_LEFT,
+	                CUBLAS_FILL_MODE_UPPER,
+	                CUBLAS_OP_N,
+	                CUBLAS_DIAG_NON_UNIT,
+	                m,
+	                s,
+	                &alpha,
+	                d_A,
+	                m,
+	                d_B,
+	                m);
+
+	}
+	template <typename T>
+	void calculate_S_and_c(cublasHandle_t &cublas_handle,
+	                       cusolverDnHandle_t &solver_handle,
+	                       T *d_a, T *d_b, T *d_Z, T *d_L, T *d_J, T *d_Y,
+	                       int m, int s,
+	                       T *d_c, T *d_S)
+	{
+	    int *d_devInfo;
+	    // calculate working space
+	    int h_swork = 0; // working space size
+	    T *d_work; // working space
+	    T *d_TAU; // scaling factors for householder reflectors
+	    cuutils::check(cudaMalloc((void **)&d_devInfo, sizeof(int)));
+	    cuutils::check(cusolverDnDgeqrf_bufferSize(solver_handle,
+	                                m,m,
+	                                d_J, m,
+	                                &h_swork));
+	    cuutils::check(cudaMalloc((void **)&d_work, sizeof(T)*h_swork));
+	    cuutils::check(cudaMalloc((void **)&d_TAU, m*sizeof(T)));
+	    // S = L
+	    cuutils::check(cudaMemcpy(d_S, d_L, s*s*sizeof(T), cudaMemcpyDeviceToDevice));
+	    // c = a
+	    cuutils::check(cudaMemcpy(d_c, d_a, s*sizeof(T), cudaMemcpyDeviceToDevice));
+	    // ----------------------------------------
+	    // d_J <- d_J = QR
+	    // ----------------------------------------
+	    calculate_QR(solver_handle, d_J, d_TAU,d_devInfo, d_work, h_swork, m);
+	    // ----------------------------------------
+	    // d_Y <- d_J^{-1}*d_Y
+	    // ----------------------------------------
+	    solveQRXeqB(cublas_handle, solver_handle,
+	                d_J, d_TAU, d_devInfo, d_work, h_swork, d_Y, m, s);
+	    // ----------------------------------------
+	    // d_b <- d_J^{-1}*d_b
+	    // ----------------------------------------
+	    solveQRXeqB(cublas_handle, solver_handle,
+	                d_J, d_TAU, d_devInfo, d_work, h_swork, d_b, m, 1);
+
+	    double alpha = -1;
+	    double beta = 1;
+	    // ----------------------------------------
+	    // S = S + (-1) Z*d_Y
+	    // ----------------------------------------
+	    cuutils::check(cublasDgemm(cublas_handle,
+	                   CUBLAS_OP_N,
+	                   CUBLAS_OP_N,
+	                   s,s,m,
+	                   &alpha,
+	                   d_Z,
+	                   s,
+	                   d_Y,
+	                   m,
+	                   &beta,
+	                   d_S,
+	                   s));
+
+	    // ----------------------------------------
+	    // c = c + (-1) Z.d_b
+	    // ----------------------------------------
+	    cuutils::check(cublasDgemv(cublas_handle,
+	                   CUBLAS_OP_N,
+	                   s, m,
+	                   &alpha,
+	                   d_Z,
+	                   s,
+	                   d_b,
+	                   1,
+	                   &beta,
+	                   d_c,
+	                   1));
+	    cuutils::check(cudaFree(d_devInfo));
+	    cuutils::check(cudaFree(d_TAU));
+	}
+	template <typename T>
+	void calculate_S(cublasHandle_t &cublas_handle,
+	                cusolverDnHandle_t &solver_handle,
+	                T *d_L, T *d_Z, T *d_J, T *d_Y, int m, int s, T *d_S)
+	{
+	    // cuutils::printf_vector(d_Y, m*s, "Y");
+	    // S = L
+	    cudaMemcpy(d_S, d_L, s*s*sizeof(T), cudaMemcpyDeviceToDevice);
+	    // d_Y <- J^{-1}*Y
+	    solveAXeqB(cublas_handle, solver_handle, d_J, d_Y, m, s);
+	    // S = S + (-1) Z*d_Y
+	    double alpha = -1;
+	    double beta = 1;
+	    cublasDgemm(cublas_handle,
+	                CUBLAS_OP_N,
+	                CUBLAS_OP_N,
+	                s,s,m,
+	                &alpha,
+	                d_Z,
+	                s,
+	                d_Y,
+	                m,
+	                &beta,
+	                d_S,
+	                s);
+	}
+	template <typename T>
+	void calculate_c(cublasHandle_t &cublas_handle,
+	                 cusolverDnHandle_t &solver_handle,
+	                 T *d_a, T *d_Z, T *d_J, T *d_b, int m, int s, T *d_c)
+	{
+
+	    // c = a
+	    cudaMemcpy(d_c, d_a, s*sizeof(T), cudaMemcpyDeviceToDevice);
+
+	    // cuutils::printf_vector(d_c, s, "S");
+
+	    // d_b <- J^{-1}*b
+	    solveAXeqB(cublas_handle, solver_handle, d_J, d_b, m, 1);
+
+	    double alpha = -1;
+	    double beta = 1;
+	    cublasDgemv(cublas_handle,
+	                CUBLAS_OP_N,
+	                s, m,
+	                &alpha,
+	                d_Z,
+	                s,
+	                d_b,
+	                1,
+	                &beta,
+	                d_c,
+	                1);
+	}
+	template <typename T>
 	void solve(T *h_a, T *h_b,
 			   T *h_Z, T *h_L,
 			   T *h_J, T *h_Y,
@@ -442,6 +812,7 @@ namespace absnf
 		cublasHandle_t handle;
 		cublasCreate(&handle);
 		// ----------------------------------
+
 
 		// ----------------------------------
 		cudaMemcpy(h_dx, d_dx, m*sizeof(T), cudaMemcpyDeviceToHost);
