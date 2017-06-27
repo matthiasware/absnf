@@ -105,7 +105,230 @@
 \newtheorem{mydef}{Definition}
 \newtheorem*{mydef*}{Definition}
 \newtheorem{mybei}{Beispiel}
-\newtheorem*{mybei*}{Beispiel}
+\newtheorem*{mybei*}{Beispiel}\begin{frame}
+	\frametitle{Aufgabenbeschreibung}
+	\framesubtitle{Aufgabenbeschreibung - Evaluate}
+	\setbeamertemplate{enumerate items}[default]
+	
+	\begin{flalign*}
+	\left(\begin{array}{cccc}
+	\tikzmarkin[ver=style cyan]{col 1}\x  & \x  & \tikzmarkin[ver=style green]{col 2} \x & \x \\
+	0   & \x  & \x & \x \\
+	0   & 0   & \x & \x \\
+	0   & 0   & 0  & \x \\
+	a \tikzmarkend{col 1}  &  b  &  c  \tikzmarkend{col 2} &  d \\
+	\end{array}\right)
+	\end{flalign*}
+	\begin{flalign*}
+	\begin{pmatrix}
+	\Delta z \\
+	\Delta y
+	\end{pmatrix}
+	= 
+	\begin{pmatrix}
+	a \\
+	b
+	\end{pmatrix}
+	+
+	\begin{pmatrix}
+	Z & L \\
+	J & Y 
+	\end{pmatrix}
+	\times
+	\begin{pmatrix}
+	\Delta x \\
+	|\Delta z |
+	\end{pmatrix}
+	\end{flalign*}
+	\begin{flalign*}
+	\left(\begin{array}{c}
+	\Delta z_1 \\
+	\vdots \\
+	\Delta z_s \\
+	\Delta y_1 \\
+	\vdots \\
+	\Delta y_m
+	\end{array}\right)  =
+	\left(\begin{array}{c}
+	a_1 \\
+	\vdots \\
+	a_s \\
+	b_1 \\
+	\vdots \\
+	b_m \\
+	\end{array}\right) +
+	\left(\begin{array}{cccccc}
+	Z_{1,1} & \dots & Z_{1,n} & 0 & \dots  & 0 \\
+	\vdots & \ddots & \vdots  & L_x & \ddots & 0 \\
+	Z_{s,1} & \dots & Z_{s,n} & L_x & L_x & 0 \\
+	J_{1,1} & \dots & J_{1,n} & Y_{1,1} & \dots & Y_{1,s} \\
+	\vdots  & \ddots & \vdots & \vdots & \ddots & \vdots \\
+	J_{m,1} & \dots  & J_{m,n} & Y_{m,1} & \dots & Y_{m,s} \\
+	\end{array}\right) \times
+	\left(\begin{array}{c}
+	\Delta x_1 \\
+	\vdots \\
+	\Delta x_n \\
+	|\Delta z_1 | \\
+	\vdots \\
+	| \Delta z_s| \\
+	\end{array}\right)
+	\end{flalign*}
+	
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{Aufgabenbeschreibung}
+	\framesubtitle{Aufgabenbeschreibung - Evaluate}
+	\setbeamertemplate{enumerate items}[default]
+	
+	\begin{flalign*}
+	\left(\begin{array}{cccc}
+	\tikzmarkin[ver=style cyan]{col 1}\x  & \x  & \tikzmarkin[ver=style green]{col 2} \x & \x \\
+	0   & \x  & \x & \x \\
+	0   & 0   & \x & \x \\
+	0   & 0   & 0  & \x \\
+	a \tikzmarkend{col 1}  &  b  &  c  \tikzmarkend{col 2} &  d \\
+	\end{array}\right)
+	\end{flalign*}
+	\begin{flalign*}
+	\begin{pmatrix}
+	\Delta z \\
+	\Delta y
+	\end{pmatrix}
+	= 
+	\begin{pmatrix}
+	a \\
+	b
+	\end{pmatrix}
+	+
+	\begin{pmatrix}
+	Z & L \\
+	J & Y 
+	\end{pmatrix}
+	\times
+	\begin{pmatrix}
+	\Delta x \\
+	|\Delta z |
+	\end{pmatrix}
+	\end{flalign*}
+	\begin{flalign*}
+	\left(\begin{array}{c}
+	\Delta z_1 \\
+	\vdots \\
+	\Delta z_s \\
+	\Delta y_1 \\
+	\vdots \\
+	\Delta y_m
+	\end{array}\right)  =
+	\left(\begin{array}{c}
+	a_1 \\
+	\vdots \\
+	a_s \\
+	b_1 \\
+	\vdots \\
+	b_m \\
+	\end{array}\right) +
+	\left(\begin{array}{cccccc}
+	Z_{1,1} & \dots & Z_{1,n} & 0 & \dots  & 0 \\
+	\vdots & \ddots & \vdots  & L_x & \ddots & 0 \\
+	Z_{s,1} & \dots & Z_{s,n} & L_x & L_x & 0 \\
+	J_{1,1} & \dots & J_{1,n} & Y_{1,1} & \dots & Y_{1,s} \\
+	\vdots  & \ddots & \vdots & \vdots & \ddots & \vdots \\
+	J_{m,1} & \dots  & J_{m,n} & Y_{m,1} & \dots & Y_{m,s} \\
+	\end{array}\right) \times
+	\left(\begin{array}{c}
+	\Delta x_1 \\
+	\vdots \\
+	\Delta x_n \\
+	|\Delta z_1 | \\
+	\vdots \\
+	| \Delta z_s| \\
+	\end{array}\right)
+	\end{flalign*}
+	
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{Aufgabenbeschreibung}
+	\framesubtitle{Aufgabenbeschreibung - Evaluate}
+	\setbeamertemplate{enumerate items}[default]
+	
+	\begin{flalign*}
+	\left(\begin{array}{cccc}
+	\tikzmarkin[ver=style cyan]{col 1}\x  & \x  & \tikzmarkin[ver=style green]{col 2} \x & \x \\
+	0   & \x  & \x & \x \\
+	0   & 0   & \x & \x \\
+	0   & 0   & 0  & \x \\
+	a \tikzmarkend{col 1}  &  b  &  c  \tikzmarkend{col 2} &  d \\
+	\end{array}\right)
+	\end{flalign*}
+	\begin{flalign*}
+	\begin{pmatrix}
+	\Delta z \\
+	\Delta y
+	\end{pmatrix}
+	= 
+	\begin{pmatrix}
+	a \\
+	b
+	\end{pmatrix}
+	+
+	\begin{pmatrix}
+	Z & L \\
+	J & Y 
+	\end{pmatrix}
+	\times
+	\begin{pmatrix}
+	\Delta x \\
+	|\Delta z |
+	\end{pmatrix}
+	\end{flalign*}
+	\begin{flalign*}
+	\left(\begin{array}{c}
+	\Delta z_1 \\
+	\vdots \\
+	\Delta z_s \\
+	\Delta y_1 \\
+	\vdots \\
+	\Delta y_m
+	\end{array}\right)  =
+	\left(\begin{array}{c}
+	a_1 \\
+	\vdots \\
+	a_s \\
+	b_1 \\
+	\vdots \\
+	b_m \\
+	\end{array}\right) +
+	\left(\begin{array}{cccccc}
+	Z_{1,1} & \dots & Z_{1,n} & 0 & \dots  & 0 \\
+	\vdots & \ddots & \vdots  & L_x & \ddots & 0 \\
+	Z_{s,1} & \dots & Z_{s,n} & L_x & L_x & 0 \\
+	J_{1,1} & \dots & J_{1,n} & Y_{1,1} & \dots & Y_{1,s} \\
+	\vdots  & \ddots & \vdots & \vdots & \ddots & \vdots \\
+	J_{m,1} & \dots  & J_{m,n} & Y_{m,1} & \dots & Y_{m,s} \\
+	\end{array}\right) \times
+	\left(\begin{array}{c}
+	\Delta x_1 \\
+	\vdots \\
+	\Delta x_n \\
+	|\Delta z_1 | \\
+	\vdots \\
+	| \Delta z_s| \\
+	\end{array}\right)
+	\end{flalign*}
+	
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{Implementierung}
+	\framesubtitle{Client Side Storage}
+	So wenig wie möglich selbst machen \\
+	CUBLAS, CUSOLVE, THRUST, C++ STL \\
+	Genpgend Speicher vorhanden
+\end{frame}
+%------------------------------------------------------------------------
 \newtheorem{mysatz}{Satz}
 \newtheorem*{mysatz*}{Satz}
 \newtheorem{mybew}{Beweis}

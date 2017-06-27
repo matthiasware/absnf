@@ -1,0 +1,122 @@
+\begin{frame}
+	\frametitle{ABS-NF}
+	\framesubtitle{Aufgabenbeschreibung}
+	\setbeamertemplate{enumerate items}[default]
+	\begin{flalign*}
+	\begin{pmatrix}
+	\Delta z \\
+	\Delta y
+	\end{pmatrix}
+	= 
+	\begin{pmatrix}
+	a \\
+	b
+	\end{pmatrix}
+	+
+	\begin{pmatrix}
+	Z & L \\
+	J & Y 
+	\end{pmatrix}
+	\times
+	\begin{pmatrix}
+	\Delta x \\
+	|\Delta z |
+	\end{pmatrix}
+	\end{flalign*}
+	\begin{itemize}
+		\item Evaluate abs normal form:
+			\begin{itemize}
+				\item Geg: $a,b,Z,L,J,Y,\Delta x$
+				\item Ges: $\Delta z, \Delta y$
+			\end{itemize}
+		\item Calculate Gradient
+			\begin{itemize}
+				\item Geg: $a,b,Z,L,J,Y, \Delta Z$
+				\item Ges: Gradient $\gamma, \Gamma$
+			\end{itemize}
+		\item Solve abs-normal form system
+		\begin{itemize}
+			\item Geg: $a,b,Z,L,J,Y,\Delta y$
+			\item Ges: $\Delta x, \Delta Z$
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{Annahmen und Voraussetzung und Info zur Implementierung}
+	\framesubtitle{Implementierung}
+	\setbeamertemplate{enumerate items}[default]
+	Programmiersprachen
+	\begin{itemize}
+		\item Python 3.5: Prototyping und Serial Performance benchmarks
+		\item Cuda C++: Implementierung der paralleln ABSNF Aufgaben
+	\end{itemize}
+	
+	Annahmen:
+	\begin{enumerate}
+		\item Global memory der GPU ist groß genug um alle benötigten Datenstrukturen zeitgleich zu halten
+		\item Daten werden vektorisiert übergeben
+		\item Benutzen Lineare Algebra so weit wie möglich
+		\item Sofern möglich mappe alle Problem auf existierende Librariers
+	\end{enumerate}
+	
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{Annahmen und Voraussetzung und Info zur Implementierung}
+	\framesubtitle{Implementierung}
+	\setbeamertemplate{enumerate items}[default]
+	Programmiersprachen
+	\begin{itemize}
+		\item Python 3.5: Prototyping und Serial Performance benchmarks
+		\item Cuda C++: Implementierung der paralleln ABSNF Aufgaben
+	\end{itemize}
+	
+	Annahmen:
+	\begin{enumerate}
+		\item Global memory der GPU ist groß genug um alle benötigten Datenstrukturen zeitgleich zu halten
+		\item Daten werden vektorisiert übergeben
+		\item Benutzen Lineare Algebra so weit wie möglich
+		\item Sofern möglich mappe alle Problem auf existierende Librariers
+	\end{enumerate}
+	
+\end{frame}
+%------------------------------------------------------------------------
+
+\begin{frame}
+\frametitle{Projekstruktur}
+\framesubtitle{Aufteilung und verwaltung von Code}
+\setbeamertemplate{enumerate items}[default]
+
+\begin{itemize}
+	\item utils.hpp test\_utils.hpp
+	\item absnf.h test\_absnf.cu
+	\item cuutils.h test\_cuutils.cu
+	\item tabsnf.h test\_tabsnf.h
+	\item make
+	\item absnf.py
+\end{itemize}
+
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{Evaluate}
+	\framesubtitle{Implementierung}
+	\setbeamertemplate{enumerate items}[default]
+	Benutzte Libraries:
+	\begin{itemize}
+		\item cuBLAS (cuda Basic Linear Algebra Subprograms)
+		\begin{itemize}
+			\item Matrix Vector operations
+			\item Matrix Matrix operations
+		\end{itemize}
+		\item cuSOLVER
+		\begin{itemize}
+			\item Matrix factorization
+			\item Triangular solve
+		\end{itemize}
+		\item C++ STL
+	\end{itemize}
+	
+\end{frame}
+%------------------------------------------------------------------------

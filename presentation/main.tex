@@ -1,4 +1,4 @@
-\documentclass{beamer}
+\documentclass[8pt]{beamer}
 
 %-----------------------------------------------------------------
 %	Packages
@@ -18,6 +18,17 @@
 \usepackage[absolute,overlay]{textpos} %to translate graphics through space
 \usepackage{soul}
 \usepackage{hyperref}
+\usepackage{xcolor}
+
+
+\newcommand{\highlightred}[1]{%
+	\colorbox{red!50}{$\displaystyle#1$}}
+\newcommand{\highlightgreen}[1]{%
+	\colorbox{green!50}{$\displaystyle#1$}}
+\newcommand{\highlightblue}[1]{%
+	\colorbox{blue!50}{$\displaystyle#1$}}
+\newcommand{\highlightyellow}[1]{%
+	\colorbox{yellow!50}{$\displaystyle#1$}}
 
 
 %-----------------------------------------------------------------
@@ -141,14 +152,45 @@
 %-------------------------------------------------
 %\definecolor{craneorange}{rgb}{0.68,1,1}
 %\definecolor{craneblue}{gray}{0.85}
+
+\newcommand\x{\times}
+
+% requires version 0.3 of the package
+\usepackage[customcolors]{hf-tikz}
+
+\tikzset{style green/.style={
+		set fill color=green!50!lime!60,
+		set border color=white,
+	},
+	style cyan/.style={
+		set fill color=cyan!90!blue!60,
+		set border color=white,
+	},
+	style orange/.style={
+		set fill color=orange!80!red!60,
+		set border color=white,
+	},
+	hor/.style={
+		above left offset={-0.15,0.31},
+		below right offset={0.15,-0.125},
+		#1
+	},
+	ver/.style={
+		above left offset={-0.1,0.3},
+		below right offset={0.15,-0.15},
+		#1
+	}
+}
 \begin{document}
 
-\maketitle
+%\maketitle
 
-\addtobeamertemplate{frametitle}{}{%
-\begin{tikzpicture}[remember picture,overlay]
-\node[anchor=north east,yshift=1pt] at (current page.north east) {\includegraphics[height=0.8cm]{img/badge-nvidia-cuda-cpp}};
-\end{tikzpicture}}
-	\include{intro}
-	\include{problems}
+%\addtobeamertemplate{frametitle}{}{%
+%\begin{tikzpicture}[remember picture,overlay]
+%\node[anchor=north east,yshift=1pt] at (current page.north east) %{\includegraphics[height=0.8cm]{img/badge-nvidia-cuda-cpp}};
+%\end{tikzpicture}}
+	%\include{intro}
+	\include{aufgaben}
+	\include{eval}
+	%\include{problems}
 \end{document}

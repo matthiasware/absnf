@@ -20,34 +20,120 @@
 \end{frame}
 %------------------------------------------------------------------------
 \begin{frame}
-\frametitle{ABS-NF}
-\framesubtitle{Client Side Storage}
+	\frametitle{ABS-NF}
+	\framesubtitle{Einführung}
 	\setbeamertemplate{enumerate items}[default]
-	\begin{enumerate}
-		\item Was ist das
-		\item Wie bekommen ich das?
-		\item Wofür brauche ich das?
-	\end{enumerate}	
-\end{frame}
-%------------------------------------------------------------------------
-\begin{frame}
-\frametitle{Aufgabenbeschreibung}
-\framesubtitle{Aufgabenbeschreibung}
-\setbeamertemplate{enumerate items}[default]
-
-Solve instead of inverse \\
-Solve vs inverse
-$ https://stackoverflow.com/questions/28794010/solving-linear-systems-ax-b-with-cuda$
-
-
+	\begin{mydef*}
+		Smooth funcion \\
+		A smooth function $f(x)$ is continuous and has a continuous derivative
+	\end{mydef*}
+	$f(x) = x^2$ $f'(x) = 2x$
 
 \end{frame}
 %------------------------------------------------------------------------
 \begin{frame}
-\frametitle{Implementierung}
-\framesubtitle{Client Side Storage}
- So wenig wie möglich selbst machen \\
- CUBLAS, CUSOLVE, THRUST, C++ STL \\
- Genpgend Speicher vorhanden
+	\frametitle{ABS-NF}
+	\framesubtitle{Einführung}
+	\setbeamertemplate{enumerate items}[default]
+	\begin{mydef*}
+		Picewise smooth function \\
+		A picewise smooth function $f(x)$ is made up of finitly many smooth functions, separated by
+		jump discontiuities.
+	\end{mydef*}
+	\begin{flalign*}
+		f(x) = \begin{cases}
+			1 & x < -1 \\
+			x^2 + 1 & -1 <= x < 2 \\
+			x & 2 <= x
+		\end{cases}
+	\end{flalign*}
+	Wir betrachten ausschließlich continuous picewise smooth functions.
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}
+\frametitle{ABS-NF}
+\framesubtitle{Einführung}
+	Picewise smooth  funcitons können durch picewise linear functions (PL) approximiert werden.
+	\begin{center}
+		BILD
+	\end{center}
+	Betrachten ausschließlich continuous PL
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{ABS-NF}
+	\framesubtitle{Einführung}
+	\setbeamertemplate{enumerate items}[default]
+	ABS-Normal Form:
+	\begin{center}
+		Repräsentierung für Picewise linear functions (PL) 
+	\end{center}
+	\begin{flalign*}
+	\begin{pmatrix}
+	\Delta z \\
+	\Delta y
+	\end{pmatrix}
+	= 
+	\begin{pmatrix}
+	a \\
+	b
+	\end{pmatrix}
+	+
+	\begin{pmatrix}
+	Z & L \\
+	J & Y 
+	\end{pmatrix}
+	\times
+	\begin{pmatrix}
+	\Delta x \\
+	|\Delta z |
+	\end{pmatrix}
+	\end{flalign*}
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{ABS-NF}
+	\framesubtitle{Einführung}
+	\setbeamertemplate{enumerate items}[default]
+	Vorgehen:
+	\begin{itemize}
+		\item Any picewise linear scalar function has a so called min-max repräsentation
+		\item All min max expressions can be expressed in terms of abs functions
+		\item Picewise linearization wird erreicht durch algorithmic differentiation
+	\end{itemize}
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{ABS-NF}
+	\framesubtitle{Beispiel}
+	\setbeamertemplate{enumerate items}[default]
+	\begin{flalign*}
+		F(x_1,x_2) &= (x_2^2 - x_1^+)^+ \\
+			 (i)^+ &= \max(0, i)
+	\end{flalign*}
+	\begin{center}
+		BILD
+	\end{center}
+	
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{ABS-NF}
+	\framesubtitle{Einführung}
+	\setbeamertemplate{enumerate items}[default]
+	\begin{center}
+		ADOL C, Beispiel
+	\end{center}
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{ABS-NF}
+	\framesubtitle{Aufgabenbeschreibung}
+	\setbeamertemplate{enumerate items}[default]
+	\begin{itemize}
+		\item Evaluate abs normal form
+		\item Calculate Gradient
+		\item Solve abs-normal form system
+	\end{itemize}
 \end{frame}
 %------------------------------------------------------------------------
