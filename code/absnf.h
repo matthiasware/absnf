@@ -6,6 +6,8 @@
 #include <cusolverDn.h>
 #include "cuutils.h"
 
+#define DEBUG_ABSNF true
+
 namespace absnf
 {
 	/** Helper for eval
@@ -63,9 +65,69 @@ namespace absnf
 	void calculate_S_and_c(cublasHandle_t &cublas_handle, cusolverDnHandle_t &solver_handle,
 	                       T *d_a, T *d_b, T *d_Z, T *d_L, T *d_J, T *d_Y,
 	                       int m, int s, T *d_c, T *d_S);
+
+	template <typename T>
+	void modulus_core(cublasHandle_t &cublas_handle, T *d_S, T *d_c, T *d_abs_dz, int s, T *d_dz);
+
+	template <typename T>
+	void modulus(cublasHandle_t &cublas_handle, 
+				 T *d_S, T *d_c, T *d_dz,
+				 T *d_abs_dz, T *d_dz_old,
+				 int m, int s,
+				 int blocksize, int gridsize,
+				 int maxiter = 1000, double tol = 1e-8, bool verbose=DEBUG_ABSNF);
 	// ---------------------------------------------------
 	//  IMPLEMENTATIONS
 	// ---------------------------------------------------
+	template <typename T>
+	void modulus(cublasHandle_t &cublas_handle, 
+				 T *d_S, T *d_c, T *d_dz,
+				 T *d_abs_dz, T *d_dz_old,
+				 int m, int s,
+				 int blocksize, int gridsize,
+				 int maxiter, double tol, bool verbose)
+	{
+		int i=0;
+		double diff = tol + 1;
+		while(i < maxiter && diff > tol)
+		{
+			// dz_old = dz
+        	cuutils::check(cudaMemcpy(d_dz_old, d_dz, s*sizeof(T), cudaMemcpyDeviceToDevice));
+        	// abs_dz = |dz|
+	        cuutils::abs<<<gridsize,blocksize>>>(d_dz, d_abs_dz, s);
+	        // dz = calculateDZ()
+        	modulus_core(cublas_handle, d_S, d_c, d_abs_dz, s, d_dz);
+        	// calculate diff
+        	cuutils::vvSub<<<gridsize, blocksize>>>(d_dz, d_dz_old, d_dz_old, s);
+        	cuutils::check(cublasDnrm2(cublas_handle,
+                    s,
+                    d_dz_old,
+                    1,
+                    &diff));
+        	if(verbose)
+        		std::cout << i << ": " << diff << std::endl;
+        	i++;
+		}
+	}
+	template <typename T>
+	void modulus_core(cublasHandle_t &cublas_handle,
+             		  T *d_S, T *d_c, T *d_abs_dz, int s, T *d_dz)
+	{
+    // d_dz = c
+    cudaMemcpy(d_dz, d_c, s*sizeof(T), cudaMemcpyDeviceToDevice);
+    // d_dz = beta * d_dz + S * d_abs_dz
+    double alpha = 1;
+    double beta = 1;
+    cublasDgemv(cublas_handle,
+                CUBLAS_OP_N,
+                s, s,
+                &alpha,
+                d_S, s,
+                d_abs_dz, 1,
+                &beta,
+                d_dz, 1);
+	}	
+
 	template <typename T>
 	void eval_core(cublasHandle_t &handle,
 			  	   T *a, T *b, 
@@ -834,4 +896,3 @@ namespace absnf
 }
 
 #endif // __ABSNF_H_INCLUDED__
-

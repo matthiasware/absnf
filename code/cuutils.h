@@ -7,6 +7,8 @@
 #include <cusolverDn.h>
 #include <sstream>
 
+#define DEBUG_CUUTILS true
+
 namespace cuutils
 {	
 	// ---------------------------------------------------

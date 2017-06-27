@@ -1,7 +1,10 @@
 #include <cublas_v2.h>
+#include <cusolverDn.h>
 #include "absnf.h"
-#include <vector>
+#include "cuutils.h"
 #include "utils.hpp"
+#include "assert.h"
+#include <vector>
 #define t_def double
 
 bool test_eval_Singular(t_def *h_a, t_def *h_b, 
@@ -316,16 +319,222 @@ bool test_mmp()
 
 	return success;
 }
+bool test_calculate_S_and_c()
+{
+	bool success = true;
 
+	cublasHandle_t cublas_handle;
+    cublasCreate(&cublas_handle);
+
+    cusolverDnHandle_t solver_handle;
+    cusolverDnCreate(&solver_handle);
+
+	int m = 4;
+    int s = 3;
+    // m x m
+    std::vector<t_def> h_J = {100, 1, 2 ,1,
+                              4, 120, 0, 1,
+                              3, 5, 120, 6,
+                              1, 1, 0, 130};
+    utils::rowColConversion(&h_J[0], m, m, true);                                
+    // m x s                                 
+    std::vector<t_def> h_Y = {0, 0, 2,
+                              4, 2, 0,
+                              2, 1, 3,
+                              0, 1, 3};
+    utils::rowColConversion(&h_Y[0], m, s, true);
+
+    // s x s
+    std::vector<t_def> h_L = {0,0,0,
+                              1,0,0,
+                              0,1,0};
+    utils::rowColConversion(&h_L[0], s, s, true);
+
+    // s x m
+    std::vector<t_def> h_Z = {-4,  0, -4 , 1,
+                               3,  0, -2, -3,
+                              -3, -4, -4,  0};
+    utils::rowColConversion(&h_Z[0], s, m, true);
+
+    // m
+    // std::vector<t_def> h_b = {-275, -126, -484, -450};
+    // b = b - y IMPORTANT !!!
+    std::vector<t_def> h_b = {-223, -432, -200, -48};
+
+    // s
+    std::vector<t_def> h_a = {4, 4, -3};
+
+    t_def h_S_expected[] = {0.0589243, 1.03177,0.192736,
+    						0.0199725,0.0384088,1.09439,
+    						0.14793,0.0576823,0.148214};
+    t_def h_c_expected[] = {-10.1223,6.61218,-29.3861};
+
+    // (m x s) = (m x n) x (m * s)
+    t_def *d_a; cudaMalloc((void **)&d_a, s*sizeof(t_def));
+    t_def *d_b; cudaMalloc((void **)&d_b, m*sizeof(t_def));
+    t_def *d_Z; cudaMalloc((void **)&d_Z, s*m*sizeof(t_def));
+    t_def *d_L; cudaMalloc((void **)&d_L, s*s*sizeof(t_def));
+    t_def *d_J; cudaMalloc((void **)&d_J, m*m*sizeof(t_def));
+    t_def *d_Y; cudaMalloc((void **)&d_Y, m*s*sizeof(t_def));
+    t_def *d_S; cudaMalloc((void **)&d_S, s*s*sizeof(t_def));
+    t_def *d_c; cudaMalloc((void **)&d_c, s*sizeof(t_def));
+    t_def *h_c_actual = (t_def *)malloc(s*sizeof(t_def));
+    t_def *h_S_actual = (t_def *)malloc(s*s*sizeof(t_def));
+
+    cudaMemcpy(d_a, &h_a[0], s*sizeof(t_def), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_b, &h_b[0], m*sizeof(t_def), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_Z, &h_Z[0], s*m*sizeof(t_def), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_L, &h_L[0], s*s*sizeof(t_def), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_J, &h_J[0], m*m*sizeof(t_def), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_Y, &h_Y[0], m*s*sizeof(t_def), cudaMemcpyHostToDevice);
+
+    absnf::calculate_S_and_c(cublas_handle, solver_handle,
+                      		 d_a, d_b, d_Z, d_L, d_J, d_Y, 
+                      		 m, s,
+                      		 d_c, d_S);
+
+    // std::cout << "HERE \n";
+    cudaMemcpy(h_c_actual, d_c, s*sizeof(t_def), cudaMemcpyDeviceToHost);
+    cudaMemcpy(h_S_actual, d_S, s*s*sizeof(t_def), cudaMemcpyDeviceToHost);
+
+    if(!utils::vectors_almost_equal(h_c_actual, h_c_expected, s, 1e-4, false))
+    	success = false;
+    if(!utils::vectors_almost_equal(h_S_actual, h_S_expected, s*s, 1e-4, false))
+    	success = false;
+
+    cusolverDnDestroy(solver_handle);
+    cublasDestroy(cublas_handle);
+
+    free(h_c_actual);
+    free(h_S_actual);
+    cudaFree(d_a);
+    cudaFree(d_b);
+    cudaFree(d_Z);
+    cudaFree(d_L);
+    cudaFree(d_J);
+    cudaFree(d_Y);
+    cudaFree(d_S);
+    cudaFree(d_c);
+
+	return success;
+}
+bool test_modulus()
+{
+	bool success = true;
+	
+	int m = 4;
+    int s = 3;
+    // m x m
+    std::vector<t_def> h_J = {100, 1, 2 ,1,
+                              4, 120, 0, 1,
+                              3, 5, 120, 6,
+                              1, 1, 0, 130};
+    utils::rowColConversion(&h_J[0], m, m, true);                                
+    // m x s                                 
+    std::vector<t_def> h_Y = {0, 0, 2,
+                              4, 2, 0,
+                              2, 1, 3,
+                              0, 1, 3};
+    utils::rowColConversion(&h_Y[0], m, s, true);
+
+    // s x s
+    std::vector<t_def> h_L = {0,0,0,
+                            1,0,0,
+                            0,1,0};
+    utils::rowColConversion(&h_L[0], s, s, true);
+
+    // s x m
+    std::vector<t_def> h_Z = {-4,  0, -4 , 1,
+                               3,  0, -2, -3,
+                              -3, -4, -4,  0};
+    utils::rowColConversion(&h_Z[0], s, m, true);
+
+    // m
+    // b = b - y IMPORTANT
+    std::vector<t_def> h_b = {-223, -432, -200, -48};
+
+    // s
+    std::vector<t_def> h_a = {4, 4, -3};
+
+    // dz_start
+    t_def h_dz[] = {-1.59449432,  9.28890523,  9.39411967};
+    t_def h_dz_expected[] = {-8,  16,  -9};
+
+    // (m x s) = (m x n) x (m * s)
+    t_def *d_J; cudaMalloc((void **)&d_J, m*m*sizeof(t_def));
+    t_def *d_Y; cudaMalloc((void **)&d_Y, m*s*sizeof(t_def));
+    t_def *d_Z; cudaMalloc((void **)&d_Z, s*m*sizeof(t_def));
+    t_def *d_b; cudaMalloc((void **)&d_b, m*sizeof(t_def));
+    t_def *d_a; cudaMalloc((void **)&d_a, s*sizeof(t_def));
+    t_def *d_L; cudaMalloc((void **)&d_L, s*s*sizeof(t_def));
+    t_def *d_S; cudaMalloc((void **)&d_S, s*s*sizeof(t_def));
+    t_def *d_c; cudaMalloc((void **)&d_c, s*sizeof(t_def));
+    t_def *d_dz; cudaMalloc((void **)&d_dz, s*sizeof(t_def));
+    t_def *d_abs_dz; cudaMalloc((void **)&d_abs_dz, s*sizeof(t_def));
+    t_def *d_dz_old; cudaMalloc((void **)&d_dz_old, s*sizeof(t_def));
+    t_def *d_dx; cudaMalloc((void **)&d_dx, m*sizeof(t_def));
+
+    cudaMemcpy(d_J, &h_J[0], m*m*sizeof(t_def), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_Y, &h_Y[0], m*s*sizeof(t_def), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_Z, &h_Z[0], s*m*sizeof(t_def), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_b, &h_b[0], m*sizeof(t_def), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_a, &h_a[0], s*sizeof(t_def), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_L, &h_L[0], s*s*sizeof(t_def), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_dz, h_dz, s*sizeof(t_def), cudaMemcpyHostToDevice);
+
+    // --------------------------------------------------------------
+    cublasHandle_t cublas_handle;
+    cublasCreate(&cublas_handle);
+
+    cusolverDnHandle_t solver_handle;
+    cusolverDnCreate(&solver_handle);
+
+    absnf::calculate_S_and_c(cublas_handle, solver_handle,
+                      d_a, d_b, d_Z, d_L, d_J, d_Y, 
+                      m, s,
+                      d_c, d_S); 
+
+    int gridsize, blocksize;
+    cuutils::getGridBlockSize(&gridsize, &blocksize);
+
+    absnf::modulus(cublas_handle, d_S, d_c, d_dz,
+                   d_abs_dz, d_dz_old, m, s, blocksize, gridsize,
+                   100, 1e-8, true);
+
+    cudaMemcpy(h_dz, d_dz, s*sizeof(t_def), cudaMemcpyDeviceToHost);
+
+    if(!utils::vectors_almost_equal(h_dz, h_dz_expected, s, 1e-4, false))
+    	success = false;
+    
+    // --------------------------------------------------------------
+    cusolverDnDestroy(solver_handle);
+    cublasDestroy(cublas_handle);
+    // --------------------------------------------------------------
+    cudaFree(d_J);
+    cudaFree(d_Y);
+    cudaFree(d_Z);
+    cudaFree(d_b);
+    cudaFree(d_a);
+    cudaFree(d_L);
+    cudaFree(d_S);
+    cudaFree(d_c);
+    cudaFree(d_dx);
+    cudaFree(d_dz);
+    cudaFree(d_abs_dz);
+    cudaFree(d_dz_old);
+
+	return success;
+}
 
 int main()
 {	
-	test_eval();
-	test_initTss();
-	test_initIdentity();
-	test_getTriangularInverse();
-	// test_mmp();
-	test_gradient();
-
+	assert(test_eval());
+	assert(test_initTss());
+	assert(test_initIdentity());
+	assert(test_getTriangularInverse());
+	assert(test_gradient());
+	assert(test_calculate_S_and_c());
+	assert(test_modulus());
+	// test_modulus();
 	return 0;
 }

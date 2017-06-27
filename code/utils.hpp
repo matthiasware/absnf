@@ -3,7 +3,10 @@
 #include <random>
 #include <iostream>
 #include <string.h>
+#include <math.h> 
 #define IDX2C(i,j,ld) (((j)*(ld))+(i))
+
+#define DEBUG_UTILS false
 
 namespace utils
 {
@@ -76,11 +79,34 @@ namespace utils
 	void rowColConversion(T *matrix, int rows, int cols, bool rm=true);
 
 	template <typename T>
-	bool vectors_equals(T* a, T* b, int size, bool verbose=false);
+	bool vectors_equals(T* a, T* b, int size, bool verbose=DEBUG_UTILS);
+
+	template <typename T>
+	bool vectors_almost_equal(T* a, T* b, int size, double tol=1e-6, bool verbose=DEBUG_UTILS);
 
 	// ---------------------------------------------------
 	//  IMPLEMENTATION
 	// ---------------------------------------------------
+	template <typename T>
+	bool vectors_almost_equal(T* a, T* b, int size, double tol, bool verbose)
+	{
+		if(verbose)
+		{
+			std::cout << "COMPARING : " << std::endl;
+			utils::printf_vector(a, size);
+			utils::printf_vector(b, size);
+
+		}
+		for(int i=0; i<size; i++)
+		{
+			if(fabs(a[i] - b[i]) > tol)
+			{	
+				std::cout << a[i] << " != " << b[i] << std::endl;
+				return false;
+			}
+		}
+		return true;
+	}
 	template <typename T>
 	void printf_vector(T *A, int cols, const std::string& name)
 	{
