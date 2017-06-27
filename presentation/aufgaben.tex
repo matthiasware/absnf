@@ -99,7 +99,7 @@
 
 \end{frame}
 %------------------------------------------------------------------------
-\begin{frame}
+\begin{frame}[fragile]
 	\frametitle{Evaluate}
 	\framesubtitle{Implementierung}
 	\setbeamertemplate{enumerate items}[default]
@@ -117,6 +117,14 @@
 		\end{itemize}
 		\item C++ STL
 	\end{itemize}
+\begin{lstlisting}[language=C++]
+#include <cublas_v2.h>
+#include <cusolverDn.h>
+\end{lstlisting}
+
+\begin{lstlisting}
+	nvcc -std=c++11 x.cu -lcublas -lcusolver -o x
+\end{lstlisting}
 	
 \end{frame}
 %------------------------------------------------------------------------

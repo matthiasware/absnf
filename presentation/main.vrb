@@ -1,8 +1,30 @@
-\frametitle{IndexedDB}
-\framesubtitle{Client Side Storage}
-	Browser Support
-	\begin{center}
-		\includegraphics[height=5cm,width=11cm]{img/indexedDB-support.png}
-		\\
-		\includegraphics[height=0.5cm,width=5cm]{img/legende.png}
-	\end{center}
+\frametitle{Aufgabe 1) Evaluate}
+	\framesubtitle{Implementierung}
+	\begin{lstlisting}[language=cpp]
+	template <typename T>
+	void eval(T *a, T *b,
+			  T *Z, T *L,
+			  T *J, T *Y,
+			  T *dx,
+			  int m, int n, int s,
+			  T *dz, T *dy,
+			  T *abs_dz)
+	{
+			// dz = a
+			cudaMemcpy(dz, a, ., cudaMemcpyDeviceToDevice));
+			// dz = Z * dx + dx
+			cublasDgemv(.,Z, ., dx, . dz, .)
+			// dz[i] = L[i]_i * |dz|_i
+			for(int i=0; i<s; i++)
+			{
+				cublasDgemv( . ,&L[i * s], . ,abs_dz, . , &dz[i],.);
+				abs <<<1,1>>>(&dz[i], &abs_dz[i], 1);
+			}
+			// dy = b
+			cudaMemcpy(dy, b, ., cudaMemcpyDeviceToDevice);
+			// dy = dy + J*dx
+			cublasDgemv(.,J, ., dx, ., dy, .));
+			// dy = dy + Y * |dz|
+			cublasDgemv(., Y, ., abs_dz, ., dy, .));
+	}
+	\end{lstlisting}

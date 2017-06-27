@@ -19,6 +19,7 @@
 \usepackage{soul}
 \usepackage{hyperref}
 \usepackage{xcolor}
+\usepackage{textpos}
 
 
 \newcommand{\highlightred}[1]{%
@@ -103,22 +104,87 @@
   stringstyle=\color{red}\ttfamily,
   sensitive=true
 }
+\lstdefinelanguage{cuda}{
+	keywords={cudaMemcpy, cudaMemcpyDeviceToDevice},
+	morecomment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	morestring=[b]',
+	morestring=[b]",
+	ndkeywords={class, if, while, boolean, for, int, bool, double, ffloat, template, typename},
+	keywordstyle=\color{blue}\bfseries,
+	ndkeywordstyle=\color{darkgray}\bfseries,
+	identifierstyle=\color{black},
+	commentstyle=\color{purple}\ttfamily,
+	stringstyle=\color{red}\ttfamily,
+	sensitive=true
+}
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{dred}{rgb}{0.545,0,0}
+\definecolor{dblue}{rgb}{0,0,0.545}
+\definecolor{lgrey}{rgb}{0.9,0.9,0.9}
+\definecolor{gray}{rgb}{0.4,0.4,0.4}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.6}
+\lstdefinelanguage{cpp}{
+	backgroundcolor=\color{lgrey},  
+	basicstyle=\footnotesize \ttfamily \color{black} \bfseries,   
+	breakatwhitespace=false,       
+	breaklines=true,               
+	captionpos=b,                   
+	commentstyle=\color{dkgreen},   
+	deletekeywords={...},          
+	escapeinside={\%*}{*)},                  
+	frame=single,                  
+	language=C++,                
+	keywordstyle=\color{purple},  
+	morekeywords={BRIEFDescriptorConfig,string,TiXmlNode,DetectorDescriptorConfigContainer,istringstream,cerr,exit},
+	ndkeywords={cudaMemcpy, cudaMemcpyDeviceToDevice, cublasDgemv},
+	ndkeywordstyle=\color{blue},
+	identifierstyle=\color{black},
+	stringstyle=\color{blue},      
+	numbers=left,                 
+	numbersep=5pt,                  
+	numberstyle=\tiny\color{black}, 
+	rulecolor=\color{black},        
+	showspaces=false,               
+	showstringspaces=false,        
+	showtabs=false,                
+	stepnumber=1,                   
+	tabsize=2,                     
+	title=\lstname,                 
+}
+%\lstset{
+%   language=JavaScript,
+%   backgroundcolor=\color{lightgray},
+%   extendedchars=true,
+%   basicstyle=\footnotesize\ttfamily,
+%   showstringspaces=false,
+%   showspaces=false,
+%   numbers=left,
+%   numberstyle=\footnotesize,
+%   numbersep=7pt,
+%   tabsize=2,
+%   breaklines=true,
+%   showtabs=false,
+%   captionpos=b,
+%   literate={\ \ }{{\ }}1
+%}
+
+\definecolor{mygray}{rgb}{0.4,0.4,0.4}
+\definecolor{mygreen}{rgb}{0,0.8,0.6}
+\definecolor{myorange}{rgb}{1.0,0.4,0}
 
 \lstset{
-   language=JavaScript,
-   backgroundcolor=\color{lightgray},
-   extendedchars=true,
-   basicstyle=\footnotesize\ttfamily,
-   showstringspaces=false,
-   showspaces=false,
-   numbers=left,
-   numberstyle=\footnotesize,
-   numbersep=7pt,
-   tabsize=2,
-   breaklines=true,
-   showtabs=false,
-   captionpos=b,
-   literate={\ \ }{{\ }}1
+	basicstyle=\footnotesize\sffamily\color{black},
+	commentstyle=\color{mygray},
+	frame=single,
+	numbers=left,
+	numbersep=5pt,
+	numberstyle=\tiny\color{mygray},
+	keywordstyle=\color{mygreen},
+	showspaces=false,
+	showstringspaces=false,
+	stringstyle=\color{myorange},
+	tabsize=2
 }
 
 % An environment for stpes, cases ect. 
@@ -189,7 +255,7 @@
 %\begin{tikzpicture}[remember picture,overlay]
 %\node[anchor=north east,yshift=1pt] at (current page.north east) %{\includegraphics[height=0.8cm]{img/badge-nvidia-cuda-cpp}};
 %\end{tikzpicture}}
-	%\include{intro}
+	\include{intro}
 	\include{aufgaben}
 	\include{eval}
 	%\include{problems}
