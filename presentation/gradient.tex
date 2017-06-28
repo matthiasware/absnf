@@ -1,7 +1,7 @@
 %------------------------------------------------------------------------
 \begin{frame}
-	\frametitle{Aufgabenbeschreibung}
-	\framesubtitle{Aufgabenbeschreibung - Gradient}
+	\frametitle{Aufgabe 2) Gradient}
+	\framesubtitle{Aufgabenbeschreibung}
 	\setbeamertemplate{enumerate items}[default]
 	Gegeben:
 	\begin{flalign*}
@@ -11,6 +11,7 @@
 	\begin{flalign*}
 		\gamma, \Gamma
 	\end{flalign*}
+	Wobei:
 	\begin{flalign*}
 		\gamma &= b + Y \Sigma(I-L\Sigma)^{-1} a \\
 		\Gamma &= J + Y \Sigma(I-L\Sigma)^{-1} Z
@@ -40,6 +41,74 @@
 	\end{pmatrix}
 	\end{flalign*}
 	
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{Aufgabe 2) Gradient}
+	\framesubtitle{Interssanter Teil}
+	\setbeamertemplate{enumerate items}[default]
+	Brauchen:
+	\begin{flalign*}
+		\Sigma(I-L\Sigma)^{-1}
+	\end{flalign*}
+	\begin{flalign*}
+		\Sigma = Diag(Sign(\Delta z))
+	\end{flalign*}
+	Fallstricken:
+	\begin{itemize}
+		\item Sparse Matrix $\Sigma$
+		\item Inverse $(I-L\Sigma)^{-1}$
+	\end{itemize}
+	
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{Aufgabe 2) Gradient}
+	\framesubtitle{Beispiel}
+	\setbeamertemplate{enumerate items}[default]
+	
+	Sei:
+	\begin{flalign*}
+		\Delta z = [-3, 0, 4,  -1]
+	\end{flalign*}
+	Dann gilt für $I - L\Sigma$:
+	\begin{flalign*} 
+	I -
+	\left(\begin{array}{cccc}
+	0 		& 0 	  & 0  & 0 \\
+	L_{2,1} & 0 	  & 0  & 0 \\
+	L_{3,1} & L_{3,2} & 0  & 0\\
+	L_{4,1} & L_{4,2} & L_{4,3} & 0 \\
+	\end{array}\right) \times
+	\left(\begin{array}{cccc}
+	-1 & 0 & 0 & 0 \\
+	0 & 0 & 0 & 0 \\
+	0 & 0 & 1 & 0 \\
+	0 & 0 & 0 & -1 \\
+	\end{array}\right)
+	= 
+	\left(\begin{array}{cccc}
+	1 & 0 & 0 & 0 \\
+	-L_{2,1} & 1 & 0 & 0 \\
+	-L_{3,1} & 0 & 1 & 0 \\
+	-L_{4,1} & 0 & 0 & 1 \\
+	\end{array}\right)
+	\end{flalign*}
+	das entspricht folgenden Operationen:
+	\begin{itemize}
+		\item Hinzufügen einer Hauptdiagonalen
+		\item Skalieren der Spalten von $L$ mit den Vorzeichen von $\Delta z$
+	\end{itemize}
+	Besser dieses als Operation zu implementieren.
+	Das Auflösen der unteren Dreiecksmatrix $(I-L\Sigma)^{-1}$ übernimmt CUBLAS.
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{Aufgabe 2) Gradient}
+	\framesubtitle{Komplexität}
+	BLOCKSIZE, GRIDSIZE OPTIMIZATION \\
+	ROW FORMAT, COL FORMAT \\
+	INTERFACE ??? \\
 \end{frame}
 %------------------------------------------------------------------------
 \begin{frame}
@@ -117,8 +186,8 @@
 \begin{frame}
 \frametitle{Implementierung}
 \framesubtitle{Client Side Storage}
- So wenig wie möglich selbst machen \\
- CUBLAS, CUSOLVE, THRUST, C++ STL \\
- Genpgend Speicher vorhanden
+	 BLOCKSIZE, GRIDSIZE OPTIMIZATION \\
+	 ROW FORMAT, COL FORMAT \\
+	 INTERFACE ??? \\
 \end{frame}
 %------------------------------------------------------------------------
