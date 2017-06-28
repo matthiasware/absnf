@@ -1,30 +1,32 @@
-\frametitle{Aufgabe 1) Evaluate}
+\frametitle{Aufgabe 1) Gradient}
 	\framesubtitle{Implementierung}
 	\begin{lstlisting}[language=cpp]
 	template <typename T>
-	void eval(T *a, T *b,
-			  T *Z, T *L,
-			  T *J, T *Y,
-			  T *dx,
-			  int m, int n, int s,
-			  T *dz, T *dy,
-			  T *abs_dz)
-	{
-			// dz = a
-			cudaMemcpy(dz, a, ., cudaMemcpyDeviceToDevice));
-			// dz = Z * dx + dx
-			cublasDgemv(.,Z, ., dx, . dz, .)
-			// dz[i] = L[i]_i * |dz|_i
-			for(int i=0; i<s; i++)
-			{
-				cublasDgemv( . ,&L[i * s], . ,abs_dz, . , &dz[i],.);
-				abs <<<1,1>>>(&dz[i], &abs_dz[i], 1);
-			}
-			// dy = b
-			cudaMemcpy(dy, b, ., cudaMemcpyDeviceToDevice);
-			// dy = dy + J*dx
-			cublasDgemv(.,J, ., dx, ., dy, .));
-			// dy = dy + Y * |dz|
-			cublasDgemv(., Y, ., abs_dz, ., dy, .));
+	void gradient(T *a, T *b,
+				  T *Z, T *L,
+				  T *J, T *Y,
+				  T *dz,
+				  T *Tss, T *I, T *K,
+				  int m, int n, int s,
+				  int gridsize, int blocksize,
+				  T *gamma, T *Gamma)
+		//  d_Tss = diag(1) - L * diag(sign(dz))
+		initTss <<<gridsize, blocksize >>>(d_Tss,d_L, d_dz, s, s*s);
+		//  d_I = diag(1) // room for improvement, operations can be merged
+		initIdentity <<<gridsize, blocksize >>> (d_I, s);
+		//  d_I = d_Tss * X
+		getTriangularInverse(handle, d_Tss, d_I, s);
+		//	d_I = d_I * diag(sign(dz))
+		multWithDz <<<gridsize, blocksize >>>(d_I, d_dz, s);
+		//	d_K = d_Y * d_I
+		cublasDgemm(.,d_Y,.,d_I,d_K,));
+		//	d_gamma = d_b
+		//  d_Gamma = J
+		cudaMemcpy(d_gamma, d_b,.);
+		cudaMemcpy(d_Gamma, d_J,.);
+		//	d_gamma = d_gamma + K*a
+		cublasDgemv(.,d_K,., d_a,., d_gamma,.);
+		//  d_Gamma = d_Gamma + K*Z
+		cublasDgemm(.,d_K,d_Z,d_Gamma,m));
 	}
 	\end{lstlisting}

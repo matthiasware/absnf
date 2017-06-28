@@ -102,13 +102,92 @@
 	Besser dieses als Operation zu implementieren.
 	Das Auflösen der unteren Dreiecksmatrix $(I-L\Sigma)^{-1}$ übernimmt CUBLAS.
 \end{frame}
+%----------------------------------------------------------------------------
+\begin{frame}[fragile]
+	\frametitle{Aufgabe 1) Gradient}
+	\framesubtitle{Implementierung}
+	\begin{lstlisting}[language=cpp]
+	template <typename T>
+	void gradient(T *a, T *b, 
+				  T *Z, T *L, 
+				  T *J, T *Y,
+				  T *dz,
+				  T *Tss, T *I, T *K,
+				  int m, int n, int s,
+				  int gridsize, int blocksize,
+				  T *gamma, T *Gamma)
+		//  d_Tss = diag(1) - L * diag(sign(dz))
+		initTss <<<gridsize, blocksize >>>(d_Tss,d_L, d_dz, s, s*s);
+		//  d_I = diag(1) // room for improvement, operations can be merged		
+		initIdentity <<<gridsize, blocksize >>> (d_I, s);
+		//  d_I = d_Tss * X	
+		getTriangularInverse(handle, d_Tss, d_I, s);
+		//	d_I = d_I * diag(sign(dz))
+		multWithDz <<<gridsize, blocksize >>>(d_I, d_dz, s);
+		//	d_K = d_Y * d_I
+		cublasDgemm(.,d_Y,.,d_I,d_K,));
+		//	d_gamma = d_b
+		//  d_Gamma = J
+		cudaMemcpy(d_gamma, d_b,.);
+		cudaMemcpy(d_Gamma, d_J,.);
+		//	d_gamma = d_gamma + K*a
+		cublasDgemv(.,d_K,., d_a,., d_gamma,.);
+		//  d_Gamma = d_Gamma + K*Z
+		cublasDgemm(.,d_K,d_Z,d_Gamma,m));
+	}
+	\end{lstlisting}
+\end{frame}
+%------------------------------------------------------------------------
+
+\begin{frame}
+	\frametitle{Aufgabe 2) Gradient}
+	\framesubtitle{Speicherkomplexität}
+	Speicherkomplexität: \\
+	\begin{center}
+		\begin{tabular}{ c | c | c | c | c | c | c | c | c | c | c | c }
+			$a$ & $b$ & $Z$ & $L$ & $J$ & $Y$ & $\Delta z$ & $\gamma$ & $\Gamma$ & $Tss$ & $I$ & $K$\\
+			\hline
+			$s$ & $m$ & $s*n$ & $s*s$ & $m*n$ & $m*s$ & $s$ & $m$ & $m*n$& $s*s$ & $s*s$ & $m*s$\\
+		\end{tabular}
+	\end{center}
+	Bei $m=n=s$:
+	\begin{flalign*}
+		8s^2 + 4s \times sizeof(type)
+	\end{flalign*}
+	\begin{itemize}
+		\item $m=n=s=1000:$  0.064 GB
+		\item $m=n=s=5000:$ 1.6 GB
+		\item $m=n=s=10.000:$ 6.40 GB
+	\end{itemize}
+\end{frame}
 %------------------------------------------------------------------------
 \begin{frame}
 	\frametitle{Aufgabe 2) Gradient}
 	\framesubtitle{Komplexität}
-	BLOCKSIZE, GRIDSIZE OPTIMIZATION \\
-	ROW FORMAT, COL FORMAT \\
-	INTERFACE ??? \\
+	Komplexität $(m=n=s)$: \\
+	\begin{center}
+		\begin{tabular}{ l | l}
+			Funktion & Komplexität Seriell \\
+			\hline
+			$initTss()$	& $s^2$\\
+			$initIdentity()$& $s^2$ \\
+			$getTriangularInverse()$& $s^2$ (backsubstitution)\\
+			$multWithDz()$  & $s^2$  \\
+			$cublasDgemm()$& $s^3$ \\
+			$cublasDgemv()$ & $s^2$ \\
+			$cudaMemcpy()$ & $s$ \\
+		\end{tabular} 	\\~\\
+	\end{center}
+	Lässt sich alles gut parallel ausführen !!!
+\end{frame}
+\setbeamertemplate{navigation symbols}{}
+\begin{frame}[plain]
+	\makebox[\linewidth]{\includegraphics[width=\paperwidth]{img/grad-single.png}}
+\end{frame}
+%------------------------------------------------------------------------
+\setbeamertemplate{navigation symbols}{}
+\begin{frame}[plain]
+	\makebox[\linewidth]{\includegraphics[width=\paperwidth]{img/grad-100.png}}
 \end{frame}
 %------------------------------------------------------------------------
 \begin{frame}
