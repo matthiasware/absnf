@@ -109,8 +109,10 @@ void blocksize()
 	std::cout << "Memory upload: " << time_mem << std::endl;
 
 	// std::cout << prop.maxThreadsPerBlock << std::endl;
+	std::ofstream myfile;
+  	myfile.open ("blocksize.txt");
 	int gs;
-	int bs = prop.maxThreadsPerBlock
+	int bs = prop.maxThreadsPerBlock / 2;
 	for(int i=1; i<=1000; i+=1)
 	{	
 		gs = i;
@@ -120,12 +122,14 @@ void blocksize()
 		t_1 = std::chrono::high_resolution_clock::now();
 		auto time_exec = std::chrono::duration_cast<std::chrono::microseconds>( t_1 - t_0 ).count();
 		std::cout << "[" << gs << "," << time_exec << "]," << std::endl;
+		myfile << "[" << gs << "," << time_exec << "],\n";
 	}
 
 	free(h_A);
 	free(h_dz);
 	cudaFree(d_A);
 	cudaFree(d_dz);
+	myfile.close();
 }
 void block_grid()
 {

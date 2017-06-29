@@ -199,7 +199,7 @@ namespace cuutils
 		cudaGetDeviceProperties(&prop, 0);
 		// we decided to run 8 blocks / MPU
 		// TODO: room for improvements
-		*gridsize = prop.multiProcessorCount * 8;
+		*gridsize = prop.multiProcessorCount;
 		*blocksize = prop.maxThreadsPerBlock;
 	};
 }
