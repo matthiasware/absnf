@@ -3,9 +3,11 @@ from matplotlib import pyplot as plt
 from matplotlib import animation
 
 plot_values = True
-s = 4
-block_dim = 2
-grid_dim = 2
+s = 100
+block_dim = 8
+grid_dim = 16
+num_threads = block_dim * grid_dim
+num_multicores = 4
 
 data = np.zeros(s*s)
 
@@ -22,10 +24,11 @@ class cuda_thread():
 		self.grid_dim = grid_dim
 		self.id = self.i * self.s + self.j;
 		self.done = False
+		self.global_id = thread_id + block_id * block_dim
 	
 	def update(self):
 		if self.id < self.s*self.s and self.j<self.s:
-			self.matrix[self.id] = self.id
+			self.matrix[self.id] = self.global_id
 			self.i += self.block_dim
 			if self.i>=self.s:
 				self.i = self.i%self.s
@@ -39,6 +42,7 @@ class image_generator():
 		self.threads = []
 		self.current_thread = 0
 		self.inplace = inplace
+		self.matrix = matrix
 		if multicores:
 			self.multicores = multicores
 		else:
@@ -53,7 +57,10 @@ class image_generator():
 		self.matrix_time = []
 
 	def generate(self):
-		if self.
+		if not self.next:
+			return
+		if not self.inplace:
+			self.matrix_time.append(np.copy(self.matrix))
 		for i in range(self.multicores):
 			thread = self.threads[self.current_thread]
 			thread.update()
@@ -65,45 +72,26 @@ class image_generator():
 		if np.all(self.all_done):
 			self.next = False
 
-generator = image_generator(block_dim, grid_dim, data, s, multicores=2)
-while generator.next:
+# def create_cmap(n,cmap):
+# 	cmap = plt.cm.get_cmap(cmap)
+# 	colors = cmap(np.arange(cmap.N))
+# 	return cmap.from_list(cmap.name , colors, cmap.N)
+
+generator = image_generator(block_dim, grid_dim, data, s, inplace=False, multicores=num_multicores)
+
+def update(i):
 	generator.generate()
+	matrice.set_array(data.reshape((s,s)).T)
+
+fig, ax = plt.subplots()
+matrice = ax.matshow(data.reshape(s,s), vmin=0, vmax=num_threads)
+plt.colorbar(matrice)
+
+ani = animation.FuncAnimation(fig, update, frames=4, interval=50)
+plt.show()
 
 data = data.reshape((s,s))
-print(data)
-
-# calculate
-# done = np.zeros(len(threads), dtype=bool)
-# while(True):
-# 	print("round")
-# 	for i, thread in enumerate(threads):
-# 		thread.update()
-# 		done[i] = thread.done
-# 	if np.all(done):
-# 		break
-# data = data.reshape((s,s))
-# print(data)
-
-
-# M=np.array([[0,0,100,100,100,100,100,100,300,300,300,300,300,300,500,500,500,500,500,500,1000,1000,1000,1000] for i in range(0,20)]) 
-# M=np.zeros(cols*rows)
-
-# def update(i):
-#     M[7,i] = 1000
-#     M[19-i,10] = 500
-#     matrice.set_array(M)
-
-# fig, ax = plt.subplots()
-# matrice = ax.matshow(M)
-# plt.colorbar(matrice)
-
-# ani = animation.FuncAnimation(fig, update, frames=19, interval=500)
-# plt.show()
-
-
-
-
-
+print(s)
 
 
 
