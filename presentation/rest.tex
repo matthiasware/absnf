@@ -7,11 +7,11 @@
 		\begin{tabular}{ l | l}
 			Funktion & Komplexität Seriell \\
 			\hline
-			$cusolverDnDgeqrf$ & $f$ (QR) \\
-			$cusolverDnDormqr$ & $f$ (QRxB) \\
+			$cusolverDnDgeqrf$ & $s^3$ (QR) \\
+			$cusolverDnDormqr$ & $s^2$ (QRxB) \\
 			$cublasDgemm()$& $s^3$ \\
 			$cublasDgemv()$ & $s^2 * k$  \\
-			$cudaMemcpy()$ & $s$ \\
+			$cudaMemcpy()$ & $s * k$  \\
 		\end{tabular} 	\\~\\
 	\end{center}
 	Lässt sich alles gut parallel ausführen !!!
