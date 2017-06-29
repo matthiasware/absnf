@@ -6,6 +6,7 @@
 #include <iostream>
 #include <cusolverDn.h>
 #include <sstream>
+#include <stdexcept>
 
 #define DEBUG_CUUTILS true
 

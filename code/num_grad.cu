@@ -149,15 +149,15 @@ void test_1000(int s)
 	cuutils::getGridBlockSize(&gridsize, &blocksize);
 
 	TimeVar t_0 = std::chrono::high_resolution_clock::now();
-	// for(int i=0; i<100; i++)
-	// {
+	for(int i=0; i<100; i++)
+	{
 		absnf::gradient_core(cublas_handle,
 							 d_a, d_b, d_Z, d_L, d_J,
 							 d_Y, d_dz, d_Tss, d_I, d_K,
 							 s, s, s,
 							 gridsize, blocksize,
 							 d_gamma, d_Gamma);
-	// }
+	}
 	cudaDeviceSynchronize();
 	TimeVar t_1 = std::chrono::high_resolution_clock::now();
 	auto time_exec = std::chrono::duration_cast<std::chrono::milliseconds>( t_1 - t_0 ).count();
@@ -200,6 +200,6 @@ void test_gridsize(int s)
 }
 int main()
 {
-	test(1000);
+	test(5000);
 	return 0;
 }
