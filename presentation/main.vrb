@@ -1,15 +1,22 @@
-\frametitle{Solve}
-	\framesubtitle{Komplexität}
-	Komplexität $(m=n=s)$ bei $k$ Iterationen\\
-	\begin{center}
-		\begin{tabular}{ l | l}
-			Funktion & Komplexität Seriell \\
-			\hline
-			$cusolverDnDgeqrf$ & $s^3$ (QR) \\
-			$cusolverDnDormqr$ & $s^2$ (QRxB) \\
-			$cublasDgemm()$& $s^3$ \\
-			$cublasDgemv()$ & $s^2 * k$  \\
-			$cudaMemcpy()$ & $s * k$  \\
-		\end{tabular} 	\\~\\
-	\end{center}
-	Lässt sich alles gut parallel ausführen !!!
+\frametitle{Final Thoughts}
+	\framesubtitle{Was ist da?}
+Was ist da nach der ersten Implementation?
+\pause
+\begin{lstlisting}
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+Python                          25            285            486           7451
+C/C++ Header                     5             82            209           1256
+C++                              7             41             19            334
+-------------------------------------------------------------------------------
+SUM:                            37            408            714           9041
+-------------------------------------------------------------------------------
+\end{lstlisting}
+\pause
+Dabei:
+\begin{itemize}
+	\item Working prototype in CUDA C++ und Python
+	\item Unittests
+	\item Coole Plot Generatoren
+\end{itemize}

@@ -1,12 +1,42 @@
+%------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{Content}
+	\framesubtitle{ABS-Normal Form}
+	\begin{columns}[T] % align columns
+		\begin{column}{.48\textwidth}
+			
+			\begin{center}
+				{\Huge Blocksize und \\ Gridsize?}
+			\end{center}
+			
+		\end{column}%
+		\hfill%
+		\begin{column}{.48\textwidth}
+			\color{blue}\rule{\linewidth}{4pt}
+			
+			\setbeamertemplate{enumerate items}[default]
+			\begin{enumerate}
+				\item Einführung
+				\item Aufgaben
+				\item Evaluate
+				\item Gradient
+				\item Blocksize und Gridsize
+				\item Solve
+				\item Final Thoughts
+			\end{enumerate}
+		\end{column}%
+	\end{columns}
+\end{frame}
+%------------------------------------------------------------------------
 \begin{frame}
 	\frametitle{Choosing Gridsize and Blocksize}
-	\framesubtitle{Choosing Gridsize and Blocksize}
+	\framesubtitle{Ansatz}
 	Wie sollen gridsize and blocksize gewählt werden?
 	\begin{itemize}
-		\item Generischen Ansatz
-		\item Starte mit gewisser blocksize and gridsize in abh. von device spec.
-		\item threads berechnen, welche aufgaben sie abarbeiten sollen
-		\item über die optimalen parameter kann optimiert werden.
+		\item <2-> Generischen Ansatz
+		\item <3-> Starte mit gewisser blocksize and gridsize in abh. von device spec.
+		\item <4-> threads berechnen, welche aufgaben sie abarbeiten sollen
+		\item <5-> über die optimalen parameter kann optimiert werden.
 	\end{itemize}
 \end{frame}
 %------------------------------------------------------------------------
@@ -17,6 +47,7 @@
 	\begin{flalign*}
 	A = A \times Diag(Sign(dz))
 	\end{flalign*}
+	\pause
 	Beispiel:
 	\begin{flalign*}
 	A \in \mathbb{R}^{3 \times 3}, dz \in \mathbb{R}^2 \\
@@ -44,13 +75,12 @@
 	\end{flalign*}
 \end{frame}
 %------------------------------------------------------------------------
-\begin{frame}
+\begin{frame}[fragile]
 	\frametitle{Choosing Gridsize and Blocksize}
-	\framesubtitle{Choosing Gridsize and Blocksize}
-	\begin{itemize}
-		\item Blocksize: 2
-		\item Gridsize: 2
-	\end{itemize}
+	\framesubtitle{Beispiel}
+	\begin{center}
+		ANIMATION
+	\end{center}
 \end{frame}
 %------------------------------------------------------------------------
 \begin{frame}[fragile]
@@ -78,3 +108,15 @@
 	\end{lstlisting}
 \end{frame}
 %------------------------------------------------------------------------
+
+\setbeamertemplate{navigation symbols}{}
+\begin{frame}[plain]
+	\makebox[\linewidth]{\includegraphics[width=\paperwidth]{img/blocksize.png}}
+\end{frame}
+\setbeamertemplate{navigation symbols}{}
+\begin{frame}[plain]
+	\makebox[\linewidth]{\includegraphics[width=\paperwidth]{img/gridsize.png}}
+\end{frame}
+\begin{frame}[plain]
+	\makebox[\linewidth]{\includegraphics[width=\paperwidth]{img/block_grid_3d.png}}
+\end{frame}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.5.28)  29 JUN 2017 22:43
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.5.28)  30 JUN 2017 01:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -695,10 +695,278 @@ Package: beamerinnerthemedefault 2014/06/30  (rcs-revision 580088513a67)
 (/usr/share/texlive/texmf-dist/tex/latex/beamer/themes/outer/beamerouterthemede
 fault.sty
 Package: beamerouterthemedefault 2012/12/19  (rcs-revision 1686da3db3c9)
-))) (/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
+))) (/usr/share/texlive/texmf-dist/tex/latex/animate/animate.sty
+Package: animate 2016/03/15 PDF animations from files and inline graphics
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/ifdraft.sty
+Package: ifdraft 2008/08/11 v1.3 Detect class options draft and final (HO)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty
+Package: calc 2014/10/28 v4.3 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count153
+\calc@Bcount=\count154
+\calc@Adimen=\dimen188
+\calc@Bdimen=\dimen189
+\calc@Askip=\skip57
+\calc@Bskip=\skip58
+LaTeX Info: Redefining \setlength on input line 80.
+LaTeX Info: Redefining \addtolength on input line 81.
+\calc@Ccount=\count155
+\calc@Cskip=\skip59
+)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/atenddvi.sty
+Package: atenddvi 2007/04/17 v1.1 At end DVI hook (HO)
+
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/zref-abspage.sty
+Package: zref-abspage 2012/04/04 v2.24 Module abspage for zref (HO)
+
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/zref-base.sty
+Package: zref-base 2012/04/04 v2.24 Module base for zref (HO)
+Package zref Info: New property list: main on input line 759.
+Package zref Info: New property: default on input line 760.
+Package zref Info: New property: page on input line 761.
+)
+\c@abspage=\count156
+Package zref Info: New property: abspage on input line 62.
+)
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/zref-lastpage.sty
+Package: zref-lastpage 2012/04/04 v2.24 Module lastpage for zref (HO)
+Package zref Info: New property list: LastPage on input line 55.
+))
+(/usr/share/texlive/texmf-dist/tex/latex/animate/animfp.sty
+Package: animfp 2009/07/23 fixed point addition for animate.sty
+\afp@xs=\count157
+\afp@xia=\count158
+\afp@xib=\count159
+\afp@xfa=\count160
+\afp@xfb=\count161
+\afp@rega=\count162
+\afp@regb=\count163
+\afp@regs=\count164
+)
+(/usr/share/texlive/texmf-dist/tex/latex/media9/pdfbase.sty
+(/usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3.sty
+Package: expl3 2016/01/19 v6377 L3 programming layer (loader) 
+
+(/usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3-code.tex
+Package: expl3 2016/01/19 v6377 L3 programming layer (code)
+L3 Module: l3bootstrap 2016/01/01 v6339 L3 Bootstrap code
+L3 Module: l3names 2015/12/21 v6328 L3 Namespace for primitives
+L3 Module: l3basics 2015/11/22 v6315 L3 Basic definitions
+L3 Module: l3expan 2015/09/10 v5983 L3 Argument expansion
+L3 Module: l3tl 2015/09/29 v6121 L3 Token lists
+L3 Module: l3str 2016/01/03 v6357 L3 Strings
+L3 Module: l3seq 2015/08/05 v5777 L3 Sequences and stacks
+L3 Module: l3int 2016/01/05 v6366 L3 Integers
+\c_max_int=\count165
+\l_tmpa_int=\count166
+\l_tmpb_int=\count167
+\g_tmpa_int=\count168
+\g_tmpb_int=\count169
+L3 Module: l3quark 2015/08/17 v5855 L3 Quarks
+L3 Module: l3prg 2015/11/01 v6216 L3 Control structures
+\g__prg_map_int=\count170
+L3 Module: l3clist 2015/09/02 v5901 L3 Comma separated lists
+L3 Module: l3token 2015/11/11 v6249 L3 Experimental token manipulation
+L3 Module: l3prop 2016/01/05 v6366 L3 Property lists
+L3 Module: l3msg 2015/09/28 v6113 L3 Messages
+L3 Module: l3file 2015/12/03 v6317 L3 File and I/O operations
+\l_iow_line_count_int=\count171
+\l__iow_target_count_int=\count172
+\l__iow_current_line_int=\count173
+\l__iow_current_word_int=\count174
+\l__iow_current_indentation_int=\count175
+L3 Module: l3skip 2016/01/05 v6366 L3 Dimensions and skips
+\c_zero_dim=\dimen190
+\c_max_dim=\dimen191
+\l_tmpa_dim=\dimen192
+\l_tmpb_dim=\dimen193
+\g_tmpa_dim=\dimen194
+\g_tmpb_dim=\dimen195
+\c_zero_skip=\skip60
+\c_max_skip=\skip61
+\l_tmpa_skip=\skip62
+\l_tmpb_skip=\skip63
+\g_tmpa_skip=\skip64
+\g_tmpb_skip=\skip65
+\c_zero_muskip=\muskip12
+\c_max_muskip=\muskip13
+\l_tmpa_muskip=\muskip14
+\l_tmpb_muskip=\muskip15
+\g_tmpa_muskip=\muskip16
+\g_tmpb_muskip=\muskip17
+L3 Module: l3keys 2015/11/17 v6284 L3 Key-value interfaces
+\g__keyval_level_int=\count176
+\l_keys_choice_int=\count177
+L3 Module: l3fp 2015/08/25 v5890 L3 Floating points
+\c__fp_leading_shift_int=\count178
+\c__fp_middle_shift_int=\count179
+\c__fp_trailing_shift_int=\count180
+\c__fp_big_leading_shift_int=\count181
+\c__fp_big_middle_shift_int=\count182
+\c__fp_big_trailing_shift_int=\count183
+\c__fp_Bigg_leading_shift_int=\count184
+\c__fp_Bigg_middle_shift_int=\count185
+\c__fp_Bigg_trailing_shift_int=\count186
+L3 Module: l3box 2015/08/09 v5822 L3 Experimental boxes
+\c_empty_box=\box53
+\l_tmpa_box=\box54
+\l_tmpb_box=\box55
+\g_tmpa_box=\box56
+\g_tmpb_box=\box57
+L3 Module: l3coffins 2015/08/06 v5789 L3 Coffin code layer
+\l__coffin_internal_box=\box58
+\l__coffin_internal_dim=\dimen196
+\l__coffin_offset_x_dim=\dimen197
+\l__coffin_offset_y_dim=\dimen198
+\l__coffin_x_dim=\dimen199
+\l__coffin_y_dim=\dimen256
+\l__coffin_x_prime_dim=\dimen257
+\l__coffin_y_prime_dim=\dimen258
+\c_empty_coffin=\box59
+\l__coffin_aligned_coffin=\box60
+\l__coffin_aligned_internal_coffin=\box61
+\l_tmpa_coffin=\box62
+\l_tmpb_coffin=\box63
+\l__coffin_display_coffin=\box64
+\l__coffin_display_coord_coffin=\box65
+\l__coffin_display_pole_coffin=\box66
+\l__coffin_display_offset_dim=\dimen259
+\l__coffin_display_x_dim=\dimen260
+\l__coffin_display_y_dim=\dimen261
+L3 Module: l3color 2014/08/23 v5354 L3 Experimental color support
+L3 Module: l3sys 2015/09/25 v6087 L3 Experimental system/runtime functions
+L3 Module: l3candidates 2016/01/14 v6376 L3 Experimental additions to l3kernel
+\l__box_top_dim=\dimen262
+\l__box_bottom_dim=\dimen263
+\l__box_left_dim=\dimen264
+\l__box_right_dim=\dimen265
+\l__box_top_new_dim=\dimen266
+\l__box_bottom_new_dim=\dimen267
+\l__box_left_new_dim=\dimen268
+\l__box_right_new_dim=\dimen269
+\l__box_internal_box=\box67
+\l__coffin_bounding_shift_dim=\dimen270
+\l__coffin_left_corner_dim=\dimen271
+\l__coffin_right_corner_dim=\dimen272
+\l__coffin_bottom_corner_dim=\dimen273
+\l__coffin_top_corner_dim=\dimen274
+\l__coffin_scaled_total_height_dim=\dimen275
+\l__coffin_scaled_width_dim=\dimen276
+L3 Module: l3luatex 2015/11/11 v6250 L3 Experimental LuaTeX-specific functions
+)
+(/usr/share/texlive/texmf-dist/tex/latex/l3kernel/l3pdfmode.def
+File: l3pdfmode.def 2015/11/11 v6250 L3 Experimental driver: PDF mode
+\l__driver_color_stack_int=\count187
+))
+(/usr/share/texlive/texmf-dist/tex/latex/l3experimental/l3str/l3regex.sty
+Package: l3regex 2016/01/19 v6377 L3 Experimental regular expressions
+
+(/usr/share/texlive/texmf-dist/tex/latex/l3experimental/l3str/l3tl-build.sty
+Package: l3tl-build 2016/01/19 v6377 L3 Experimental token list construction
+\l__tl_build_start_index_int=\count188
+\l__tl_build_index_int=\count189
+)
+(/usr/share/texlive/texmf-dist/tex/latex/l3experimental/l3str/l3tl-analysis.sty
+Package: l3tl-analysis 2015/11/09 v6244 L3 Experimental token lists analysis
+\l__tl_analysis_normal_int=\count190
+\l__tl_analysis_index_int=\count191
+\l__tl_analysis_nesting_int=\count192
+\l__tl_analysis_type_int=\count193
+) (/usr/share/texlive/texmf-dist/tex/latex/l3experimental/l3str/l3flag.sty
+Package: l3flag 2016/01/19 v6377 L3 Experimental flags
+)
+(/usr/share/texlive/texmf-dist/tex/latex/l3experimental/l3str/l3str-convert.sty
+Package: l3str-convert 2015/09/26 v6106 L3 Experimental string encoding convers
+ions
+\l__str_internal_int=\count194
+\c__str_replacement_char_int=\count195
+)
+\l__regex_internal_a_int=\count196
+\l__regex_internal_b_int=\count197
+\l__regex_internal_c_int=\count198
+\l__regex_balance_int=\count199
+\l__regex_group_level_int=\count266
+\l__regex_mode_int=\count267
+\l__regex_catcodes_int=\count268
+\l__regex_default_catcodes_int=\count269
+\c__regex_catcode_D_int=\count270
+\c__regex_catcode_S_int=\count271
+\c__regex_catcode_L_int=\count272
+\c__regex_catcode_O_int=\count273
+\c__regex_catcode_A_int=\count274
+\c__regex_all_catcodes_int=\count275
+\l__regex_show_lines_int=\count276
+\l__regex_min_state_int=\count277
+\l__regex_max_state_int=\count278
+\l__regex_left_state_int=\count279
+\l__regex_right_state_int=\count280
+\l__regex_capturing_group_int=\count281
+\l__regex_min_pos_int=\count282
+\l__regex_max_pos_int=\count283
+\l__regex_current_pos_int=\count284
+\l__regex_start_pos_int=\count285
+\l__regex_success_pos_int=\count286
+\l__regex_current_char_int=\count287
+\l__regex_current_catcode_int=\count288
+\l__regex_last_char_int=\count289
+\l__regex_case_changed_char_int=\count290
+\l__regex_current_state_int=\count291
+\l__regex_step_int=\count292
+\l__regex_min_active_int=\count293
+\l__regex_max_active_int=\count294
+\l__regex_replacement_csnames_int=\count295
+\l__regex_match_count_int=\count296
+\l__regex_submatch_int=\count297
+\l__regex_zeroth_submatch_int=\count298
+) (/usr/share/texlive/texmf-dist/tex/latex/l3packages/l3keys2e/l3keys2e.sty
+Package: l3keys2e 2016/01/19 v6377 LaTeX2e option processing using LaTeX3 keys
+)
+Package: pdfbase 2016/03/11 v0.7 driver independent access to low-level PDF fea
+tures
+\g_pbs_oc_int=\count299
+)
+(/usr/share/texlive/texmf-dist/tex/latex/ocgx2/ocgbase.sty
+Package: ocgbase 2016/03/11 v0.6 support package for ocgx2.sty
+)
+(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count300
+\scratchdimen=\dimen277
+\scratchbox=\box68
+\nofMPsegments=\count301
+\nofMParguments=\count302
+\everyMPshowfont=\toks43
+\MPscratchCnt=\count303
+\MPscratchDim=\dimen278
+\MPnumerator=\count304
+\makeMPintoPDFobject=\count305
+\everyMPtoPDFconversion=\toks44
+)
+\@anim@box=\box69
+\@anim@measbox=\box70
+\@anim@tmpdima=\dimen279
+\@anim@tmpdimb=\dimen280
+\@anim@num=\count306
+\@anim@curframe=\count307
+\@anim@curframe@zb=\count308
+\@anim@resizeflags=\count309
+\@anim@skipfram=\count310
+\@anim@mulframecnt=\count311
+\@anim@@tmlnfile=\read2
+\@anim@tmpcnt=\count312
+\c@@anim@ltxcnt=\count313
+\@anim@curlayer=\count314
+\@anim@lineno=\count315
+\@anim@curfield=\count316
+\@anim@@resizeflags=\count317
+) (/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
 Package: inputenc 2015/03/17 v1.2c Input encoding file
-\inpenc@prehook=\toks43
-\inpenc@posthook=\toks44
+\inpenc@prehook=\toks45
+\inpenc@posthook=\toks46
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/utf8.def
 File: utf8.def 2015/12/03 v1.1r UTF-8 support for inputenc
@@ -1008,41 +1276,41 @@ Now handling font encoding PD1 ...
    defining Unicode char U+2423 (decimal 9251)
 ))
 (/usr/share/texlive/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
-\fancy@headwidth=\skip57
-\f@ncyO@elh=\skip58
-\f@ncyO@erh=\skip59
-\f@ncyO@olh=\skip60
-\f@ncyO@orh=\skip61
-\f@ncyO@elf=\skip62
-\f@ncyO@erf=\skip63
-\f@ncyO@olf=\skip64
-\f@ncyO@orf=\skip65
+\fancy@headwidth=\skip66
+\f@ncyO@elh=\skip67
+\f@ncyO@erh=\skip68
+\f@ncyO@olh=\skip69
+\f@ncyO@orh=\skip70
+\f@ncyO@elf=\skip71
+\f@ncyO@erf=\skip72
+\f@ncyO@olf=\skip73
+\f@ncyO@orf=\skip74
 )
 (/usr/share/texlive/texmf-dist/tex/latex/lastpage/lastpage.sty
 Package: lastpage 2015/03/29 v1.2m Refers to last page's name (HMM; JPG)
 )
 (/usr/share/texlive/texmf-dist/tex/latex/fancyhdr/extramarks.sty
-\@temptokenb=\toks45
+\@temptokenb=\toks47
 )
 (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.sty
-\lst@mode=\count153
-\lst@gtempboxa=\box53
-\lst@token=\toks46
-\lst@length=\count154
-\lst@currlwidth=\dimen188
-\lst@column=\count155
-\lst@pos=\count156
-\lst@lostspace=\dimen189
-\lst@width=\dimen190
-\lst@newlines=\count157
-\lst@lineno=\count158
-\lst@maxwidth=\dimen191
+\lst@mode=\count318
+\lst@gtempboxa=\box71
+\lst@token=\toks48
+\lst@length=\count319
+\lst@currlwidth=\dimen281
+\lst@column=\count320
+\lst@pos=\count321
+\lst@lostspace=\dimen282
+\lst@width=\dimen283
+\lst@newlines=\count322
+\lst@lineno=\count323
+\lst@maxwidth=\dimen284
 
 (/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
 File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
-\c@lstnumber=\count159
-\lst@skipnumbers=\count160
-\lst@framebox=\box54
+\c@lstnumber=\count324
+\lst@skipnumbers=\count325
+\lst@framebox=\box72
 )
 (/usr/share/texlive/texmf-dist/tex/latex/listings/listings.cfg
 File: listings.cfg 2015/06/04 1.6 listings configuration
@@ -1055,15 +1323,15 @@ Package: pgf 2015/08/07 v3.0.1a (rcs-revision 1.15)
 
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmoduleshapes.code.tex
 File: pgfmoduleshapes.code.tex 2014/03/21  (rcs-revision 1.35)
-\pgfnodeparttextbox=\box55
+\pgfnodeparttextbox=\box73
 ) (/usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmoduleplot.code.tex
 File: pgfmoduleplot.code.tex 2015/08/03  (rcs-revision 1.13)
 )
 (/usr/share/texlive/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-0-65
 .sty
 Package: pgfcomp-version-0-65 2007/07/03 v3.0.1a (rcs-revision 1.7)
-\pgf@nodesepstart=\dimen192
-\pgf@nodesepend=\dimen193
+\pgf@nodesepstart=\dimen285
+\pgf@nodesepend=\dimen286
 )
 (/usr/share/texlive/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-1-18
 .sty
@@ -1077,10 +1345,10 @@ Package: pgfcomp-version-1-18 2007/07/23 v3.0.1a (rcs-revision 1.1)
 Package: pgffor 2013/12/13 v3.0.1a (rcs-revision 1.25)
 
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex)
-\pgffor@iter=\dimen194
-\pgffor@skip=\dimen195
-\pgffor@stack=\toks47
-\pgffor@toks=\toks48
+\pgffor@iter=\dimen287
+\pgffor@skip=\dimen288
+\pgffor@stack=\toks49
+\pgffor@toks=\toks50
 ))
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex
 Package: tikz 2015/08/07 v3.0.1a (rcs-revision 1.151)
@@ -1088,31 +1356,31 @@ Package: tikz 2015/08/07 v3.0.1a (rcs-revision 1.151)
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/pgflibraryplothandlers
 .code.tex
 File: pgflibraryplothandlers.code.tex 2013/08/31 v3.0.1a (rcs-revision 1.20)
-\pgf@plot@mark@count=\count161
-\pgfplotmarksize=\dimen196
+\pgf@plot@mark@count=\count326
+\pgfplotmarksize=\dimen289
 )
-\tikz@lastx=\dimen197
-\tikz@lasty=\dimen198
-\tikz@lastxsaved=\dimen199
-\tikz@lastysaved=\dimen256
-\tikzleveldistance=\dimen257
-\tikzsiblingdistance=\dimen258
-\tikz@figbox=\box56
-\tikz@figbox@bg=\box57
-\tikz@tempbox=\box58
-\tikz@tempbox@bg=\box59
-\tikztreelevel=\count162
-\tikznumberofchildren=\count163
-\tikznumberofcurrentchild=\count164
-\tikz@fig@count=\count165
+\tikz@lastx=\dimen290
+\tikz@lasty=\dimen291
+\tikz@lastxsaved=\dimen292
+\tikz@lastysaved=\dimen293
+\tikzleveldistance=\dimen294
+\tikzsiblingdistance=\dimen295
+\tikz@figbox=\box74
+\tikz@figbox@bg=\box75
+\tikz@tempbox=\box76
+\tikz@tempbox@bg=\box77
+\tikztreelevel=\count327
+\tikznumberofchildren=\count328
+\tikznumberofcurrentchild=\count329
+\tikz@fig@count=\count330
 
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.code.tex
 File: pgfmodulematrix.code.tex 2013/09/17  (rcs-revision 1.8)
-\pgfmatrixcurrentrow=\count166
-\pgfmatrixcurrentcolumn=\count167
-\pgf@matrix@numberofcolumns=\count168
+\pgfmatrixcurrentrow=\count331
+\pgfmatrixcurrentcolumn=\count332
+\pgf@matrix@numberofcolumns=\count333
 )
-\tikz@expandcount=\count169
+\tikz@expandcount=\count334
 
 (/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tik
 zlibrarytopaths.code.tex
@@ -1122,38 +1390,38 @@ File: tikzlibrarytopaths.code.tex 2008/06/17 v3.0.1a (rcs-revision 1.2)
 Package: textpos 2014/01/03 v1.7j
 
 Package: textpos 2014/01/03 1.7j, absolute positioning of text on the page
-\TP@textbox=\box60
-\TP@holdbox=\box61
-\TPHorizModule=\dimen259
-\TPVertModule=\dimen260
-\TP@margin=\dimen261
-\TP@absmargin=\dimen262
+\TP@textbox=\box78
+\TP@holdbox=\box79
+\TPHorizModule=\dimen296
+\TPVertModule=\dimen297
+\TP@margin=\dimen298
+\TP@absmargin=\dimen299
 Grid set 16 x 16 = 22.7622pt x 17.07166pt
-\TPboxrulesize=\dimen263
-\TP@ox=\dimen264
-\TP@oy=\dimen265
-\TP@tbargs=\toks49
-\TP@prevdepth=\dimen266
+\TPboxrulesize=\dimen300
+\TP@ox=\dimen301
+\TP@oy=\dimen302
+\TP@tbargs=\toks51
+\TP@prevdepth=\dimen303
 TextBlockOrigin set to 0pt x 0pt
 ) (/usr/share/texlive/texmf-dist/tex/latex/soul/soul.sty
 Package: soul 2003/11/17 v2.4 letterspacing/underlining (mf)
-\SOUL@word=\toks50
-\SOUL@lasttoken=\toks51
-\SOUL@cmds=\toks52
-\SOUL@buffer=\toks53
-\SOUL@token=\toks54
-\SOUL@spaceskip=\skip66
-\SOUL@ttwidth=\dimen267
-\SOUL@uldp=\dimen268
-\SOUL@ulht=\dimen269
+\SOUL@word=\toks52
+\SOUL@lasttoken=\toks53
+\SOUL@cmds=\toks54
+\SOUL@buffer=\toks55
+\SOUL@token=\toks56
+\SOUL@spaceskip=\skip75
+\SOUL@ttwidth=\dimen304
+\SOUL@uldp=\dimen305
+\SOUL@ulht=\dimen306
 )
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\new@ifnextchar' on input line 40.
+(hyperref)                removing `\new@ifnextchar' on input line 42.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (PDFDocEncoding):
-(hyperref)                removing `\\' on input line 40.
+(hyperref)                removing `\\' on input line 42.
 
 
 (/usr/share/texlive/texmf-dist/tex/latex/beamer/themes/theme/beamerthemeWarsaw.
@@ -1184,12 +1452,12 @@ Package: beamercolorthemewhale 2010/06/17  (rcs-revision d02a7cf4d8ae)
 ane.sty
 Package: beamercolorthemecrane 2010/06/17  (rcs-revision d02a7cf4d8ae)
 )
-\c@mydef=\count170
-\c@mybei=\count171
-\c@mysatz=\count172
-\c@mybew=\count173
-\c@myfolg=\count174
-\c@mybemerk=\count175
+\c@mydef=\count335
+\c@mybei=\count336
+\c@mysatz=\count337
+\c@mybew=\count338
+\c@myfolg=\count339
+\c@mybemerk=\count340
  (/usr/share/texlive/texmf-dist/tex/latex/hf-tikz/hf-tikz.sty
 Package: hf-tikz 2014/07/25 v0.3a A simple way to highlight formulas and formul
 a parts.
@@ -1202,130 +1470,16 @@ File: tikzlibraryshadings.code.tex 2008/10/29 v3.0.1a (rcs-revision 1.1)
 e.tex
 File: pgflibraryshadings.code.tex 2008/10/29 v3.0.1a (rcs-revision 1.2)
 )) (/usr/share/texlive/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
-(/usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3.sty
-Package: expl3 2016/01/19 v6377 L3 programming layer (loader) 
-
-(/usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3-code.tex
-Package: expl3 2016/01/19 v6377 L3 programming layer (code)
-L3 Module: l3bootstrap 2016/01/01 v6339 L3 Bootstrap code
-L3 Module: l3names 2015/12/21 v6328 L3 Namespace for primitives
-L3 Module: l3basics 2015/11/22 v6315 L3 Basic definitions
-L3 Module: l3expan 2015/09/10 v5983 L3 Argument expansion
-L3 Module: l3tl 2015/09/29 v6121 L3 Token lists
-L3 Module: l3str 2016/01/03 v6357 L3 Strings
-L3 Module: l3seq 2015/08/05 v5777 L3 Sequences and stacks
-L3 Module: l3int 2016/01/05 v6366 L3 Integers
-\c_max_int=\count176
-\l_tmpa_int=\count177
-\l_tmpb_int=\count178
-\g_tmpa_int=\count179
-\g_tmpb_int=\count180
-L3 Module: l3quark 2015/08/17 v5855 L3 Quarks
-L3 Module: l3prg 2015/11/01 v6216 L3 Control structures
-\g__prg_map_int=\count181
-L3 Module: l3clist 2015/09/02 v5901 L3 Comma separated lists
-L3 Module: l3token 2015/11/11 v6249 L3 Experimental token manipulation
-L3 Module: l3prop 2016/01/05 v6366 L3 Property lists
-L3 Module: l3msg 2015/09/28 v6113 L3 Messages
-L3 Module: l3file 2015/12/03 v6317 L3 File and I/O operations
-\l_iow_line_count_int=\count182
-\l__iow_target_count_int=\count183
-\l__iow_current_line_int=\count184
-\l__iow_current_word_int=\count185
-\l__iow_current_indentation_int=\count186
-L3 Module: l3skip 2016/01/05 v6366 L3 Dimensions and skips
-\c_zero_dim=\dimen270
-\c_max_dim=\dimen271
-\l_tmpa_dim=\dimen272
-\l_tmpb_dim=\dimen273
-\g_tmpa_dim=\dimen274
-\g_tmpb_dim=\dimen275
-\c_zero_skip=\skip67
-\c_max_skip=\skip68
-\l_tmpa_skip=\skip69
-\l_tmpb_skip=\skip70
-\g_tmpa_skip=\skip71
-\g_tmpb_skip=\skip72
-\c_zero_muskip=\muskip12
-\c_max_muskip=\muskip13
-\l_tmpa_muskip=\muskip14
-\l_tmpb_muskip=\muskip15
-\g_tmpa_muskip=\muskip16
-\g_tmpb_muskip=\muskip17
-L3 Module: l3keys 2015/11/17 v6284 L3 Key-value interfaces
-\g__keyval_level_int=\count187
-\l_keys_choice_int=\count188
-L3 Module: l3fp 2015/08/25 v5890 L3 Floating points
-\c__fp_leading_shift_int=\count189
-\c__fp_middle_shift_int=\count190
-\c__fp_trailing_shift_int=\count191
-\c__fp_big_leading_shift_int=\count192
-\c__fp_big_middle_shift_int=\count193
-\c__fp_big_trailing_shift_int=\count194
-\c__fp_Bigg_leading_shift_int=\count195
-\c__fp_Bigg_middle_shift_int=\count196
-\c__fp_Bigg_trailing_shift_int=\count197
-L3 Module: l3box 2015/08/09 v5822 L3 Experimental boxes
-\c_empty_box=\box62
-\l_tmpa_box=\box63
-\l_tmpb_box=\box64
-\g_tmpa_box=\box65
-\g_tmpb_box=\box66
-L3 Module: l3coffins 2015/08/06 v5789 L3 Coffin code layer
-\l__coffin_internal_box=\box67
-\l__coffin_internal_dim=\dimen276
-\l__coffin_offset_x_dim=\dimen277
-\l__coffin_offset_y_dim=\dimen278
-\l__coffin_x_dim=\dimen279
-\l__coffin_y_dim=\dimen280
-\l__coffin_x_prime_dim=\dimen281
-\l__coffin_y_prime_dim=\dimen282
-\c_empty_coffin=\box68
-\l__coffin_aligned_coffin=\box69
-\l__coffin_aligned_internal_coffin=\box70
-\l_tmpa_coffin=\box71
-\l_tmpb_coffin=\box72
-\l__coffin_display_coffin=\box73
-\l__coffin_display_coord_coffin=\box74
-\l__coffin_display_pole_coffin=\box75
-\l__coffin_display_offset_dim=\dimen283
-\l__coffin_display_x_dim=\dimen284
-\l__coffin_display_y_dim=\dimen285
-L3 Module: l3color 2014/08/23 v5354 L3 Experimental color support
-L3 Module: l3sys 2015/09/25 v6087 L3 Experimental system/runtime functions
-L3 Module: l3candidates 2016/01/14 v6376 L3 Experimental additions to l3kernel
-\l__box_top_dim=\dimen286
-\l__box_bottom_dim=\dimen287
-\l__box_left_dim=\dimen288
-\l__box_right_dim=\dimen289
-\l__box_top_new_dim=\dimen290
-\l__box_bottom_new_dim=\dimen291
-\l__box_left_new_dim=\dimen292
-\l__box_right_new_dim=\dimen293
-\l__box_internal_box=\box76
-\l__coffin_bounding_shift_dim=\dimen294
-\l__coffin_left_corner_dim=\dimen295
-\l__coffin_right_corner_dim=\dimen296
-\l__coffin_bottom_corner_dim=\dimen297
-\l__coffin_top_corner_dim=\dimen298
-\l__coffin_scaled_total_height_dim=\dimen299
-\l__coffin_scaled_width_dim=\dimen300
-L3 Module: l3luatex 2015/11/11 v6250 L3 Experimental LuaTeX-specific functions
-)
-(/usr/share/texlive/texmf-dist/tex/latex/l3kernel/l3pdfmode.def
-File: l3pdfmode.def 2015/11/11 v6250 L3 Experimental driver: PDF mode
-\l__driver_color_stack_int=\count198
-))
 Package: xparse 2016/01/19 v6377 L3 Experimental document command parser
-\l__xparse_current_arg_int=\count199
-\l__xparse_m_args_int=\count266
-\l__xparse_mandatory_args_int=\count267
-\l__xparse_processor_int=\count268
-\l__xparse_v_nesting_int=\count269
+\l__xparse_current_arg_int=\count341
+\l__xparse_m_args_int=\count342
+\l__xparse_mandatory_args_int=\count343
+\l__xparse_processor_int=\count344
+\l__xparse_v_nesting_int=\count345
 )
 (/usr/share/texlive/texmf-dist/tex/latex/etoolbox/etoolbox.sty
 Package: etoolbox 2015/08/02 v2.2a e-TeX tools for LaTeX (JAW)
-\etb@tempcnta=\count270
+\etb@tempcnta=\count346
 )
 .................................................
 . LaTeX info: "xparse/define-command"
@@ -1334,23 +1488,24 @@ Package: etoolbox 2015/08/02 v2.2a e-TeX tools for LaTeX (JAW)
 . D(){\aboveleftoff }' on line 455.
 .................................................
 ) (./main.aux
-(./rest.aux))
+(./intro.aux) (./aufgaben.aux) (./eval.aux) (./gradient.aux)
+(./blockgridsize.aux) (./solve.aux) (./rest.aux))
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 250.
-LaTeX Font Info:    ... okay on input line 250.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 250.
-LaTeX Font Info:    ... okay on input line 250.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 250.
-LaTeX Font Info:    ... okay on input line 250.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 250.
-LaTeX Font Info:    ... okay on input line 250.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 250.
-LaTeX Font Info:    ... okay on input line 250.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 250.
-LaTeX Font Info:    ... okay on input line 250.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 250.
-LaTeX Font Info:    ... okay on input line 250.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 252.
+LaTeX Font Info:    ... okay on input line 252.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 252.
+LaTeX Font Info:    ... okay on input line 252.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 252.
+LaTeX Font Info:    ... okay on input line 252.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 252.
+LaTeX Font Info:    ... okay on input line 252.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 252.
+LaTeX Font Info:    ... okay on input line 252.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 252.
+LaTeX Font Info:    ... okay on input line 252.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 252.
+LaTeX Font Info:    ... okay on input line 252.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -1386,20 +1541,7 @@ LaTeX Font Info:    ... okay on input line 250.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
-[Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count271
-\scratchdimen=\dimen301
-\scratchbox=\box77
-\nofMPsegments=\count272
-\nofMParguments=\count273
-\everyMPshowfont=\toks55
-\MPscratchCnt=\count274
-\MPscratchDim=\dimen302
-\MPnumerator=\count275
-\makeMPintoPDFobject=\count276
-\everyMPtoPDFconversion=\toks56
-) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
 
 (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty
@@ -1415,8 +1557,8 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
 ABD: EveryShipout initializing macros
-\AtBeginShipoutBox=\box78
-Package hyperref Info: Link coloring OFF on input line 250.
+\AtBeginShipoutBox=\box80
+Package hyperref Info: Link coloring OFF on input line 252.
 
 (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
@@ -1424,58 +1566,58 @@ Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
-\c@section@level=\count277
+\c@section@level=\count347
 )
-LaTeX Info: Redefining \ref on input line 250.
-LaTeX Info: Redefining \pageref on input line 250.
-LaTeX Info: Redefining \nameref on input line 250.
+LaTeX Info: Redefining \ref on input line 252.
+LaTeX Info: Redefining \pageref on input line 252.
+LaTeX Info: Redefining \nameref on input line 252.
 
 (./main.out) (./main.out)
 \@outlinefile=\write5
 \openout5 = `main.out'.
 
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
-(Font)                  OT1/cmr/m/n --> OT1/cmss/m/n on input line 250.
+(Font)                  OT1/cmr/m/n --> OT1/cmss/m/n on input line 252.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `bold'
-(Font)                  OT1/cmr/bx/n --> OT1/cmss/bx/n on input line 250.
+(Font)                  OT1/cmr/bx/n --> OT1/cmss/bx/n on input line 252.
 \symnumbers=\mathgroup6
 \sympureletters=\mathgroup7
 LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `normal'
-(Font)                  OT1/cmss/m/n --> OT1/cmr/m/n on input line 250.
-LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 250.
+(Font)                  OT1/cmss/m/n --> OT1/cmr/m/n on input line 252.
+LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 252.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `normal'
-(Font)                  OT1/cmr/bx/n --> OT1/cmss/bx/n on input line 250.
+(Font)                  OT1/cmr/bx/n --> OT1/cmss/bx/n on input line 252.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
-(Font)                  OT1/cmr/bx/n --> OT1/cmss/bx/n on input line 250.
-LaTeX Font Info:    Redeclaring math alphabet \mathsf on input line 250.
+(Font)                  OT1/cmr/bx/n --> OT1/cmss/bx/n on input line 252.
+LaTeX Font Info:    Redeclaring math alphabet \mathsf on input line 252.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `normal'
-(Font)                  OT1/cmss/m/n --> OT1/cmss/m/n on input line 250.
+(Font)                  OT1/cmss/m/n --> OT1/cmss/m/n on input line 252.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/cmss/bx/n --> OT1/cmss/m/n on input line 250.
-LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 250.
+(Font)                  OT1/cmss/bx/n --> OT1/cmss/m/n on input line 252.
+LaTeX Font Info:    Redeclaring math alphabet \mathit on input line 252.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
-(Font)                  OT1/cmr/m/it --> OT1/cmss/m/it on input line 250.
+(Font)                  OT1/cmr/m/it --> OT1/cmss/m/it on input line 252.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmr/bx/it --> OT1/cmss/m/it on input line 250.
-LaTeX Font Info:    Redeclaring math alphabet \mathtt on input line 250.
+(Font)                  OT1/cmr/bx/it --> OT1/cmss/m/it on input line 252.
+LaTeX Font Info:    Redeclaring math alphabet \mathtt on input line 252.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `normal'
-(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 250.
+(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 252.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 250.
+(Font)                  OT1/cmtt/m/n --> OT1/cmtt/m/n on input line 252.
 LaTeX Font Info:    Overwriting symbol font `numbers' in version `bold'
-(Font)                  OT1/cmss/m/n --> OT1/cmss/bx/n on input line 250.
+(Font)                  OT1/cmss/m/n --> OT1/cmss/bx/n on input line 252.
 LaTeX Font Info:    Overwriting symbol font `pureletters' in version `bold'
-(Font)                  OT1/cmss/m/it --> OT1/cmss/bx/it on input line 250.
+(Font)                  OT1/cmss/m/it --> OT1/cmss/bx/it on input line 252.
 LaTeX Font Info:    Overwriting math alphabet `\mathrm' in version `bold'
-(Font)                  OT1/cmss/bx/n --> OT1/cmr/bx/n on input line 250.
+(Font)                  OT1/cmss/bx/n --> OT1/cmr/bx/n on input line 252.
 LaTeX Font Info:    Overwriting math alphabet `\mathbf' in version `bold'
-(Font)                  OT1/cmss/bx/n --> OT1/cmss/bx/n on input line 250.
+(Font)                  OT1/cmss/bx/n --> OT1/cmss/bx/n on input line 252.
 LaTeX Font Info:    Overwriting math alphabet `\mathsf' in version `bold'
-(Font)                  OT1/cmss/m/n --> OT1/cmss/bx/n on input line 250.
+(Font)                  OT1/cmss/m/n --> OT1/cmss/bx/n on input line 252.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
-(Font)                  OT1/cmss/m/it --> OT1/cmss/bx/it on input line 250.
+(Font)                  OT1/cmss/m/it --> OT1/cmss/bx/it on input line 252.
 LaTeX Font Info:    Overwriting math alphabet `\mathtt' in version `bold'
-(Font)                  OT1/cmtt/m/n --> OT1/cmtt/bx/n on input line 250.
+(Font)                  OT1/cmtt/m/n --> OT1/cmtt/bx/n on input line 252.
 
 (/usr/share/texlive/texmf-dist/tex/latex/beamer/translator/dicts/translator-bas
 ic-dictionary/translator-basic-dictionary-English.dict
@@ -1501,37 +1643,848 @@ Dictionary: translator-numbers-dictionary, Language: English
 orem-dictionary/translator-theorem-dictionary-English.dict
 Dictionary: translator-theorem-dictionary, Language: English 
 )
-LaTeX Info: Redefining \includegraphics on input line 250.
+LaTeX Info: Redefining \includegraphics on input line 252.
 Package lastpage Info: Please have a look at the pageslts package at
 (lastpage)             https://www.ctan.org/pkg/pageslts
-(lastpage)             ! on input line 250.
-\c@lstlisting=\count278
+(lastpage)             ! on input line 252.
+\c@lstlisting=\count348
  (./main.nav)
-\openout2 = `rest.aux'.
+<img/badge-nvidia-cuda-cpp.png, id=30, 1106.1325pt x 632.3625pt>
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 254.
+(pdftex.def)             Requested size: 113.80971pt x 85.3556pt.
 
 
-(./rest.tex
-\openout4 = `main.vrb'.
+LaTeX Font Warning: Font shape `OT1/cmss/m/n' in size <4> not available
+(Font)              size <5> substituted on input line 254.
 
- (./main.vrb
-LaTeX Font Info:    Try loading font information for U+msa on input line 3.
+[1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./img/badge-nvidia-cuda-cp
+p.png>]
+\openout2 = `intro.aux'.
+
+ (./intro.tex
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 15.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [2
+
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 45.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [3
+
+]
+<img/function.png, id=123, 654.445pt x 542.025pt>
+File: img/function.png Graphic file (type png)
+ <use img/function.png>
+Package pdftex.def Info: img/function.png used on input line 59.
+(pdftex.def)             Requested size: 170.71652pt x 141.38632pt.
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 59.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [4
+
+ <./img/function.png>]
+File: img/function.png Graphic file (type png)
+
+<use img/function.png>
+Package pdftex.def Info: img/function.png used on input line 59.
+(pdftex.def)             Requested size: 170.71652pt x 141.38632pt.
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 59.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [5
+
+]
+LaTeX Font Info:    Try loading font information for U+msa on input line 91.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 3.
+LaTeX Font Info:    Try loading font information for U+msb on input line 91.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-))
+)
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
 
-LaTeX Font Warning: Font shape `OT1/cmss/m/n' in size <4> not available
-(Font)              size <5> substituted on input line 18.
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 91.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [6
 
-[1
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 108.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+
+[7
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 108.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [8
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 108.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [9
+
+]
+<img/minmax.png, id=286, 462.528pt x 346.896pt>
+File: img/minmax.png Graphic file (type png)
+ <use img/minmax.png>
+Package pdftex.def Info: img/minmax.png used on input line 122.
+(pdftex.def)             Requested size: 227.62204pt x 170.71628pt.
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 122.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [10
+
+ <./img/minmax.png>]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 180.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [11
+
+])
+\openout2 = `aufgaben.aux'.
+
+ (./aufgaben.tex
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 29.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [12
 
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 74.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+
+[13
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 74.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [14
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 74.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [15
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 93.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+
+[16
+
+]
+\openout4 = `main.vrb'.
+
+ (./main.vrb (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+) (/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2015/06/04 1.6 listings language file
+)
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstmisc.sty
+File: lstmisc.sty 2015/06/04 1.6 (Carsten Heinz)
+)
+LaTeX Font Info:    Try loading font information for OML+cmss on input line 19.
+
+LaTeX Font Info:    No file OMLcmss.fd. on input line 19.
+
+
+LaTeX Font Warning: Font shape `OML/cmss/m/n' undefined
+(Font)              using `OML/cmm/m/it' instead
+(Font)              for symbol `textless' on input line 19.
+
+)
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 122.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [17
+
+])
+\openout2 = `eval.aux'.
+
+ (./eval.tex
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 29.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [18
+
+
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 75.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+
+[19
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 75.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [20
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 75.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [21
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 125.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+
+Overfull \vbox (5.83511pt too high) detected at line 125
+ []
+
+[22
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 125.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+
+Overfull \vbox (5.83511pt too high) detected at line 125
+ []
+
+[23
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 125.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+
+Overfull \vbox (5.83511pt too high) detected at line 125
+ []
+
+[24
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 125.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+
+Overfull \vbox (5.83511pt too high) detected at line 125
+ []
+
+[25
+
+]
+\openout4 = `main.vrb'.
+
+ (./main.vrb
+LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <6> not available
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 3.
+LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <8> not available
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 30.
+)
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 158.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [26
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 189.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [27
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 189.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+
+[28
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 189.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [29
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 214.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [30
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 214.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+
+[31
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 214.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [32
+
+]
+<img/eval-single.png, id=904, 1387.584pt x 690.1785pt>
+File: img/eval-single.png Graphic file (type png)
+
+<use img/eval-single.png>
+Package pdftex.def Info: img/eval-single.png used on input line 219.
+(pdftex.def)             Requested size: 364.19536pt x 181.14824pt.
+ [33
+
+ <./img/eval-single.png>]
+<img/eval-100.png, id=910, 1214.136pt x 686.565pt>
+File: img/eval-100.png Graphic file (type png)
+ <use img/eval-100.png>
+Package pdftex.def Info: img/eval-100.png used on input line 224.
+(pdftex.def)             Requested size: 364.19536pt x 205.93965pt.
+
+[34
+
+ <./img/eval-100.png>])
+\openout2 = `gradient.aux'.
+
+ (./gradient.tex
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 29.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+
+[35
+
+
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 72.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [36
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 91.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [37
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 91.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+
+[38
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 91.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [39
+
+]
+Overfull \hbox (1.8171pt too wide) in paragraph at lines 134--134
+[]  
+ []
+
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 134.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [40
+
+]
+Overfull \hbox (1.8171pt too wide) in paragraph at lines 134--134
+[]  
+ []
+
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 134.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [41
+
+]
+Overfull \hbox (1.8171pt too wide) in paragraph at lines 134--134
+[]  
+ []
+
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 134.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [42
+
+]
+\openout4 = `main.vrb'.
+
+ (./main.vrb)
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 169.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [43
+
+]
+Overfull \hbox (6.28065pt too wide) in paragraph at lines 192--192
+ [] 
+ []
+
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 192.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [44
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 214.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+
+[45
+
+] <img/grad-single.png, id=985, 1387.584pt x 690.1785pt>
+File: img/grad-single.png Graphic file (type png)
+
+<use img/grad-single.png>
+Package pdftex.def Info: img/grad-single.png used on input line 218.
+(pdftex.def)             Requested size: 364.19536pt x 181.14824pt.
+ [46
+
+ <./img/grad-single.png>]
+<img/grad-100.png, id=992, 1387.584pt x 690.1785pt>
+File: img/grad-100.png Graphic file (type png)
+ <use img/grad-100.png>
+Package pdftex.def Info: img/grad-100.png used on input line 223.
+(pdftex.def)             Requested size: 364.19536pt x 181.14824pt.
+
+[47
+
+ <./img/grad-100.png>])
+\openout2 = `blockgridsize.aux'.
+
+ (./blockgridsize.tex
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 29.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [48
+
+
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 41.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+
+[49
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 41.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [50
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 41.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [51
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 41.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+
+[52
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 41.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [53
+
+]
+\openout4 = `main.vrb'.
+
+ (./main.vrb)
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 76.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [54
+
+] (./main.vrb)
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 76.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [55
+
+]
+\openout4 = `main.vrb'.
+
+ (./main.vrb)
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 84.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [56
+
+]
+\openout4 = `main.vrb'.
+
+ (./main.vrb)
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 109.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [57
+
+]
+<img/blocksize.png, id=1062, 1387.584pt x 690.1785pt>
+File: img/blocksize.png Graphic file (type png)
+ <use img/blocksize.png>
+Package pdftex.def Info: img/blocksize.png used on input line 115.
+(pdftex.def)             Requested size: 364.19536pt x 181.14824pt.
+
+[58
+
+ <./img/blocksize.png>]
+<img/gridsize.png, id=1069, 1387.584pt x 690.1785pt>
+File: img/gridsize.png Graphic file (type png)
+ <use img/gridsize.png>
+Package pdftex.def Info: img/gridsize.png used on input line 119.
+(pdftex.def)             Requested size: 364.19536pt x 181.14824pt.
+
+[59
+
+ <./img/gridsize.png>]
+<img/block_grid_3d.png, id=1076, 1214.136pt x 686.565pt>
+File: img/block_grid_3d.png Graphic file (type png)
+
+<use img/block_grid_3d.png>
+Package pdftex.def Info: img/block_grid_3d.png used on input line 122.
+(pdftex.def)             Requested size: 364.19536pt x 205.93965pt.
+ [60
+
+ <./img/block_grid_3d.png>])
+\openout2 = `solve.aux'.
+
+ (./solve.tex
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 29.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [61
+
+
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 63.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+
+[62
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 91.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [63
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 91.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [64
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 114.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+
+[65
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 114.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [66
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 138.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [67
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 155.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+
+[68
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 155.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [69
+
+]
+\openout4 = `main.vrb'.
+
+ (./main.vrb)
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 175.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [70
+
+]
+\openout4 = `main.vrb'.
+
+ (./main.vrb)
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 198.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [71
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 216.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+
+[72
+
+])
+\openout2 = `rest.aux'.
+
+ (./rest.tex
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 29.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [73
+
+
+
+]
+\openout4 = `main.vrb'.
+
+ (./main.vrb)
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 54.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [74
+
+] (./main.vrb)
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 54.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [75
+
+] (./main.vrb)
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 54.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [76
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 72.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+
+[77
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 72.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [78
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 72.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [79
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 72.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+
+[80
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 72.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [81
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 72.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [82
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 72.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+
+[83
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 72.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [84
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 72.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [85
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 72.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+
+[86
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+ <use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 72.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [87
+
+]
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 84.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+ [88
+
+] <./img/n/n0.png> <./img/n/n1.png> <./img/n/n2.png> <./img/n/n3.png> <./img/n/
+n4.png>
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+
+<use img/badge-nvidia-cuda-cpp.png>
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 92.
+(pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
+Package atenddvi Info: Last page = 89.
+ [89
 
 ])
 \tf@nav=\write6
@@ -1543,14 +2496,14 @@ LaTeX Font Warning: Font shape `OT1/cmss/m/n' in size <4> not available
 \tf@snm=\write8
 \openout8 = `main.snm'.
 
-
-
+ 
 AED: lastpage setting LastPage
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 266.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 266.
-(./main.aux (./rest.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 266.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 266.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 267.
+Package atveryend Info: Executing hook `AfterLastShipout' on input line 267.
+(./main.aux (./intro.aux) (./aufgaben.aux) (./eval.aux) (./gradient.aux)
+(./blockgridsize.aux) (./solve.aux) (./rest.aux))
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 267.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 267.
 Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
 
@@ -1558,24 +2511,37 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 266.
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 267.
  ) 
 Here is how much of TeX's memory you used:
- 28872 strings out of 494901
- 562032 string characters out of 6178617
- 608756 words of memory out of 5000000
- 31633 multiletter control sequences out of 15000+600000
- 9655 words of font info for 36 fonts, out of 8000000 for 9000
+ 32123 strings out of 494901
+ 618870 string characters out of 6178617
+ 946353 words of memory out of 5000000
+ 34555 multiletter control sequences out of 15000+600000
+ 12195 words of font info for 46 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 48i,16n,62p,10381b,557s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share
-/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmssi8.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
-Output written on main.pdf (2 pages, 43471 bytes).
+ 50i,16n,67p,10433b,1531s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex8.pfb>
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/s
+hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/te
+xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/texlive/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/texlive/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmss12.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/amsfonts/cm/cmss17.pfb></usr/share/texlive/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmss8.pfb></usr/share/texlive/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmssbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
+amsfonts/cm/cmssi8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmsy5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
+msy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pf
+b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb></usr
+/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on main.pdf (89 pages, 1943526 bytes).
 PDF statistics:
- 101 PDF objects out of 1000 (max. 8388607)
- 74 compressed objects within 1 object stream
- 5 named destinations out of 1000 (max. 500000)
- 101 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1413 PDF objects out of 1440 (max. 8388607)
+ 1219 compressed objects within 13 object streams
+ 179 named destinations out of 1000 (max. 500000)
+ 326 words of extra memory for PDF output out of 10000 (max. 10000000)
 

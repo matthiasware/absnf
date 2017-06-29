@@ -1,8 +1,58 @@
 %------------------------------------------------------------------------
 \begin{frame}
+	\frametitle{Content}
+	\framesubtitle{ABS-Normal Form}
+	\begin{columns}[T] % align columns
+		\begin{column}{.48\textwidth}
+			
+			\begin{center}
+				{\Huge Gradient}
+			\end{center}
+			
+		\end{column}%
+		\hfill%
+		\begin{column}{.48\textwidth}
+			\color{blue}\rule{\linewidth}{4pt}
+			
+			\setbeamertemplate{enumerate items}[default]
+			\begin{enumerate}
+				\item Einführung
+				\item Aufgaben
+				\item Evaluate
+				\item \textbf{Gradient}
+				\item Blocksize und Gridsize
+				\item Solve
+				\item Final Thoughts
+			\end{enumerate}
+		\end{column}%
+	\end{columns}
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}
 	\frametitle{Aufgabe 2) Gradient}
 	\framesubtitle{Aufgabenbeschreibung}
 	\setbeamertemplate{enumerate items}[default]
+	\begin{flalign*}
+		\begin{pmatrix}
+		\Delta z \\
+		\Delta y
+		\end{pmatrix}
+		= 
+		\begin{pmatrix}
+		a \\
+		b
+		\end{pmatrix}
+		+
+		\begin{pmatrix}
+		Z & L \\
+		J & Y 
+		\end{pmatrix}
+		\times
+		\begin{pmatrix}
+		\Delta x \\
+		|\Delta z |
+		\end{pmatrix}
+	\end{flalign*}
 	Gegeben:
 	\begin{flalign*}
 		a,b,Z,L,J,Y,m,n,s, \Delta Z
@@ -18,29 +68,7 @@
 	\end{flalign*}
 	\begin{flalign*}
 		\Sigma = Diag(Sign(\Delta z))
-	\end{flalign*}
-	\begin{flalign*}
-	\begin{pmatrix}
-	\Delta z \\
-	\Delta y
-	\end{pmatrix}
-	= 
-	\begin{pmatrix}
-	a \\
-	b
-	\end{pmatrix}
-	+
-	\begin{pmatrix}
-	Z & L \\
-	J & Y 
-	\end{pmatrix}
-	\times
-	\begin{pmatrix}
-	\Delta x \\
-	|\Delta z |
-	\end{pmatrix}
-	\end{flalign*}
-	
+	\end{flalign*}	
 \end{frame}
 %------------------------------------------------------------------------
 \begin{frame}
@@ -56,8 +84,8 @@
 	\end{flalign*}
 	Fallstricken:
 	\begin{itemize}
-		\item Sparse Matrix $\Sigma$
-		\item Inverse $(I-L\Sigma)^{-1}$
+		\item <2-> Sparse Matrix $\Sigma$
+		\item <3-> Inverse $(I-L\Sigma)^{-1}$
 	\end{itemize}
 	
 \end{frame}
@@ -94,11 +122,13 @@
 	-L_{4,1} & 0 & 0 & 1 \\
 	\end{array}\right)
 	\end{flalign*}
+	\pause
 	das entspricht folgenden Operationen:
 	\begin{itemize}
 		\item Hinzufügen einer Hauptdiagonalen
 		\item Skalieren der Spalten von $L$ mit den Vorzeichen von $\Delta z$
 	\end{itemize}
+	\pause
 	Besser dieses als Operation zu implementieren.
 	Das Auflösen der unteren Dreiecksmatrix $(I-L\Sigma)^{-1}$ übernimmt CUBLAS.
 \end{frame}
@@ -178,7 +208,9 @@
 			$cudaMemcpy()$ & $s$ \\
 		\end{tabular} 	\\~\\
 	\end{center}
-	Lässt sich alles gut parallel ausführen !!!
+	\begin{center}
+		Lässt sich alles gut parallelisieren.
+	\end{center}
 \end{frame}
 \setbeamertemplate{navigation symbols}{}
 \begin{frame}[plain]
@@ -188,85 +220,5 @@
 \setbeamertemplate{navigation symbols}{}
 \begin{frame}[plain]
 	\makebox[\linewidth]{\includegraphics[width=\paperwidth]{img/grad-100.png}}
-\end{frame}
-%------------------------------------------------------------------------
-\begin{frame}
-	\frametitle{Aufgabenbeschreibung}
-	\framesubtitle{Aufgabenbeschreibung - Solve}
-	\setbeamertemplate{enumerate items}[default]
-	
-	\begin{flalign*}
-	\left(\begin{array}{cccc}
-	\tikzmarkin[ver=style cyan]{col 1}\x  & \x  & \tikzmarkin[ver=style green]{col 2} \x & \x \\
-	0   & \x  & \x & \x \\
-	0   & 0   & \x & \x \\
-	0   & 0   & 0  & \x \\
-	a \tikzmarkend{col 1}  &  b  &  c  \tikzmarkend{col 2} &  d \\
-	\end{array}\right)
-	\end{flalign*}
-	\begin{flalign*}
-	\begin{pmatrix}
-	\Delta z \\
-	\Delta y
-	\end{pmatrix}
-	= 
-	\begin{pmatrix}
-	a \\
-	b
-	\end{pmatrix}
-	+
-	\begin{pmatrix}
-	Z & L \\
-	J & Y 
-	\end{pmatrix}
-	\times
-	\begin{pmatrix}
-	\Delta x \\
-	|\Delta z |
-	\end{pmatrix}
-	\end{flalign*}
-	\begin{flalign*}
-	\left(\begin{array}{c}
-	\Delta z_1 \\
-	\vdots \\
-	\Delta z_s \\
-	\Delta y_1 \\
-	\vdots \\
-	\Delta y_m
-	\end{array}\right)  =
-	\left(\begin{array}{c}
-	a_1 \\
-	\vdots \\
-	a_s \\
-	b_1 \\
-	\vdots \\
-	b_m \\
-	\end{array}\right) +
-	\left(\begin{array}{cccccc}
-	Z_{1,1} & \dots & Z_{1,n} & 0 & \dots  & 0 \\
-	\vdots & \ddots & \vdots  & L_x & \ddots & 0 \\
-	Z_{s,1} & \dots & Z_{s,n} & L_x & L_x & 0 \\
-	J_{1,1} & \dots & J_{1,n} & Y_{1,1} & \dots & Y_{1,s} \\
-	\vdots  & \ddots & \vdots & \vdots & \ddots & \vdots \\
-	J_{m,1} & \dots  & J_{m,n} & Y_{m,1} & \dots & Y_{m,s} \\
-	\end{array}\right) \times
-	\left(\begin{array}{c}
-	\Delta x_1 \\
-	\vdots \\
-	\Delta x_n \\
-	|\Delta z_1 | \\
-	\vdots \\
-	| \Delta z_s| \\
-	\end{array}\right)
-	\end{flalign*}
-	
-\end{frame}
-%------------------------------------------------------------------------
-\begin{frame}
-\frametitle{Implementierung}
-\framesubtitle{Client Side Storage}
-	 BLOCKSIZE, GRIDSIZE OPTIMIZATION \\
-	 ROW FORMAT, COL FORMAT \\
-	 INTERFACE ??? \\
 \end{frame}
 %------------------------------------------------------------------------

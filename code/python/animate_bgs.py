@@ -138,10 +138,46 @@ class image_generator2():
             self.next = False
 
 
-s = 10
-block_dim = 8
-grid_dim = 4 
-warpsize = 2
+def ani2():
+    s = 10
+    block_dim = 8
+    grid_dim = 4 
+    warpsize = 2
+    num_threads = block_dim * grid_dim
+    data = np.ones(s*s) * num_threads
+    cmap = LinearSegmentedColormap.from_list('mycmap', ['green', 'white', 'darkgreen', 'black'])
+    generator = image_generator2(block_dim, grid_dim, data, s, warpsize)
+
+    def update(i):
+        generator.generate()
+        matrice.set_array(data.reshape((s,s)))
+
+    fig, ax = plt.subplots()
+    matrice = ax.matshow(data.reshape(s,s), cmap="Paired", vmin=0, vmax=num_threads)
+    plt.colorbar(matrice)
+
+    frames = (s * s) // grid_dim + 1
+    frames = 20
+    ########################################################################################
+    ani = animation.FuncAnimation(fig, update, frames=10, interval=1000, repeat=False, blit=False)
+    ########################################################################################
+
+    ax.set_xlabel("Matrix Columns")
+    ax.set_ylabel("Matrix Rows")
+    text = "Gridsize: {}\nBlocksize: {}\nWarpsize: {}\nMPU: {}\nWarps\MPU: {}"
+    text = text.format(grid_dim, block_dim, warpsize, grid_dim, 1)
+    anchored_text = AnchoredText(text, loc=1)
+    ax.add_artist(anchored_text)
+    fig.suptitle("CUDA threads working on a matrix", fontsize=14)
+    plt.tight_layout()
+
+    # ani.save('basic_animation.mp4', fps=1)
+    plt.show()
+
+s = 100
+block_dim = 16
+grid_dim = 8 
+warpsize = 4
 num_threads = block_dim * grid_dim
 data = np.ones(s*s) * num_threads
 cmap = LinearSegmentedColormap.from_list('mycmap', ['green', 'white', 'darkgreen', 'black'])
@@ -152,15 +188,6 @@ def update(i):
     matrice.set_array(data.reshape((s,s)))
 
 fig, ax = plt.subplots()
-matrice = ax.matshow(data.reshape(s,s), cmap="Paired", vmin=0, vmax=num_threads)
-plt.colorbar(matrice)
-
-frames = (s * s) // grid_dim + 1
-frames = 20
-########################################################################################
-ani = animation.FuncAnimation(fig, update, frames=10, interval=1000, repeat=False, blit=True)
-########################################################################################
-
 ax.set_xlabel("Matrix Columns")
 ax.set_ylabel("Matrix Rows")
 text = "Gridsize: {}\nBlocksize: {}\nWarpsize: {}\nMPU: {}\nWarps\MPU: {}"
@@ -168,11 +195,17 @@ text = text.format(grid_dim, block_dim, warpsize, grid_dim, 1)
 anchored_text = AnchoredText(text, loc=1)
 ax.add_artist(anchored_text)
 fig.suptitle("CUDA threads working on a matrix", fontsize=14)
-plt.tight_layout()
+# plt.tight_layout()
 
-# ani.save('basic_animation.mp4', fps=1)
-plt.show()
-# ani.save('test.mp4', writer="ffmpeg", fps=30)
+im = plt.imshow(data.reshape((s,s)), cmap="Paired", vmin=0, vmax=num_threads)
+fig.colorbar(im)
+i = 1
+while(generator.next):
+    print(i)
+    generator.generate()
+    plt.imshow(data.reshape((s,s)), cmap="Paired", vmin=0, vmax=num_threads)
+    fig.savefig("img/a{}.png".format(i))
+    i += 1
 
 
 

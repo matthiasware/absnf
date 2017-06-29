@@ -1,3 +1,33 @@
+%------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{Content}
+	\framesubtitle{ABS-Normal Form}
+	\begin{columns}[T] % align columns
+		\begin{column}{.48\textwidth}
+			
+			\begin{center}
+				{\Huge Evaluate}
+			\end{center}
+			
+		\end{column}%
+		\hfill%
+		\begin{column}{.48\textwidth}
+			\color{blue}\rule{\linewidth}{4pt}
+			
+			\setbeamertemplate{enumerate items}[default]
+			\begin{enumerate}
+				\item Einführung
+				\item Aufgaben
+				\item \textbf{Evaluate}
+				\item Gradient
+				\item Blocksize und Gridsize
+				\item Solve
+				\item Final Thoughts
+			\end{enumerate}
+		\end{column}%
+	\end{columns}
+\end{frame}
+%------------------------------------------------------------------------
 \begin{frame}
 	\frametitle{Aufgabe 1) Evaluate}
 	\framesubtitle{Aufgabenstellung und Problem}
@@ -32,10 +62,12 @@
 	\begin{flalign*}
 		\Delta z, \Delta y
 	\end{flalign*}
+	\pause
 	\begin{flalign*}
 		\Delta y &= b + (J \times \Delta x) + (Y \times |\Delta z|) \\
 		\Delta z &= a + (J \times \Delta x) + (L \times |\Delta z|)
 	\end{flalign*}
+	\pause
 	Problem:
 	\begin{flalign*}
 		\highlightred{\Delta z} &= a + (J \times \Delta x) + (L \times\highlightred{ |\Delta z|})
@@ -79,15 +111,16 @@
 \end{flalign*}
 
 \begin{flalign*}
-	\highlightblue{\Delta  z_1}  &= \underbrace{L_1 \times |\Delta z|}_{=0} + k_1 = k_1 \\
-	\highlightyellow{\Delta z_2} &= L_2 \times |\Delta z| + k_2 \\
-								 &= L_{2,1} \times \highlightblue{|\Delta z_1 |} + k_2 \\
-		\highlightgreen{\Delta z_3} &= L_3 \times |\Delta z| + k_3 \\
-		&= L_{3,1} \times \highlightblue{|\Delta z_1 |} + L_{3,2} \times \highlightyellow{|\Delta z_2|} + k_3 \\
-		\highlightred{\Delta z_4} &= L_{4} \times |\Delta z| + k_4 \\
+	\onslide<1-> {\highlightblue{\Delta  z_1}  &= \underbrace{L_1 \times |\Delta z|}_{=0} + k_1 = k_1} \\
+	\pause
+	\onslide<2->{\highlightyellow{\Delta z_2} &= L_2 \times |\Delta z| + k_2 \\
+								 &= L_{2,1} \times \highlightblue{|\Delta z_1 |} + k_2 \\}
+		\onslide<3->{\highlightgreen{\Delta z_3} &= L_3 \times |\Delta z| + k_3 \\
+		&= L_{3,1} \times \highlightblue{|\Delta z_1 |} + L_{3,2} \times \highlightyellow{|\Delta z_2|} + k_3 \\}
+		\onslide<4->{\highlightred{\Delta z_4} &= L_{4} \times |\Delta z| + k_4 \\
 		&= L_{4,1} \times \highlightblue{|\Delta z_1|} + 
 		L_{4,2} \times \highlightyellow{|\Delta z_2|} +
-		L_{4,3} \times \highlightgreen{|\Delta z_3|} + k_4 \\
+		L_{4,3} \times \highlightgreen{|\Delta z_3|} + k_4 \\}
 \end{flalign*}
 \end{frame}
 %----------------------------------------------------------------------------
@@ -139,12 +172,14 @@
 	\begin{flalign*}
 		(s^2 + (3 + m + n)*s + (m + 2)m + n) * sizeof(T)
 	\end{flalign*}
+	\pause
 	Seien 
 	\begin{itemize}
 		\item $m = 1000, n = 1000, s=1000$
 		\item Datatype: $double \approx 8 bytes$
 		\item $32.048.000$ Bytes $\approx 0.032048 GB$
 	\end{itemize}
+	\pause
 	Seien 
 	\begin{itemize}
 		\item $m = 1000, n = 1000, s=100.000$
@@ -170,13 +205,12 @@
 		$cublasDgemv(Y, |dz|, dy)$ & $m*s$ & $(m*s)/p$ \\
 	\end{tabular} 	\\~\\
 	\end{center}
-	
+	\pause
 	Der Rechenaufwand steigt im selben Maße wie der Speicheraufwand ! \\
-	
+	\pause
 	\begin{center}
 		Vermutung, parallelisieren bringt hier nicht viel!
 	\end{center}
-	Flaschenhals: Speicher, Speicheroperationen
 \end{frame}
 %----------------------------------------------------------------------------
 \setbeamertemplate{navigation symbols}{}

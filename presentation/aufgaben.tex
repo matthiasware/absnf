@@ -1,3 +1,33 @@
+%------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{Content}
+	\framesubtitle{ABS-Normal Form}
+	\begin{columns}[T] % align columns
+		\begin{column}{.48\textwidth}
+			
+			\begin{center}
+				{\Huge Aufgaben}
+			\end{center}
+			
+		\end{column}%
+		\hfill%
+		\begin{column}{.48\textwidth}
+			\color{blue}\rule{\linewidth}{4pt}
+			
+			\setbeamertemplate{enumerate items}[default]
+			\begin{enumerate}
+				\item Einführung
+				\item \textbf{Aufgaben}
+				\item Evaluate
+				\item Gradient
+				\item Blocksize und Gridsize
+				\item Solve
+				\item Final Thoughts
+			\end{enumerate}
+		\end{column}%
+	\end{columns}
+\end{frame}
+%------------------------------------------------------------------------
 \begin{frame}
 	\frametitle{ABS-NF}
 	\framesubtitle{Aufgabenbeschreibung}
@@ -23,18 +53,19 @@
 	|\Delta z |
 	\end{pmatrix}
 	\end{flalign*}
+	Aufgaben:
 	\begin{itemize}
-		\item Evaluate abs normal form:
+		\item <1-> Evaluate abs normal form:
 			\begin{itemize}
 				\item Geg: $a,b,Z,L,J,Y,\Delta x$
 				\item Ges: $\Delta z, \Delta y$
 			\end{itemize}
-		\item Calculate Gradient
+		\item <2-> Calculate Gradient
 			\begin{itemize}
 				\item Geg: $a,b,Z,L,J,Y, \Delta Z$
 				\item Ges: Gradient $\gamma, \Gamma$
 			\end{itemize}
-		\item Solve abs-normal form system
+		\item <3-> Solve abs-normal form system
 		\begin{itemize}
 			\item Geg: $a,b,Z,L,J,Y,\Delta y$
 			\item Ges: $\Delta x, \Delta Z$
@@ -43,8 +74,8 @@
 \end{frame}
 %------------------------------------------------------------------------
 \begin{frame}
-	\frametitle{Annahmen und Voraussetzung und Info zur Implementierung}
-	\framesubtitle{Implementierung}
+	\frametitle{ABS-NF}
+	\framesubtitle{Annahmen und Voraussetzung und Info zur Implementierung}
 	\setbeamertemplate{enumerate items}[default]
 	Programmiersprachen
 	\begin{itemize}
@@ -56,51 +87,13 @@
 	\begin{enumerate}
 		\item Global memory der GPU ist groß genug um alle benötigten Datenstrukturen zeitgleich zu halten
 		\item Daten werden vektorisiert übergeben
-		\item Benutzen Lineare Algebra so weit wie möglich
 		\item Sofern möglich mappe alle Problem auf existierende Librariers
 	\end{enumerate}
 	
-\end{frame}
-%------------------------------------------------------------------------
-\begin{frame}
-	\frametitle{Annahmen und Voraussetzung und Info zur Implementierung}
-	\framesubtitle{Implementierung}
-	\setbeamertemplate{enumerate items}[default]
-	Programmiersprachen
-	\begin{itemize}
-		\item Python 3.5: Prototyping und Serial Performance benchmarks
-		\item Cuda C++: Implementierung der paralleln ABSNF Aufgaben
-	\end{itemize}
-	
-	Annahmen:
-	\begin{enumerate}
-		\item Global memory der GPU ist groß genug um alle benötigten Datenstrukturen zeitgleich zu halten
-		\item Daten werden vektorisiert übergeben
-		\item Benutzen Lineare Algebra so weit wie möglich
-		\item Sofern möglich mappe alle Problem auf existierende Librariers
-	\end{enumerate}
-	
-\end{frame}
-%------------------------------------------------------------------------
-
-\begin{frame}
-\frametitle{Projekstruktur}
-\framesubtitle{Aufteilung und verwaltung von Code}
-\setbeamertemplate{enumerate items}[default]
-
-\begin{itemize}
-	\item utils.hpp test\_utils.hpp
-	\item absnf.h test\_absnf.cu
-	\item cuutils.h test\_cuutils.cu
-	\item tabsnf.h test\_tabsnf.h
-	\item make
-	\item absnf.py
-\end{itemize}
-
 \end{frame}
 %------------------------------------------------------------------------
 \begin{frame}[fragile]
-	\frametitle{Evaluate}
+	\frametitle{ABS-NF}
 	\framesubtitle{Implementierung}
 	\setbeamertemplate{enumerate items}[default]
 	Benutzte Libraries:

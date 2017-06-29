@@ -1,29 +1,92 @@
 %------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{Content}
+	\framesubtitle{ABS-Normal Form}
+	\begin{columns}[T] % align columns
+		\begin{column}{.48\textwidth}
+			
+			\begin{center}
+				{\Huge Final Thoughts}
+			\end{center}
+			
+		\end{column}%
+		\hfill%
+		\begin{column}{.48\textwidth}
+			\color{blue}\rule{\linewidth}{4pt}
+			
+			\setbeamertemplate{enumerate items}[default]
+			\begin{enumerate}
+				\item Einführung
+				\item Aufgaben
+				\item Evaluate
+				\item Gradient
+				\item Blocksize und Gridsize
+				\item Solve
+				\item \textbf{Final Thoughts}
+			\end{enumerate}
+		\end{column}%
+	\end{columns}
+\end{frame}
+%------------------------------------------------------------------------
 \begin{frame}[fragile]
-	\frametitle{Solve}
-	\framesubtitle{Komplexität}
-	Komplexität $(m=n=s)$ bei $k$ Iterationen\\
-	\begin{center}
-		\begin{tabular}{ l | l}
-			Funktion & Komplexität Seriell \\
-			\hline
-			$cusolverDnDgeqrf$ & $s^3$ (QR) \\
-			$cusolverDnDormqr$ & $s^2$ (QRxB) \\
-			$cublasDgemm()$& $s^3$ \\
-			$cublasDgemv()$ & $s^2 * k$  \\
-			$cudaMemcpy()$ & $s * k$  \\
-		\end{tabular} 	\\~\\
-	\end{center}
-	Lässt sich alles gut parallel ausführen !!!
+	\frametitle{Final Thoughts}
+	\framesubtitle{Was ist da?}
+Was ist da nach der ersten Implementation?
+\pause
+\begin{lstlisting}
+-------------------------------------------------------------------------------
+Language                     files          blank        comment           code
+-------------------------------------------------------------------------------
+Python                          25            285            486           7451
+C/C++ Header                     5             82            209           1256
+C++                              7             41             19            334
+-------------------------------------------------------------------------------
+SUM:                            37            408            714           9041
+-------------------------------------------------------------------------------
+\end{lstlisting}
+\pause
+Dabei:
+\begin{itemize}
+	\item Working prototype in CUDA C++ und Python
+	\item Unittests
+	\item Coole Plot Generatoren
+\end{itemize}
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{Final Thoughts}
+	\framesubtitle{Was fehlt?}
+	Was fehlt:
+	\begin{itemize}
+		\item <2-> Refactoring
+		\item <3-> Funktionierende Implementierung des Gen. Newton solvers
+		\item <4->Useability
+		\item <5-> Anwendung
+		\item <6->Numerische Checks der Ergebnisse bei größeren Daten
+		\item <7-> Speichermanager
+		\item <8-> Spezielle Wahl für Gridsize und Blocksize
+		\item <9-> Multidevice Support
+		\item <10-> Sparsity
+		\item <11-> Math Tuning
+	\end{itemize}
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{Quellen}
+	\framesubtitle{ect.}
+	\begin{itemize}
+		\item Archiv Torsten Bosse
+		\item Linear Algebra and its Applications - Griewank
+		\item Cuda DOC
+		\item $https://castingoutnines.wordpress.com/2010/01/12/piecewise-linear-calculus-part-2-getting-to-smoothness/$
+	\end{itemize}
+	
 \end{frame}
 %------------------------------------------------------------------------
 \begin{frame}
 	\frametitle{Quellen}
 	\framesubtitle{Fixpunktiteration}
-	\begin{itemize}
-		\item Archiv Bosse
-		\item Paper
-		\item Cuda DOC
-		\item Graphic
-	\end{itemize}
+	\begin{center}
+		\animategraphics[height=6cm, width=10cm,controls]{1}{img/n/n}{0}{4}
+	\end{center}
 \end{frame}

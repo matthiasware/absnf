@@ -1,8 +1,10 @@
+%\documentclass[8pt,handout]{beamer}
 \documentclass[8pt]{beamer}
 
 %-----------------------------------------------------------------
 %	Packages
 %-----------------------------------------------------------------
+\usepackage{animate}
 \usepackage[utf8]{inputenc}	% für Umlaute ect.
 \usepackage{fancyhdr} % für header
 \usepackage{lastpage} % für footer
@@ -249,18 +251,17 @@
 }
 \begin{document}
 
-%\maketitle
+\maketitle
 
-%\addtobeamertemplate{frametitle}{}{%
-%\begin{tikzpicture}[remember picture,overlay]
-%\node[anchor=north east,yshift=1pt] at (current page.north east) %{\includegraphics[height=0.8cm]{img/badge-nvidia-cuda-cpp}};
-%\end{tikzpicture}}
-	%\include{intro}
-	%\include{aufgaben}
-	%\include{eval}
-	%\include{gradient}
-	%\include{blockgridsize}
-	%\include{solve}
+\addtobeamertemplate{frametitle}{}{%
+\begin{tikzpicture}[remember picture,overlay]
+\node[anchor=north east,yshift=1pt] at (current page.north east) {\includegraphics[height=0.8cm]{img/badge-nvidia-cuda-cpp}};
+\end{tikzpicture}}
+	\include{intro}
+	\include{aufgaben}
+	\include{eval}
+	\include{gradient}
+	\include{blockgridsize}
+	\include{solve}
 	\include{rest}
-	%\include{problems}
 \end{document}
