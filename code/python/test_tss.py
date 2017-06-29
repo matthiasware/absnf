@@ -40,24 +40,23 @@ s = 4
 blockDim = 3
 gridDim = 6
 L = np.array([[0, 0, 0, 0],
-			  [4, 0, 0, 0],
-			  [8, 9, 0, 0],
-			  [2, 1, 7, 0]])
+			  [0, 0, 0, 0],
+			  [0, 0, 0, 0],
+			  [0, 0, 0, 0]])
 dz = np.array([-1, 0, 1, -1])
 eTss = np.diag(np.ones(s)) - L.dot(np.diag(np.sign(dz)))
 Tss = np.zeros(s*s).reshape((s,s))
 
-for blockId in range(gridDim):
-	for threadId in range(blockDim):
-		initTss(blockId,threadId, blockDim, gridDim, L, Tss, dz, s, s*s)
-Tss2 = Tss.reshape((s,s))
-
-# FLAT
-# L = L.flatten()
-# Tss = np.zeros(s*s)
-# eTss = eTss.flatten()
-
 # for blockId in range(gridDim):
 # 	for threadId in range(blockDim):
-# 		initTss_flat(blockId, threadId, blockDim, gridDim, L, Tss, dz, s, s*s)
-# initTss_flat(0, 0, blockDim, gridDim, L, Tss, dz, s, s*s)
+# 		initTss(blockId,threadId, blockDim, gridDim, L, Tss, dz, s, s*s)
+# Tss2 = Tss.reshape((s,s))
+
+# FLAT
+L = L.flatten()
+Tss = np.zeros(s*s)
+eTss = eTss.flatten()
+
+for blockId in range(gridDim):
+	for threadId in range(blockDim):
+		initTss_flat(blockId, threadId, blockDim, gridDim, L, Tss, dz, s, s*s)

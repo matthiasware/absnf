@@ -200,6 +200,9 @@ void test_gridsize(int s)
 }
 int main()
 {
-	test(5000);
+	for (int i=1000; i<=7000; i+=1000)
+	{
+		test(i);
+	}
 	return 0;
 }

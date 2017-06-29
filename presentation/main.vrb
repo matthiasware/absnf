@@ -1,32 +1,22 @@
-\frametitle{Aufgabe 1) Gradient}
-	\framesubtitle{Implementierung}
+\frametitle{Choosing Gridsize and Blocksize}
+	\framesubtitle{Beispiel - Implementierung}
 	\begin{lstlisting}[language=cpp]
 	template <typename T>
-	void gradient(T *a, T *b,
-				  T *Z, T *L,
-				  T *J, T *Y,
-				  T *dz,
-				  T *Tss, T *I, T *K,
-				  int m, int n, int s,
-				  int gridsize, int blocksize,
-				  T *gamma, T *Gamma)
-		//  d_Tss = diag(1) - L * diag(sign(dz))
-		initTss <<<gridsize, blocksize >>>(d_Tss,d_L, d_dz, s, s*s);
-		//  d_I = diag(1) // room for improvement, operations can be merged
-		initIdentity <<<gridsize, blocksize >>> (d_I, s);
-		//  d_I = d_Tss * X
-		getTriangularInverse(handle, d_Tss, d_I, s);
-		//	d_I = d_I * diag(sign(dz))
-		multWithDz <<<gridsize, blocksize >>>(d_I, d_dz, s);
-		//	d_K = d_Y * d_I
-		cublasDgemm(.,d_Y,.,d_I,d_K,));
-		//	d_gamma = d_b
-		//  d_Gamma = J
-		cudaMemcpy(d_gamma, d_b,.);
-		cudaMemcpy(d_Gamma, d_J,.);
-		//	d_gamma = d_gamma + K*a
-		cublasDgemv(.,d_K,., d_a,., d_gamma,.);
-		//  d_Gamma = d_Gamma + K*Z
-		cublasDgemm(.,d_K,d_Z,d_Gamma,m));
+	void __global__ multWithDz(T *A, T *dz, int s){
+		int i = threadIdx.x;
+		int j = blockIdx.x;
+		int id = i*s + j;
+		while(id < s*s && j < s){
+			if(i<s){
+				if(A[id] != T(0))
+					A[id] = A[id] * cuutils::sign(&dz[j]);
+				i+=blockDim.x;
+			}
+			else{
+				i = i%s;
+				j = j + gridDim.x;
+			}
+			id = i*s + j;
+		}
 	}
 	\end{lstlisting}

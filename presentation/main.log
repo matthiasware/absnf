@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.5.28)  28 JUN 2017 20:19
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.5.28)  29 JUN 2017 14:11
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1334,7 +1334,7 @@ Package: etoolbox 2015/08/02 v2.2a e-TeX tools for LaTeX (JAW)
 . D(){\aboveleftoff }' on line 455.
 .................................................
 ) (./main.aux
-(./gradient.aux))
+(./gradient.aux) (./blockgridsize.aux))
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 250.
@@ -1594,6 +1594,26 @@ Overfull \hbox (6.68513pt too wide) in paragraph at lines 263--263
 ] [10
 
 ])
+\openout2 = `blockgridsize.aux'.
+
+ (./blockgridsize.tex [11
+
+
+
+]
+\openout4 = `main.vrb'.
+
+ (./main.vrb) [12
+
+] [13
+
+]
+\openout4 = `main.vrb'.
+
+ (./main.vrb)
+[14
+
+])
 \tf@nav=\write6
 \openout6 = `main.nav'.
 
@@ -1605,11 +1625,11 @@ Overfull \hbox (6.68513pt too wide) in paragraph at lines 263--263
 
  
 AED: lastpage setting LastPage
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 263.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 263.
-(./main.aux (./gradient.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 263.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 263.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 264.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 264.
+(./main.aux (./gradient.aux) (./blockgridsize.aux))
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 264.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 264.
 Package rerunfilecheck Info: File `main.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
 
@@ -1617,13 +1637,13 @@ Package rerunfilecheck Info: File `main.out' has not changed.
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 1.0pt have occurred.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 263.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 264.
  ) 
 Here is how much of TeX's memory you used:
- 29498 strings out of 494901
- 569059 string characters out of 6178617
- 878125 words of memory out of 5000000
- 32230 multiletter control sequences out of 15000+600000
+ 29551 strings out of 494901
+ 569620 string characters out of 6178617
+ 878737 words of memory out of 5000000
+ 32264 multiletter control sequences out of 15000+600000
  9991 words of font info for 38 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  53i,21n,76p,10381b,1427s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1635,11 +1655,12 @@ texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texlive/texmf-d
 ist/fonts/type1/public/amsfonts/cm/cmssi8.pfb></usr/share/texlive/texmf-dist/fo
 nts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/typ
 e1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
-ic/amsfonts/cm/cmtt8.pfb>
-Output written on main.pdf (10 pages, 252207 bytes).
+ic/amsfonts/cm/cmtt8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
+onts/symbols/msbm10.pfb>
+Output written on main.pdf (14 pages, 262919 bytes).
 PDF statistics:
- 260 PDF objects out of 1000 (max. 8388607)
- 214 compressed objects within 3 object streams
- 21 named destinations out of 1000 (max. 500000)
+ 290 PDF objects out of 1000 (max. 8388607)
+ 239 compressed objects within 3 object streams
+ 29 named destinations out of 1000 (max. 500000)
  111 words of extra memory for PDF output out of 10000 (max. 10000000)
 
