@@ -4,10 +4,11 @@ from matplotlib import animation
 
 plot_values = True
 s = 100
-block_dim = 8
-grid_dim = 16
+block_dim = 64
+grid_dim = 10
 num_threads = block_dim * grid_dim
-num_multicores = 4
+num_multicores = 10
+
 
 data = np.zeros(s*s)
 
@@ -37,6 +38,55 @@ class cuda_thread():
 		else:
 			self.done = True
 
+
+class image_generator2():
+	def __init__(self,block_dim, grid_dim,
+				 matrix,s,num_multicores,
+			     num_warps, num_threads_per_warps,
+			     inplace=True, multicores=None):
+		self.threads = []
+		self.num_multicores = num_multicores
+		self.num_warps = num_warps
+		self.num_threads_per_warps = num_threads_per_warps
+		self.current_thread = 0
+		self.inplace = inplace
+		self.matrix = matrix
+		if multicores:
+			self.multicores = multicores
+		else:
+			self.multicores = block_dim*grid_dim
+		for block_id in range(grid_dim):
+			for thread_id in range(block_dim):
+				thread = cuda_thread(thread_id, block_id, matrix,
+							         s, block_dim, grid_dim)
+				self.threads.append(thread)
+			self.all_done = np.zeros(len(self.threads), dtype=bool)
+			self.next = True
+		self.matrix_time = []
+		self.current_threads = []
+
+	# def getThreadsToExecute():
+	# 	threads = []
+	# 	for core in range(self.num_multicores):
+	# 		for warps in range(self.num_warps):
+	# 			for thread in range(self.num_threads_per_warps):
+
+	def generate(self):
+		if not self.next:
+			return
+		if not self.inplace:
+			self.matrix_time.append(np.copy(self.matrix))
+		for i in range(self.multicores):
+			thread = self.threads[self.current_thread]
+			thread.update()
+			self.all_done[self.current_thread] = thread.done
+			self.current_thread = (self.current_thread + 1) % len(self.threads)
+		# for i, thread in enumerate(self.threads):
+		# 	thread.update()
+		# 	self.all_done[i] = thread.done
+		if np.all(self.all_done):
+			self.next = False
+
 class image_generator():
 	def __init__(self,block_dim, grid_dim, matrix,s, inplace=True, multicores=None):
 		self.threads = []
@@ -64,8 +114,9 @@ class image_generator():
 		for i in range(self.multicores):
 			thread = self.threads[self.current_thread]
 			thread.update()
-			self.all_done[self.current_thread] = thread.done
-			self.current_thread = (self.current_thread + 1) % len(self.threads)
+			if thread.done:
+				self.all_done[self.current_thread] = thread.done
+				self.current_thread = (self.current_thread + 1) % len(self.threads)
 		# for i, thread in enumerate(self.threads):
 		# 	thread.update()
 		# 	self.all_done[i] = thread.done
@@ -81,13 +132,13 @@ generator = image_generator(block_dim, grid_dim, data, s, inplace=False, multico
 
 def update(i):
 	generator.generate()
-	matrice.set_array(data.reshape((s,s)).T)
+	matrice.set_array(data.reshape((s,s)))
 
 fig, ax = plt.subplots()
 matrice = ax.matshow(data.reshape(s,s), vmin=0, vmax=num_threads)
 plt.colorbar(matrice)
 
-ani = animation.FuncAnimation(fig, update, frames=4, interval=50)
+ani = animation.FuncAnimation(fig, update, frames=4, interval=100)
 plt.show()
 
 data = data.reshape((s,s))
