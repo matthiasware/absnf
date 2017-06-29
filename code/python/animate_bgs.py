@@ -38,6 +38,7 @@ class image_generator():
 	def __init__(self,block_dim, grid_dim, matrix,s, inplace=True, multicores=None):
 		self.threads = []
 		self.current_thread = 0
+		self.inplace = inplace
 		if multicores:
 			self.multicores = multicores
 		else:
@@ -49,8 +50,10 @@ class image_generator():
 				self.threads.append(thread)
 			self.all_done = np.zeros(len(self.threads), dtype=bool)
 			self.next = True
+		self.matrix_time = []
 
 	def generate(self):
+		if self.
 		for i in range(self.multicores):
 			thread = self.threads[self.current_thread]
 			thread.update()

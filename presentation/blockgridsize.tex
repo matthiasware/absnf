@@ -1,0 +1,80 @@
+\begin{frame}
+	\frametitle{Choosing Gridsize and Blocksize}
+	\framesubtitle{Choosing Gridsize and Blocksize}
+	Wie sollen gridsize and blocksize gewählt werden?
+	\begin{itemize}
+		\item Generischen Ansatz
+		\item Starte mit gewisser blocksize and gridsize in abh. von device spec.
+		\item threads berechnen, welche aufgaben sie abarbeiten sollen
+		\item über die optimalen parameter kann optimiert werden.
+	\end{itemize}
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}[fragile]
+	\frametitle{Choosing Gridsize and Blocksize}
+	\framesubtitle{Beispiel}
+	Zu Implementierende Operation:
+	\begin{flalign*}
+	A = A \times Diag(Sign(dz))
+	\end{flalign*}
+	Beispiel:
+	\begin{flalign*}
+	A \in \mathbb{R}^{3 \times 3}, dz \in \mathbb{R}^2 \\
+	\end{flalign*}
+	\begin{flalign*}
+			dz = (-j, 0, k)
+	\end{flalign*}
+	\begin{flalign*}
+	\left(\begin{array}{ccc}
+	a & d & g \\
+	b & e & h \\
+	c & f & i \\
+	\end{array}\right) \times
+	\left(\begin{array}{ccc}
+	-1 & 0 & 0 \\
+	0 & 0 & 0 \\
+	0 & 0 & 1 \\
+	\end{array}\right)
+	=
+	\left(\begin{array}{ccc}
+	-a & 0 & g \\
+	-b & 0 & h \\
+	-c & 0 & i \\
+	\end{array}\right)
+	\end{flalign*}
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{Choosing Gridsize and Blocksize}
+	\framesubtitle{Choosing Gridsize and Blocksize}
+	\begin{itemize}
+		\item Blocksize: 2
+		\item Gridsize: 2
+	\end{itemize}
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}[fragile]
+	\frametitle{Choosing Gridsize and Blocksize}
+	\framesubtitle{Beispiel - Implementierung}
+	\begin{lstlisting}[language=cpp]
+	template <typename T>
+	void __global__ multWithDz(T *A, T *dz, int s){
+		int i = threadIdx.x;
+		int j = blockIdx.x;
+		int id = i*s + j;
+		while(id < s*s && j < s){
+			if(i<s){
+				if(A[id] != T(0)) 
+					A[id] = A[id] * cuutils::sign(&dz[j]);
+				i+=blockDim.x;
+			}
+			else{
+				i = i%s;
+				j = j + gridDim.x;
+			}
+			id = i*s + j;
+		}			
+	}
+	\end{lstlisting}
+\end{frame}
+%------------------------------------------------------------------------
