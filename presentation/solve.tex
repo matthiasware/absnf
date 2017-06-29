@@ -1,0 +1,193 @@
+%------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{Solve}
+	\framesubtitle{Aufgaben}
+	Gegben: 
+	\begin{flalign*}
+		a,b,Z,L,J,Y,\Delta y
+	\end{flalign*}
+	Gesucht:
+	\begin{flalign*}
+		\Delta x, \Delta z
+	\end{flalign*}
+	\begin{flalign*}
+	\begin{pmatrix}
+	\Delta z \\
+	\Delta y
+	\end{pmatrix}
+	= 
+	\begin{pmatrix}
+	a \\
+	b
+	\end{pmatrix}
+	+
+	\begin{pmatrix}
+	Z & L \\
+	J & Y 
+	\end{pmatrix}
+	\times
+	\begin{pmatrix}
+	\Delta x \\
+	|\Delta z |
+	\end{pmatrix}
+	\end{flalign*}
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{Solve}
+	\framesubtitle{Lösungsansätze}
+	Wollen Lösen:
+	\begin{flalign*}
+		\Delta z &= a + Z \Delta x + L |\Delta z| \\
+		\Delta y &= b + J \Delta x + Y |\Delta z| \\
+	\end{flalign*}
+	Ausgangslage:
+	\begin{flalign*}
+		\Delta y = 0
+	\end{flalign*}
+	Andernfalls
+	\begin{flalign*}
+		b' = b - \Delta y
+	\end{flalign*}
+	Umstellen nach $\Delta x$:
+\begin{flalign*}
+\Delta y &= b + J \Delta x + Y |\Delta z| \\
+0 &= b + J \Delta x + Y |\Delta z| \\
+- b - Y |\Delta z| &= J \Delta x \\
+b + Y |\Delta z| &= J \Delta x (-1) \\
+J^{-1}(b + Y |\Delta z|) &= - \Delta x \\
+\Delta x = - J^{-1}(b + Y |\Delta z|)
+\end{flalign*}
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{Solve}
+	\framesubtitle{Lösungsansätze}
+	Wollen Lösen:
+	\begin{flalign*}
+	\Delta z &= a + Z \Delta x + L |\Delta z| \\
+	\Delta y &= b + J \Delta x + Y |\Delta z| \\
+	\end{flalign*}
+	Haben:
+	\begin{flalign*}
+	\Delta x = - J^{-1}(b + Y |\Delta z|)
+	\end{flalign*}
+	Einsetzen in
+\begin{flalign*}
+\Delta z &= a + Z \Delta x + L |\Delta z| \\
+&= a + Z \Big( - J^{-1}(b + Y |\Delta z|) \Big) +  L |\Delta z| \\
+&= a + Z \Big( -J^{-1}b - J^{-1}Y|\Delta z| \Big) +  L |\Delta z| \\
+&= a - ZJ^{-1}b - Z J^{-1}Y|\Delta z| +  L |\Delta z| \\
+&= a - ZJ^{-1}b - (Z J^{-1}Y - L)|\Delta z|
+\end{flalign*}
+\begin{flalign*}
+\Delta z &= a - ZJ^{-1}b - (Z J^{-1}Y - L)|\Delta z| \\
+&= c + S|\Delta z| \\
+c		 &= a - ZJ^{-1}b \\
+S		 &= (L - Z J^{-1}Y)
+\end{flalign*}
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{Solve}
+	\framesubtitle{Lösungsansätze}
+	Wollen Lösen:
+	\begin{flalign*}
+	\Delta z &= a + Z \Delta x + L |\Delta z| \\
+	\Delta y &= b + J \Delta x + Y |\Delta z| \\
+	\end{flalign*}
+	Haben:
+	\begin{flalign*}
+	\Delta x &= - J^{-1}(b + Y |\Delta z|) \\
+	\Delta z &= a - ZJ^{-1}b - (Z J^{-1}Y - L)|\Delta z|
+	\end{flalign*}
+	Modularisieren:
+	\begin{flalign*}
+	\Delta z &= a - ZJ^{-1}b - (Z J^{-1}Y - L)|\Delta z| \\
+	&= c + S|\Delta z|
+	\end{flalign*}
+	\begin{flalign*}
+		c		 &= a - ZJ^{-1}b \\
+		S		 &= L - Z J^{-1}Y
+	\end{flalign*}
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}
+	\frametitle{Solve}
+	\framesubtitle{Fixpunktiteration}
+	Problem:
+	\begin{flalign*}
+	\Delta z &= c + S|\Delta z|
+	\end{flalign*}
+	Lösung mithilfe Fixpunktiteration: \\
+	\begin{enumerate}
+		\item Generalized (Pseudo) Newton
+		\item Block-Seidel Algorthmus
+		\item Modulus Iteration Algorithmus
+	\end{enumerate}
+	Konvergieren unter gewissen Konvergenzkrieterien (linear / endlich).
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}[fragile]
+	\frametitle{Solve}
+	\framesubtitle{Moulus Iteration Algorithmus}
+	Modulus Iteration Algorithmus:
+	\begin{lstlisting}[mathescape=true]
+		$\Delta z$ = Init()
+		$c = a - ZJ^{-1}b $
+		$S = L - Z J^{-1}Y$
+		while not converged:
+				 $\Delta_z$ = $c + S|\Delta z|$
+		$\Delta x = - J^{-1}(b + Y |\Delta z|)$
+	\end{lstlisting}
+	Notes:
+	\begin{itemize}
+		\item Problem ist die Berechnung von $c$ und $S$
+		\item $J$ nicht singulär.
+	\end{itemize}
+
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}[fragile]
+	\frametitle{Solve}
+	\framesubtitle{Die Berechnung von $c$ und $S$}
+	
+	Bere
+	\begin{flalign*}
+		S = L - Z J^{-1}Y
+	\end{flalign*}
+	QR - Zerlegung:
+	\begin{flalign*}
+		J^{-1} Y = X \\
+		Y = J X \\
+		Y = QR X \\
+		QY = R X
+	\end{flalign*}
+	Benutze triangular solve! \\
+	Berechne:
+	\begin{flalign*}
+		S = L - Z X
+	\end{flalign*}
+	
+\end{frame}
+%------------------------------------------------------------------------
+\begin{frame}[fragile]
+	\frametitle{Solve}
+	\framesubtitle{Komplexität}
+	Komplexität $(m=n=s)$: \\
+	\begin{center}
+		\begin{tabular}{ l | l}
+			Funktion & Komplexität Seriell \\
+			\hline
+			$initTss()$	& $s^2$\\
+			$initIdentity()$& $s^2$ \\
+			$getTriangularInverse()$& $s^2$ (backsubstitution)\\
+			$multWithDz()$  & $s^2$  \\
+			$cublasDgemm()$& $s^3$ \\
+			$cublasDgemv()$ & $s^2$ \\
+			$cudaMemcpy()$ & $s$ \\
+		\end{tabular} 	\\~\\
+	\end{center}
+	Lässt sich alles gut parallel ausführen !!!
+\end{frame}
+%------------------------------------------------------------------------
