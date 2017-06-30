@@ -167,6 +167,7 @@ J^{-1}(b + Y |\Delta z|) &= - \Delta x \\
 		$\Delta x = - J^{-1}(b + Y |\Delta z|)$
 	\end{lstlisting}
 	Notes:
+	\pause
 	\begin{itemize}
 		\item Problem ist die Berechnung von $c$ und $S$
 		\item $J$ nicht singulär.
@@ -183,13 +184,13 @@ J^{-1}(b + Y |\Delta z|) &= - \Delta x \\
 		S = L - Z J^{-1}Y
 	\end{flalign*}
 	QR - Zerlegung:
+	\pause
 	\begin{flalign*}
 		J^{-1} Y = X \\
 		Y = J X \\
 		Y = QR X \\
 		QY = R X
 	\end{flalign*}
-	Benutze triangular solve! \\
 	Berechne:
 	\begin{flalign*}
 		S = L - Z X
@@ -212,5 +213,4 @@ J^{-1}(b + Y |\Delta z|) &= - \Delta x \\
 			$cudaMemcpy()$ & $s * k$  \\
 		\end{tabular} 	\\~\\
 	\end{center}
-	Lässt sich alles gut parallel ausführen !!!
 \end{frame}

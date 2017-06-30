@@ -174,37 +174,39 @@ def ani2():
     # ani.save('basic_animation.mp4', fps=1)
     plt.show()
 
-s = 100
-block_dim = 16
-grid_dim = 8 
-warpsize = 4
+s = 1000
+block_dim = 128
+grid_dim = 64 
+warpsize = 32
 num_threads = block_dim * grid_dim
 data = np.ones(s*s) * num_threads
-cmap = LinearSegmentedColormap.from_list('mycmap', ['green', 'white', 'darkgreen', 'black'])
+cmap = LinearSegmentedColormap.from_list('mycmap', ["darkgreen",'green', 'white', 'darkgreen', "white", "limegreen", 'black'])
 generator = image_generator2(block_dim, grid_dim, data, s, warpsize)
+# generator = image_generator(block_dim, grid_dim, data, s)
 
 def update(i):
     generator.generate()
     matrice.set_array(data.reshape((s,s)))
 
-fig, ax = plt.subplots()
-ax.set_xlabel("Matrix Columns")
-ax.set_ylabel("Matrix Rows")
-text = "Gridsize: {}\nBlocksize: {}\nWarpsize: {}\nMPU: {}\nWarps\MPU: {}"
-text = text.format(grid_dim, block_dim, warpsize, grid_dim, 1)
-anchored_text = AnchoredText(text, loc=1)
-ax.add_artist(anchored_text)
-fig.suptitle("CUDA threads working on a matrix", fontsize=14)
-# plt.tight_layout()
+def createFigure(i):
+    fig, ax = plt.subplots()
+    ax.set_xlabel("Matrix Columns")
+    ax.set_ylabel("Matrix Rows")
+    text = "Gridsize: {}\nBlocksize: {}\nWarpsize: {}\nMPU: {}\nWarps\MPU: {}"
+    text = text.format(grid_dim, block_dim, warpsize, grid_dim, 1)
+    anchored_text = AnchoredText(text, loc=1)
+    ax.add_artist(anchored_text)
+    fig.suptitle("CUDA threads working on a matrix", fontsize=14)
+    
+    im = plt.imshow(data.reshape((s,s)), cmap="prism", vmin=0, vmax=num_threads)
+    fig.colorbar(im)
+    fig.savefig("/home/matthias/Pictures/ani3/prism{num:05d}.png".format(num=i))
+    plt.close('all')
 
-im = plt.imshow(data.reshape((s,s)), cmap="Paired", vmin=0, vmax=num_threads)
-fig.colorbar(im)
 i = 1
-while(generator.next):
-    print(i)
+while generator.next:
+    createFigure(i)
     generator.generate()
-    plt.imshow(data.reshape((s,s)), cmap="Paired", vmin=0, vmax=num_threads)
-    fig.savefig("img/a{}.png".format(i))
     i += 1
 
 
