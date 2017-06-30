@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.5.28)  30 JUN 2017 03:08
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.5.28)  30 JUN 2017 09:45
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1708,27 +1708,30 @@ Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 59.
  [5
 
 ]
-LaTeX Font Info:    Try loading font information for U+msa on input line 91.
+LaTeX Font Info:    Try loading font information for U+msa on input line 94.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 91.
+LaTeX Font Info:    Try loading font information for U+msb on input line 94.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
+Overfull \hbox (7.35954pt too wide) in paragraph at lines 94--94
+[]  
+ []
 
+File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
 <use img/badge-nvidia-cuda-cpp.png>
-Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 91.
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 94.
 (pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
  [6
 
 ]
 File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
  <use img/badge-nvidia-cuda-cpp.png>
-Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 103.
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 106.
 (pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
 
 [7
@@ -1736,7 +1739,7 @@ Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 103.
 ]
 File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
  <use img/badge-nvidia-cuda-cpp.png>
-Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 103.
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 106.
 (pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
  [8
 
@@ -1744,20 +1747,20 @@ Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 103.
 File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
 
 <use img/badge-nvidia-cuda-cpp.png>
-Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 103.
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 106.
 (pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
  [9
 
 ]
-<img/minmax.png, id=286, 462.528pt x 346.896pt>
+<img/minmax.png, id=289, 462.528pt x 346.896pt>
 File: img/minmax.png Graphic file (type png)
  <use img/minmax.png>
-Package pdftex.def Info: img/minmax.png used on input line 117.
+Package pdftex.def Info: img/minmax.png used on input line 120.
 (pdftex.def)             Requested size: 227.62204pt x 170.71628pt.
 File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
 
 <use img/badge-nvidia-cuda-cpp.png>
-Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 117.
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 120.
 (pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
  [10
 
@@ -1765,7 +1768,7 @@ Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 117.
 File: img/badge-nvidia-cuda-cpp.png Graphic file (type png)
 
 <use img/badge-nvidia-cuda-cpp.png>
-Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 175.
+Package pdftex.def Info: img/badge-nvidia-cuda-cpp.png used on input line 178.
 (pdftex.def)             Requested size: 39.81567pt x 22.76228pt.
  [11
 
@@ -2536,7 +2539,7 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 267.
 Here is how much of TeX's memory you used:
  32166 strings out of 494901
  619498 string characters out of 6178617
- 946462 words of memory out of 5000000
+ 946463 words of memory out of 5000000
  34585 multiletter control sequences out of 15000+600000
  12195 words of font info for 46 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
@@ -2555,7 +2558,7 @@ ts/cm/cmsy5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
 msy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pf
 b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb></usr
 /share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on main.pdf (91 pages, 2078728 bytes).
+Output written on main.pdf (91 pages, 2078922 bytes).
 PDF statistics:
  1454 PDF objects out of 1728 (max. 8388607)
  1241 compressed objects within 13 object streams
