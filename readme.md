@@ -1,5 +1,7 @@
 ### TODO
-- transpose !!!
+- check for float
+- chechk foat and double support of devic
+e- transpose !!!
 - check for transpose
 - keep memory
 - calculate workload of functions
@@ -59,3 +61,30 @@ https://stackoverflow.com/questions/28794010/solving-linear-systems-ax-b-with-cu
 https://stackoverflow.com/questions/22399794/qr-decomposition-to-solve-linear-systems-in-cuda
 http://docs.nvidia.com/cuda/cublas/index.html#axzz4kNclpKOl
 https://git.inf-ra.uni-jena.de/sa26lat/absnf/blob/master/code/absnf.h
+
+
+##############################################
+Class
+#############################################
+- stores information about datatypes
+- calculates whether there is enough memory on GPU
+- check which data is on gpu, if not enough space, try to remove unused data and reupload later
+- tries to use multiple GPUS
+- tries to find and exploit density patterns
+- upload()
+- download()
+- verify results
+- check performance
+- cuda performance utility
+- test framework
+
+##############################################
+# Ausarbeitung
+#############################################
+- Throughput in FLOPS
+- Describe Problems
+- Describe Devices
+- Compare Eval Singel, Eval Parallel Tesla, Eval Parallel GTX Float and Double
+- Gradient Eval Single, Eval Parllel Tesla, Eval Parallel GTX Float and Double
+- Solve ....
+- Describe how the blocksize and gridsize was selected
