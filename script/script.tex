@@ -1,0 +1,150 @@
+\documentclass{article}
+
+%-----------------------------------------------------------------------------
+%	Packages
+%-----------------------------------------------------------------------------
+\usepackage[utf8]{inputenc}	% für Umlaute ect.
+\usepackage{fancyhdr} % für header
+\usepackage{lastpage} % für footer
+\usepackage{extramarks} % für header und footer
+\usepackage{amsthm} % math stuff
+\usepackage{amsmath} % math stuff
+\usepackage{amssymb} % math stuff
+\usepackage{color}
+\usepackage{listings} % code listings
+\usepackage{enumitem}
+\usepackage{graphicx} % für graphics
+\usepackage{hyperref}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{multicol}
+\usepackage{pgf}
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata} 
+
+%-----------------------------------------------------------------------------
+%	Allegmeine Dokumentsettings
+%-----------------------------------------------------------------------------
+% Margins
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+%Header und Footer
+\pagestyle{fancy}
+\chead{\moduleTitle}  
+\rhead{}
+\lfoot{\lastxmark}
+\cfoot{} 
+\rfoot{\ \thepage\ of\ \protect\pageref{LastPage}}
+\renewcommand\headrulewidth{0.4pt} % Size of the header rule
+\renewcommand\footrulewidth{0.4pt} % Size of the footer rule
+
+% Zeilenabstand
+\linespread{1.0} 
+
+%----------------------------------------------------------------------------------------
+%	Commands and Environments
+%----------------------------------------------------------------------------------------
+
+%---- Allows vertical lines in matrices
+\makeatletter
+\renewcommand*\env@matrix[1][*\c@MaxMatrixCols c]{%
+	\hskip -\arraycolsep
+	\let\@ifnextchar\new@ifnextchar
+	\array{#1}}
+\makeatother
+%--------------------------
+
+\newcommand{\moduleTitle}{Projektarbeit - Graphische Modelle}
+\newcommand{\moduleSubTitle}{Theoretische Informatík I}
+\newcommand{\moduleClassInstructor}{Prof. Joachim Giesen}
+\newcommand{\university}{FSU Jena}
+\newcommand{\moduleSemester}{SS 17}
+\newcommand{\authorName}{Matthias Mitterreiter}
+
+% Für Code listings
+\lstset{ %
+	language=Python,                % choose the language of the code
+	basicstyle=\footnotesize,       % the size of the fonts that are used for the code
+	numbers=left,                   % where to put the line-numbers
+	numberstyle=\footnotesize,      % the size of the fonts that are used for the line-numbers
+	stepnumber=1,                   % the step between two line-numbers. If it is 1 each line will be numbered
+	numbersep=5pt,                  % how far the line-numbers are from the code
+	backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+	showspaces=false,               % show spaces adding particular underscores
+	showstringspaces=false,         % underline spaces within strings
+	showtabs=false,                 % show tabs within strings adding particular underscores
+	frame=single,           % adds a frame around the code
+	tabsize=2,          % sets default tabsize to 2 spaces
+	captionpos=b,           % sets the caption-position to bottom
+	breaklines=true,        % sets automatic line breaking
+	breakatwhitespace=false,    % sets if automatic breaks should only happen at whitespacee
+	escapeinside={\%*}{*)}          % if you want to add a comment within your code
+}
+
+% An environment for stpes, cases ect. 
+% From: http://tex.stackexchange.com/questions/32798/a-step-by-step-environment
+	\newenvironment{steps}[1]{\begin{enumerate}[label=#1 \arabic*]}{\end{enumerate}}
+\makeatletter%
+\def\step{%
+	\@ifnextchar[ \@step{\@noitemargtrue\@step[\@itemlabel]}}
+\def\@step[#1]{\item[#1]\mbox{}\\\hspace*{\dimexpr-\labelwidth-\labelsep}}
+\makeatother
+
+%http://tex.stackexchange.com/questions/10669/how-to-enumerate-equations
+\def\Item$#1${\item $\displaystyle#1$
+   \hfill\refstepcounter{equation}(\theequation)}
+
+%-----------------------------------------------------------------------------
+%	Theoreme
+%-----------------------------------------------------------------------------
+\theoremstyle{definition}
+\newtheorem{mydef}{Definition}
+\newtheorem*{mydef*}{Definition}
+\newtheorem{mybei}{Beispiel}
+\newtheorem*{mybei*}{Beispiel}
+%------------------------------------------------------------------------
+\newtheorem{mysatz}{Satz}
+\newtheorem*{mysatz*}{Satz}
+\newtheorem{mybew}{Beweis}
+
+\newtheorem*{mybew*}{Beweis}
+\newtheorem{myfolg}{Folgerung}
+\newtheorem*{myfolg*}{Folgerung}
+\newtheorem{mybemerk}{Bemerkung}
+\newtheorem*{mybemerk*}{Bemerkung}
+
+% Boxed Theoreme
+
+\newenvironment{fmylemma*}
+  {\begin{mdframed}\begin{mylemma*}}
+  {\end{mylemma*}\end{mdframed}}
+
+\newenvironment{fmykorollar*}
+  {\begin{mdframed}\begin{mykorollar*}}
+  {\end{mykorollar*}\end{mdframed}}
+
+\newenvironment{fmysatz*}
+  {\begin{mdframed}\begin{mysatz*}}
+  {\end{mysatz*}\end{mdframed}}
+
+\newenvironment{fmylemma}
+  {\begin{mdframed}\begin{mylemma}}
+  {\end{mylemma}\end{mdframed}}
+
+\newenvironment{fmykorollar}
+  {\begin{mdframed}\begin{mykorollar}}
+  {\end{mykorollar}\end{mdframed}}
+
+\newenvironment{fmysatz}
+  {\begin{mdframed}\begin{mysatz}}
+  {\end{mysatz}\end{mdframed}}
+
+\begin{document}
+	\include{gliederung}
+	%\include{intro}
+	%\include{solve}
+\end{document}

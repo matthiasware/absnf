@@ -3,11 +3,11 @@ from matplotlib import pyplot as plt
 from matplotlib import animation
 from matplotlib.colors import LinearSegmentedColormap
 import random
-from matplotlib.offsetbox import AnchoredText
+# from matplotlib.offsetbox import AnchoredText
 
 
 class CudaThread():
-    def __init__(self, thread_id, block_id, matrix, 
+    def __init__(self, thread_id, block_id, matrix,
                  s, block_dim, grid_dim, verbose=False):
         self.thread_id = thread_id
         self.verbose = verbose
@@ -18,7 +18,7 @@ class CudaThread():
         self.j = block_id
         self.block_dim = block_dim
         self.grid_dim = grid_dim
-        self.id = self.i * self.s + self.j;
+        self.id = self.i * self.s + self.j
         self.done = False
         self.started = False
         self.global_id = thread_id + block_id * block_dim
@@ -26,15 +26,16 @@ class CudaThread():
     def execute(self):
         if self.verbose:
             print("Execute Thread ", self.global_id, " Block: ", self.block_id)
-        if self.id < self.s*self.s and self.j<self.s:
+        if self.id < self.s * self.s and self.j < self.s:
             self.matrix[self.id] = self.global_id
             self.i += self.block_dim
-            if self.i>=self.s:
-                self.i = self.i%self.s
+            if self.i >= self.s:
+                self.i = self.i % self.s
                 self.j = self.j + self.grid_dim
-            self.id = self.i*self.s + self.j
+            self.id = self.i * self.s + self.j
         else:
             self.done = True
+
 
 class Warp():
     def __init__(self, warp_id, num_threads_per_warp, verbose=False):
@@ -61,14 +62,18 @@ class Warp():
             self.checkWork()
 
         else:
-            print("warp ", self.id, " done!")
+            # print("warp ", self.id, " done!")
+            raise Exception("warp ", self.id,
+                            " done! Nothing to execute.")
 
     def checkWork(self):
-        self.done = np.all(np.array([thread.done for thread in self.threads], dtype=bool))
+        self.done = np.all(
+            np.array([thread.done for thread in self.threads], dtype=bool))
 
 
 class MPU():
-    def __init__(self, mpu_id, num_warps_per_mpu, num_threads_per_warp, verbose=False):
+    def __init__(self, mpu_id, num_warps_per_mpu,
+                 num_threads_per_warp, verbose=False):
         if verbose:
             print("Created MPU ", mpu_id)
         self.thread_class = None
@@ -84,15 +89,19 @@ class MPU():
             self.warps.append(warp)
 
     # creates all the threads for the  block block_id
-    def create_threads(self, thread_class, block_id, block_dim, grid_dim, matrix, s):
+    def create_threads(self, thread_class, block_id,
+                       block_dim, grid_dim, matrix, s):
         self.thread_class = thread_class
         self.threads = []
         for thread_id in range(block_dim):
-            thread = self.thread_class(thread_id, block_id, matrix, s, block_dim, grid_dim, self.verbose)
+            thread = self.thread_class(
+                thread_id, block_id, matrix, s, block_dim,
+                grid_dim, self.verbose)
             self.threads.append(thread)
         random.shuffle(self.threads)
         if self.verbose:
-            print("MPU: ", self.id, "creating threads for block: ", block_id, " : ", len(self.threads))
+            print("MPU: ", self.id, "creating threads for block: ",
+                  block_id, " : ", len(self.threads))
         self.checkWork()
 
     def execute(self):
@@ -108,21 +117,26 @@ class MPU():
                     if self.verbose:
                         print("MPU ", self.id, "Starting new warp!")
                     warp.setThreads(warp_threads)
-                warp.execute()
+                if not warp.done:
+                    warp.execute()
             self.checkWork()
         else:
-            print("MPU ", self.id, " nothing to DO!")
+            raise Exception("MPU ", self.id, " nothing to DO! Threads already finished!")
 
     def checkWork(self):
-        self.done = np.all(np.array([thread.done for thread in self.threads], dtype=bool))
+        self.done = np.all(
+            np.array([thread.done for thread in self.threads], dtype=bool))
+
 
 class GPUDevice():
-    def __init__(self, num_mpu, num_warps_per_mpu, num_threads_per_warp, name="", verbose=False):
+    def __init__(self, num_mpu, num_warps_per_mpu,
+                 num_threads_per_warp, name="", verbose=False):
         self.num_mpu = num_mpu
         self.num_warps_per_mpu = num_warps_per_mpu
         self.num_threads_per_warp = num_threads_per_warp
         self.concurrent_threads = num_mpu * num_warps_per_mpu * num_threads_per_warp
-        self.mpus = [MPU(i, num_warps_per_mpu, num_threads_per_warp, verbose) for i in range(num_mpu)]
+        self.mpus = [MPU(i, num_warps_per_mpu, num_threads_per_warp, verbose)
+                     for i in range(num_mpu)]
         self.blocks = []
         self.grid_dim = None
         self.block_dim = None
@@ -137,6 +151,7 @@ class GPUDevice():
         self.grid_dim = grid_dim
         self.block_dim = block_dim
         self.blocks = [block_id for block_id in range(grid_dim)]
+        random.shuffle(self.blocks)
         self.thread_class = thread_class
         self.done = False
         self.iterations = 0
@@ -145,7 +160,8 @@ class GPUDevice():
         if not self.done:
             self.iterations += 1
             if self.verbose:
-                print("-"*20, "GPU ", self.name, " Iteration: ", self.iterations, "-"*20)
+                print("-" * 20, "GPU ", self.name,
+                      " Iteration: ", self.iterations, "-" * 20)
             for mpu in self.mpus:
                 if mpu.done:
                     if self.blocks:
@@ -160,37 +176,44 @@ class GPUDevice():
             print(self.name, " DONE!")
 
     def checkWork(self):
-        self.done = np.all(np.array([mpu.done for mpu in self.mpus], dtype=bool))
+        self.done = np.all(
+            np.array([mpu.done for mpu in self.mpus], dtype=bool))
 
 
 def animate(update_creator, frames, data):
-    cmap = LinearSegmentedColormap.from_list('mycmap', ['green', 'white', 'darkgreen', 'black'])
+    cmap = LinearSegmentedColormap.from_list(
+        'mycmap', ['green', 'white', 'darkgreen', 'black'])
     fig, ax = plt.subplots()
-    matrice = ax.matshow(data.reshape(s,s), cmap=cmap, vmin=0, vmax=NUM_CONCURRENT_THREADS)
+    matrice = ax.matshow(data.reshape(s, s), cmap=cmap,
+                         vmin=0, vmax=NUM_CONCURRENT_THREADS)
     update = update_creator(matrice, data)
     plt.colorbar(matrice)
 
     frames = (s * s) // NUM_MPU + 1
-    ani = animation.FuncAnimation(fig, update, frames=frames, interval=1000, repeat=False)
+    ani = animation.FuncAnimation(
+        fig, update, frames=frames, interval=1000, repeat=False)
     plt.show()
+
 
 # DEVICE
 NUM_MPU = 4
 NUM_WARP_PER_MPU = 16
-NUM_THREADS_PER_WARP= 8
+NUM_THREADS_PER_WARP = 8
 NUM_CONCURRENT_THREADS = NUM_MPU * NUM_WARP_PER_MPU * NUM_THREADS_PER_WARP
 
 gpu = GPUDevice(NUM_MPU, NUM_WARP_PER_MPU, NUM_THREADS_PER_WARP, "GTX", True)
 
 # Chose dimensions
 # BLOCK_DIM = NUM_WARP_PER_MPU * NUM_THREADS_PER_WARP
-# IF BLOCKDIM IS NOT EQUALS TO WARPS * THEADS -> INFINATELY MANY CACHE MISSES!!!
-BLOCK_DIM = 256
+# IF BLOCKDIM IS NOT EQUALS TO WARPS * THEADS -> INFINATELY MANY CACHE
+# MISSES!!!
+# BLOCK_DIM = NUM_WARP_PER_MPU * NUM_THREADS_PER_WARP # CAN BE > MAX_THREADS
+BLOCK_DIM = 64
 GRID_DIM = NUM_MPU
 
 # Prepare Data
 s = 100
-matrix = np.zeros(s*s) * 100
+matrix = np.zeros(s * s) * 100
 
 gpu.setTask(CudaThread, GRID_DIM, BLOCK_DIM, matrix, s)
 gpu.execute()
@@ -199,11 +222,13 @@ gpu.execute()
 #     print(matrix.reshape((s,s)))
 #     gpu.execute()
 
+
 def updata_creator(matrice, data):
     def update(i):
         gpu.execute()
-        matrice.set_array(data.reshape((s,s)))
+        matrice.set_array(data.reshape((s, s)))
     return update
+
 
 animate(updata_creator, 20, matrix)
 

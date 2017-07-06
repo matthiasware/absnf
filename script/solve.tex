@@ -1,0 +1,73 @@
+\section{Solve}
+\subsubsection{ABS-Equation-System}
+
+As a last step we bring the function in the form of a linear equation system.
+
+\begin{flalign*}
+	\begin{pmatrix}
+		\Delta z \\
+		\Delta y
+	\end{pmatrix}
+	= 
+	\begin{pmatrix}
+		a \\
+		b
+	\end{pmatrix}
+	+
+	\begin{pmatrix}
+		Z & L \\
+		J & Y 
+	\end{pmatrix}
+	\times
+	\begin{pmatrix}
+		\Delta x \\
+		|\Delta z|
+	\end{pmatrix}
+\end{flalign*}
+We assume:
+\begin{flalign*}
+	\Delta y = 0
+\end{flalign*}
+otherwise use
+\begin{flalign*}
+	b' = b - \Delta y
+\end{flalign*}
+
+\begin{flalign*}
+	\Delta y &= b + J \Delta x + Y |\Delta z| \\
+	0 &= b + J \Delta x + Y |\Delta z| \\
+	- b - Y |\Delta z| &= J \Delta x \\
+	b + Y |\Delta z| &= J \Delta x (-1) \\
+	J^{-1}(b + Y |\Delta z|) &= - \Delta x \\
+	\Delta x = - J^{-1}(b + Y |\Delta z|)
+\end{flalign*}
+
+\begin{flalign*}
+	\Delta z &= a + Z \Delta x + L |\Delta z| \\
+	&= a + Z \Big( - J^{-1}(b + Y |\Delta z|) \Big) +  L |\Delta z| \\
+	&= a + Z \Big( -J^{-1}b - J^{-1}Y|\Delta z| \Big) +  L |\Delta z| \\
+	&= a - ZJ^{-1}b - Z J^{-1}Y|\Delta z| +  L |\Delta z| \\
+	&= a - ZJ^{-1}b - (Z J^{-1}Y - L)|\Delta z|
+\end{flalign*}
+\begin{flalign*}
+\Delta z &= a - ZJ^{-1}b - (Z J^{-1}Y - L)|\Delta z| \\
+		 &= c + S|\Delta z| \\
+c		 &= a - ZJ^{-1}b \\
+S		 &= (L - Z J^{-1}Y)
+\end{flalign*}
+
+\subsection{Implementation}
+\begin{flalign*}
+	c &= a - ZJ^{-1}b \\
+	S &= (L - Z J^{-1}Y)
+\end{flalign*}
+Need the inverse of $J$
+\begin{itemize}
+	\item Calculate cublas LU
+	\item Cusolve QR
+	\item LU -> Inverse
+\end{itemize}
+\begin{flalign*}
+	c = a - Z* solve(J*X = b) \\
+	S = L - Z* solve(J*X = Y) \\
+\end{flalign*}
