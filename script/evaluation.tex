@@ -1,0 +1,81 @@
+\section{Evaluation of the ABSNF}
+\begin{itemize}
+	\item Problem
+	\item what is parallelizable?
+	\item Implementations
+	\item Performance
+	\begin{itemize}
+		\item Single Core Float and Double
+		\item GTX Float and Double
+		\item Tesla Float and Double
+	\end{itemize}
+	\item Review and Notes
+\end{itemize}
+
+\subsection{Problem Specification}
+
+ABS-Normal Form:
+\begin{flalign*}
+\begin{pmatrix}
+\Delta z \\
+\Delta y
+\end{pmatrix}
+= 
+\begin{pmatrix}
+a \\
+b
+\end{pmatrix}
++
+\begin{pmatrix}
+Z & L \\
+J & Y 
+\end{pmatrix}
+\times
+\begin{pmatrix}
+\Delta x \\
+|\Delta z |
+\end{pmatrix}
+\end{flalign*}
+Given is a PL function in abs-nf. The evaluation of this function means calculating the vectors $\Delta y$ and $\Delta z$:
+\begin{flalign}
+\Delta y &= b + (J \times \Delta x) + (Y \times |\Delta z|) \label{eval_1}\\
+\Delta z &= a + (Z \times \Delta x) + (L \times |\Delta z|) \label{eval_2}
+\end{flalign}
+where the following structures are given:
+\begin{flalign*}
+a,b,Z,L,J,Y,m,n,s, \Delta x
+\end{flalign*}
+In (\ref{eval_2}) $\Delta z$ depends on the element-wise absolute function of its own and therefore it cannot be calculated straightforward. Since the matrix $L$ is lower triangular, the vector $\Delta z$ can be iteratively calculated, by taking the row-wise dotproduct of $L$ and $|\Delta z|$. \\
+
+\begin{flalign*}
+k = a + Z \times \Delta x
+\end{flalign*}
+
+\begin{flalign*}
+\highlightblue{\Delta  z_1}  &= \underbrace{L_1 \times |\Delta z|}_{=0} + k_1 = k_1 \\
+\highlightyellow{\Delta z_2} &= L_2 \times |\Delta z| + k_2 \\
+	&= L_{2,1} \times \highlightblue{|\Delta z_1 |} + k_2 \\
+\highlightgreen{\Delta z_3} &= L_3 \times |\Delta z| + k_3 \\
+	&= L_{3,1} \times \highlightblue{|\Delta z_1 |} + L_{3,2} \times \highlightyellow{|\Delta z_2|} + k_3 \\
+\highlightred{\Delta z_4} &= L_{4} \times |\Delta z| + k_4 \\
+	&= L_{4,1} \times \highlightblue{|\Delta z_1|} + 
+	L_{4,2} \times \highlightyellow{|\Delta z_2|} +
+	L_{4,3} \times \highlightgreen{|\Delta z_3|} + k_4 \\
+	....
+\end{flalign*}
+
+\subsection{Implementation}
+Our implementation is highly focused on speed and  demands the device to hold all the required data structures in global memory simultaneously. \\
+
+Given this premise, the calculation of (\ref{eval_1}) and (\ref{eval_2}) is a series of dot products and therefore is highly parallelize-able. For this we relied mainly on CUBLAS routines. The implementation is available on [...] with several interfaces in [...].
+
+\subsubsection{Performance}
+
+\subsubsection{Analysis}
+We are interested in performance 
+For simplicity reasons we assume $n=m=s$ and obtain the following results:
+\begin{itemize}
+	\item Memory Complexity $O(s^2)$
+	\item Complexity $O(s^2)$
+\end{itemize}
+

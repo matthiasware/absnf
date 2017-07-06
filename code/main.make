@@ -19,7 +19,7 @@ solve: solve.cu
 test: test.cu absnf.h utils.hpp cuutils.h
 	nvcc -std=c++11 -O0 test.cu -lcublas -lcusolver -o test
 
-num_eval: num_eval.cu absnf.h utils.hpp cuutils.h
+performance_eval: num_eval.cu absnf.h utils.hpp cuutils.h
 	nvcc -std=c++11 num_eval.cu -lcublas -lcusolver -o num_eval
 
 num_grad: num_grad.cu absnf.h utils.hpp cuutils.h

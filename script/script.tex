@@ -3,6 +3,9 @@
 %-----------------------------------------------------------------------------
 %	Packages
 %-----------------------------------------------------------------------------
+
+%-----------------------------------------------------------------
+\usepackage{animate}
 \usepackage[utf8]{inputenc}	% für Umlaute ect.
 \usepackage{fancyhdr} % für header
 \usepackage{lastpage} % für footer
@@ -12,15 +15,25 @@
 \usepackage{amssymb} % math stuff
 \usepackage{color}
 \usepackage{listings} % code listings
-\usepackage{enumitem}
 \usepackage{graphicx} % für graphics
-\usepackage{hyperref}
-\usepackage{caption}
-\usepackage{subcaption}
-\usepackage{multicol}
-\usepackage{pgf}
+\usepackage{color}
 \usepackage{tikz}
-\usetikzlibrary{arrows,automata} 
+\usepackage[absolute,overlay]{textpos} %to translate graphics through space
+\usepackage{soul}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{textpos}
+\usepackage{caption}
+
+
+\newcommand{\highlightred}[1]{%
+	\colorbox{red!50}{$\displaystyle#1$}}
+\newcommand{\highlightgreen}[1]{%
+	\colorbox{green!50}{$\displaystyle#1$}}
+\newcommand{\highlightblue}[1]{%
+	\colorbox{blue!50}{$\displaystyle#1$}}
+\newcommand{\highlightyellow}[1]{%
+	\colorbox{yellow!50}{$\displaystyle#1$}}
 
 %-----------------------------------------------------------------------------
 %	Allegmeine Dokumentsettings
@@ -145,6 +158,8 @@
 
 \begin{document}
 	\include{gliederung}
+	\include{evaluation}
+	\include{operations}
 	%\include{intro}
 	%\include{solve}
 \end{document}
