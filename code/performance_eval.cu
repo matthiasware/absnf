@@ -284,11 +284,12 @@ void measure_performance()
 	std::cout << "Type: " << typeid(t_def).name() <<  std::endl;
 	std::cout << "------------------------------------------------" << std::endl;
 	single_execution_series();
-	multiple_executions_series(100);	
+	multiple_executions_series(1000);	
 }
 int main()
 {
 	measure_performance();
+	// multiple_executions_series(1000);
 	// multiple_executions(6000,100);
 
 	return 0;

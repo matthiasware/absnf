@@ -80,7 +80,8 @@ def single_execution_series():
     for i in range(1000,10000,1000):
         i, diff = single_execution(i)
         stats.append([i, diff*1000])
-    print(i, diff*1000)
+        print(i, diff*1000)
+    return stats
 
 def multiple_execution_series(times):
     for i in range(1000,10000,1000):
@@ -88,4 +89,5 @@ def multiple_execution_series(times):
         print(i, diff*1000)
 
 
-multiple_execution_series(100)
+# single_execution_series()
+multiple_execution_series(1000)
