@@ -7,8 +7,8 @@ def mem_eval(s,m,n, size=8):
 
 # Eval single 
 
-x_s_intel, y_s_intel = zip(*ed.multiple_serial_100)
-x_p_gtx, y_p_gtx = zip(*ed.multiple_gtx_100)
+x_s_intel, y_s_intel = zip(*ed.multiple_serial_1000)
+x_p_gtx, y_p_gtx = zip(*ed.multiple_gtx_1000)
 
 fig = plt.figure()
 ax1 = fig.add_subplot(111)
@@ -16,8 +16,6 @@ ax1.set_xlim(min(x_s_intel), max(x_s_intel))
 ax1.set_xlabel("m=n=s")
 ax1.set_ylabel("execution time / ms")
 ax1.grid(True)
-
-x_s_intel, y_s_intel = zip(*ed.single_serial)
 
 # TODO ADD TESLA
 ax1.plot(x_s_intel, y_s_intel, label="numpy : i5-2500K CPU @ 3.30GHz")
@@ -33,7 +31,7 @@ ax2.set_xbound(ax1.get_xbound())
 ax2.set_xticklabels(x_gb)
 ax1.legend()
 
-fig.suptitle("ABS-NF Evaluation - 100 Repetitions", y=1.0, fontsize=12)
+fig.suptitle("ABS-NF Evaluation - 1000 Repetitions", y=1.0, fontsize=12)
 fig.tight_layout()
 fig.savefig("eval_mult_repetition.png")
 plt.show()
