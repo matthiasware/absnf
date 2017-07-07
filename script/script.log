@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.5.28)  7 JUL 2017 12:53
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015/Debian) (preloaded format=pdflatex 2017.5.28)  7 JUL 2017 13:32
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1359,13 +1359,20 @@ Package atveryend Info: Executing hook `AfterLastShipout' on input line 165.
 (./script.aux (./gliederung.aux) (./evaluation.aux) (./operations.aux))
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 165.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 165.
-Package rerunfilecheck Info: File `script.out' has not changed.
-(rerunfilecheck)             Checksum: 9A3688EAF27435FB3485BCA4235062B8;831.
+
+
+Package rerunfilecheck Warning: File `script.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `script.out':
+(rerunfilecheck)             Before: 9A3688EAF27435FB3485BCA4235062B8;831
+(rerunfilecheck)             After:  96B987F652FB11F4C7B63D5FC9CD71C0;986.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 165.
  ) 
 Here is how much of TeX's memory you used:
- 27481 strings out of 494901
- 513919 string characters out of 6178617
+ 27483 strings out of 494901
+ 513957 string characters out of 6178617
  589396 words of memory out of 5000000
  30326 multiletter control sequences out of 15000+600000
  7523 words of font info for 29 fonts, out of 8000000 for 9000
@@ -1380,10 +1387,10 @@ t/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts
 /type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/p
 ublic/amsfonts/cm/cmsl10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
 amsfonts/cm/cmsy10.pfb>
-Output written on script.pdf (5 pages, 108835 bytes).
+Output written on script.pdf (5 pages, 111130 bytes).
 PDF statistics:
- 144 PDF objects out of 1000 (max. 8388607)
- 126 compressed objects within 2 object streams
- 23 named destinations out of 1000 (max. 500000)
+ 147 PDF objects out of 1000 (max. 8388607)
+ 129 compressed objects within 2 object streams
+ 25 named destinations out of 1000 (max. 500000)
  133 words of extra memory for PDF output out of 10000 (max. 10000000)
 
