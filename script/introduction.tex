@@ -1,0 +1,127 @@
+\section{Introcution}
+\subsection{ABSNF}
+The abs-normal form is a representation of piecewise linear (PL) functions. Any PL function can be transformed to obtain  this form. The process is described in []. The advantage and applications of the abs normal is not subject of this document but can be found in [] and [].
+
+\begin{mydef*}
+	ABS-Normal-Form \\
+	For a PL function $f:\mathbb{R}^n \rightarrow \mathbb{R}^m$ the abs-normal representation takes the following form:
+	\begin{flalign} \label{absnf}
+	\begin{pmatrix}
+	\Delta z \\
+	\Delta y
+	\end{pmatrix}
+	= 
+	\begin{pmatrix}
+	a \\
+	b
+	\end{pmatrix}
+	+
+	\begin{pmatrix}
+	Z & L \\
+	J & Y 
+	\end{pmatrix}
+	\times
+	\begin{pmatrix}
+	\Delta x \\
+	|\Delta z |
+	\end{pmatrix}
+	\end{flalign}
+	where:
+	\begin{flalign*}
+		n,m,s \in \mathbb{R}, \Delta x \in \mathbb{R}^n, \Delta z \in \mathbb{R}^s, \Delta y \in \mathbb{R}^m, a \in \mathbb{R}^s, b \in \mathbb{R}^{m}, Z \in \mathbb{R}^{s\times n}, L \in \mathbb{R}^{s \times s}, Y \in \mathbb{R}^{m \times s}, J \in \mathbb{R}^{m \times n}
+	\end{flalign*}
+	and 
+	\begin{flalign*}
+		|\Delta z|
+	\end{flalign*}
+	is the element-wise absolute vector of $\Delta z$. $L$ is a lower triangular matrix.
+\end{mydef*}
+Note that this representation is almost a linear system of equations. The non-linear parts of the function are all captured in $|\Delta z|$.
+
+\subsection{Problems}
+Given a PL function in abs-normal-form. The following tasks were given:
+\begin{enumerate}
+	\item Evaluate the function in abs-normal form
+	\begin{itemize}
+		\item Geg: $a,b,Z,L,J,Y,\Delta x$
+		\item Ges: $\Delta z, \Delta y$
+	\end{itemize}
+	\item Calculate the gradient of a function in abs-normal form
+	\begin{itemize}
+		\item Geg: $a,b,Z,L,J,Y, \Delta z$
+		\item Ges: Gradient $\gamma, \Gamma$
+	\end{itemize}
+	\item Solve the system of equations
+	\begin{itemize}
+		\item Geg: $a,b,Z,L,J,Y,\Delta y$
+		\item Ges: $\Delta x, \Delta Z$
+	\end{itemize}
+\end{enumerate}
+Task was to solve each problem by using parallel computing with CUDA C++ to boost performance.
+The specific questions were
+\begin{enumerate}
+	\item How can the problems be implemented with CUDA C++?
+	\item Is there a benifit of using parallel computing?
+	\item How does the implementation compare to a serial implementation?
+	\item Performance?
+\end{enumerate}
+Each problem is content of one of the following sections, where we show the implementation and answer the given questions. [chapet 2] [chapter 3] [chapter 4]. \\
+
+Additionally chapter [...] we describe our approach of choosing the right parameters for CUDA as well as show our kernnels.
+
+Last but not least we discuss our solution and give some final thoughts and possible improvements and further questions.
+
+\subsection{Additional Information}
+\subsubsection{Used Software Libraries}
+All the plots, prototypes and a serial implementation was done in Python 3.6, where numerics were done using numpy library. For the CUDA C++ implementation, we used the following libraries:
+\begin{itemize}
+	\item cuBLAS (cuda Basic Linear Algebra Subprograms)
+	\begin{itemize}
+		\item Matrix Vector operations
+		\item Matrix Matrix operations
+	\end{itemize}
+	\item cuSOLVER
+	\begin{itemize}
+		\item Matrix factorization
+		\item Triangular solve
+	\end{itemize}
+	\item C++ STL
+\end{itemize}
+\subsubsection{Devices}
+We tested our code on the following devices, which were also used for benchmarking. The results can be found in chapter ...
+\begin{itemize}
+	\item NVIDIA Tesla P100
+	\begin{itemize}
+		\item Global Memory
+		\item MPU
+		\item Warps / MPU
+		\item Threads / WARP
+		\item MaxThreads / Block
+		\item DOUBLE PRECISSION
+		\item SINGLE PRECISSION
+	\end{itemize}
+	\item NVIDIA Geforce GTX 780
+		\begin{itemize}
+			\item Global Memory
+			\item MPU
+			\item Warps / MPU
+			\item Threads / WARP
+			\item MaxThreads / Block
+			\item MaxFlops DOUBLE PRECISSION
+			\item SINGLE PRECISSION
+		\end{itemize}
+	\item Intel Core i5-2500 CPU, 16GB RAM
+\end{itemize}
+\begin{center}
+	TABLE
+\end{center}
+\subsubsection{Notation and Symbols}
+In the rest of the document we use the following symbols and notation:
+\begin{itemize}
+	\item $m,n,s$ denote the dimensions of the datastructures of the abs-normal form (\label{absnf})
+	\item $\Delta x, \Delta z, \Delta y, a,b ,Z ,L,J,Y$ denote the datastructures with given dimensions in ( \label{absnf}).
+	\item $|\circ|$ is the absolute value of $\circ$ if $\circ$ is a scalar and the elementwise absolute vector if $\circ$ is a vector.
+\end{itemize}
+\subsubsection{Project structure}
+The code of the implementation as well as its corresponding unit-tests can be found ...
+Plots, Serial implementation, Performance tests, raw data of performance ....
