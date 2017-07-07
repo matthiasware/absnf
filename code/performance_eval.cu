@@ -278,13 +278,18 @@ void multiple_executions_series(int times)
 		}
 	}
 }
-int main()
+void measure_performance()
 {
 	std::cout << "------------------------------------------------" << std::endl;
 	std::cout << "Type: " << typeid(t_def).name() <<  std::endl;
 	std::cout << "------------------------------------------------" << std::endl;
 	single_execution_series();
-	multiple_executions_series(100);
+	multiple_executions_series(100);	
+}
+int main()
+{
+	measure_performance();
+	// multiple_executions(6000,100);
 
 	return 0;
 }
