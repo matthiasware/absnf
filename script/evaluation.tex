@@ -1,17 +1,4 @@
 \section{Evaluation of the ABSNF}
-\begin{itemize}
-	\item Problem
-	\item what is parallelizable?
-	\item Implementations
-	\item Performance
-	\begin{itemize}
-		\item Single Core Float and Double
-		\item GTX Float and Double
-		\item Tesla Float and Double
-	\end{itemize}
-	\item Review and Notes
-\end{itemize}
-
 \subsection{Problem Specification}
 
 ABS-Normal Form:
@@ -76,22 +63,24 @@ For measuring performance and the subsequent analysis, we simplified the process
 \end{flalign*}
 
 \subsubsection{Single Execution}
-
+code
 \subsubsection{Multiple Executions}
-
+code
 \begin{itemize}
 	\item one iteration with memory
 	\item multiple executions
 \end{itemize}
 
 \subsubsection{Analysis}
-We are interested in performance 
-For simplicity reasons we assume $n=m=s$ and obtain the following results:
+
 \begin{itemize}
 	\item Memory Complexity $O(s^2)$
 	\item Complexity $O(s^2)$
+	\item mempry is bottle neck
+	\item no performance gain expected
 \end{itemize}
 
+\subsubsection{Notes}
 \begin{itemize}
 	\item Double Precision on GTX is nuts
 \end{itemize}
