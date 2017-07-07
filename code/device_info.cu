@@ -4,6 +4,7 @@ int main()
 	cudaDeviceProp prop;
 	int devcount;
 	cudaGetDeviceCount(&devcount);
+	std::cout << "Devices found: " << devcount << std::endl;
 	for(int i=0; i<devcount; i++)
 	{
 		cudaGetDeviceProperties(&prop, i);

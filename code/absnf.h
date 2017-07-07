@@ -46,7 +46,7 @@ namespace absnf
 	void gradient(T *h_a, T *h_b, T *h_Z, T *h_L, T *h_J, T *h_Y, T* h_dz,
 			  	  int m, int n, int s, T *h_gamma, T *h_Gamma);
 
-	template <typename T>
+	template <typename T>   
 	void gradient_core(cublasHandle_t &handle, T *d_a, T *d_b, T *d_Z, T *d_L,
 					   T *d_J, T *d_Y, T *d_dz, T *d_Tss, T *d_I, T *d_K,
 					   int m, int n, int s, int gridsize, int blocksize,

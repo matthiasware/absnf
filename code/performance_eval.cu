@@ -5,6 +5,7 @@
 #include "absnf.h"
 #include "utils.hpp"
 #include <chrono>
+#include <typeinfo>
 #define t_def double
 
 typedef std::chrono::high_resolution_clock::time_point TimeVar;
@@ -78,7 +79,7 @@ void single_execution(int s)
 	std::cout <<"upload:  " << int_upload << std::endl;
 	std::cout <<"exec:  " << int_exec << std::endl;
 	std::cout <<"download:  " << int_download << std::endl;
-	std::cout <<"total:  " << int_download << std::endl;
+	std::cout <<"total:  " << int_total << std::endl;
 	free(h_a);
 	free(h_b);
 	free(h_Z);
@@ -192,11 +193,98 @@ void multiple_executions(int s, int executions)
 
 	cublasDestroy(cublas_handle);	
 }
+void devInfo()
+{
+	cudaDeviceProp prop;
+	int devcount;
+	cudaGetDeviceCount(&devcount);
+	std::cout << "Devices found: " << devcount << std::endl;
+	for(int i=0; i<devcount; i++)
+	{
+		cudaGetDeviceProperties(&prop, i);
+		std::cout << "------------------" << std::endl;
+		std::cout << "Device: " << i << std::endl;
+		std::cout << "------------------" << std::endl;
+		std::cout << "Name:\t\t\t" << prop.name << std::endl;
+		std::cout << "GlobalMemory:\t\t" << prop.totalGlobalMem << std::endl;
+		std::cout << "WarpSize:\t\t" << prop.warpSize << std::endl;
+		std::cout << "MaxThreadsPerBlock:\t" << prop.maxThreadsPerBlock << std::endl;
+		std::cout << "MaxThreadsDim:\t\t" << prop.maxThreadsDim[0] << " : " << prop.maxThreadsDim[1] << " : " << prop.maxThreadsDim[2] << std::endl;
+		std::cout << "MaxGridSize:\t\t" << prop.maxGridSize[0] << " : " << prop.maxGridSize[1] << " : " << prop.maxGridSize[2] << std::endl;
+		std::cout << "MultiProcessorCount:\t" << prop.multiProcessorCount << std::endl;
+	}	
+}
+long int getGlobalMemory()
+{
+	long int globalMemory = 0;
+	cudaDeviceProp prop;
+	int devcount;
+	cudaGetDeviceCount(&devcount);
+	if (devcount > 0)
+	{
+		cudaGetDeviceProperties(&prop, 0);
+		globalMemory = prop.totalGlobalMem;
 
+	}
+	return globalMemory;
+}
+long int calcRequiredMemory(int s)
+{
+	return (4*s*s + 6*s) * sizeof(t_def);
+}
+
+void single_execution_series()
+{
+	devInfo();
+	long int globalMemory = getGlobalMemory();
+	std::cout << globalMemory << std::endl;
+	// SINGLE EXECUTIONS
+	int size = 1000;
+	int maxsize = 20000;
+	while(true)
+	{
+		long int requiredMemory = calcRequiredMemory(size);
+		if(requiredMemory > (long int) (globalMemory * 0.9) && size < maxsize)
+		{
+			break;
+		}
+		else
+		{
+			single_execution(size);
+			std::cout << "Required Memory: " << requiredMemory * 1e-9 << std::endl;
+			size+=1000;	
+		}
+	}
+}
+void multiple_executions_series(int times)
+{
+	devInfo();
+	long int globalMemory = getGlobalMemory();
+	std::cout << globalMemory << std::endl;
+	int size = 1000;
+	int maxsize = 20000;
+	while(true)
+	{
+		long int requiredMemory = calcRequiredMemory(size);
+		if(requiredMemory > (long int) (globalMemory * 0.9) && size < maxsize)
+		{
+			break;
+		}
+		else
+		{
+			multiple_executions(size, times);
+			std::cout << "Required Memory: " << requiredMemory * 1e-9 << std::endl;
+			size+=1000;	
+		}
+	}
+}
 int main()
 {
-
-	multiple_executions(1000,100);
+	std::cout << "------------------------------------------------" << std::endl;
+	std::cout << "Type: " << typeid(t_def).name() <<  std::endl;
+	std::cout << "------------------------------------------------" << std::endl;
+	single_execution_series();
+	multiple_executions_series(100);
 
 	return 0;
 }
