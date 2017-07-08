@@ -220,25 +220,31 @@ void single_execution_series()
 	devInfo();
 	std::cout << "------------SINGLE EXECUTION -------------" << std::endl;
 	std::cout << "s, time_copy, time_exec" << std::endl;
-	for(int s=1000; s <= 5000; s+=1000)
+	for(int s=1000; s <= 7000; s+=1000)
 	{
 		single_execution(s);
 	}
 }
 void multiple_execution_series()
 {
-	int executions = 1000;
+	int executions = 100;
 	devInfo();
 	std::cout << "------------MULTIPLE EXECUTIONS -------------" << std::endl;
 	std::cout << "s, time_exec" << std::endl;
-	for(int s=1000; s <= 5000; s+=1000)
+	for(int s=1000; s <= 7000; s+=1000)
 	{
 		multiple_execution(s, executions);
 	}
 }
 int main()
-{
-	single_execution_series();
-	multiple_execution_series();
+{	try
+	{
+		// single_execution_series();
+		multiple_execution_series();
+	}
+	catch (const std::runtime_error& error)
+	{
+		std::cout << error.what() << "\n";
+	}
 	return 0;
 }
