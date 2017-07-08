@@ -1,5 +1,5 @@
 # all : utils.o cuutils.o absnf.o test_cuutils eval devinfo gradient
-all : test_absnf devinfo test_utils solve test performance_eval num_grad num_blocksize
+all : test_absnf devinfo test_utils solve test performance_eval performance_gradient num_blocksize
 
 # test_cuutils: test_cuutils.cu utils.h
 # 	nvcc -std=c++11 test_cuutils.cu -o tests/test_cuutils
@@ -22,8 +22,8 @@ test: test.cu absnf.h utils.hpp cuutils.h
 performance_eval: performance_eval.cu absnf.h utils.hpp cuutils.h
 	nvcc -std=c++11 performance_eval.cu -lcublas -lcusolver -o performance_eval
 
-num_grad: num_grad.cu absnf.h utils.hpp cuutils.h
-	nvcc -std=c++11 num_grad.cu -lcublas -lcusolver -o num_grad	
+performance_gradient: performance_gradient.cu absnf.h utils.hpp cuutils.h
+	nvcc -std=c++11 performance_gradient.cu -lcublas -lcusolver -o performance_gradient	
 
 num_blocksize: num_blocksize.cu absnf.h utils.hpp cuutils.h
 	nvcc -std=c++11 num_blocksize.cu -lcublas -lcusolver -o num_blocksize	
