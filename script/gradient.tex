@@ -17,14 +17,72 @@ b
 Z & L \\
 J & Y 
 \end{pmatrix}
-\times
+\circ
 \begin{pmatrix}
 \Delta x \\
 |\Delta z |
 \end{pmatrix}
 \end{flalign*}
 
+The problem here is to calculate the gradient of a PL function in abs-normal form. Given the following structures:
+\begin{flalign*}
+	a,b,Z,L,J,Y,m,n,s,\Delta z
+\end{flalign*}
+the gradient can be obtained in the following way:
+\begin{flalign*}
+	\Sigma = diag(sign(\Delta z))
+\end{flalign*}
+\begin{flalign*}
+	\Delta z &= a + Z \Delta x + L \Sigma \Delta z \\
+		     &= (I-L\Sigma)^{-1} (a+Z \Delta x) \\
+	\Delta y &= b + J \Delta x + Y |\Delta z| \\
+		     &= b + J \Delta x + Y \Sigma \big( (I-L\Sigma)^{-1} (a+Z \Delta x) \big) \\
+		     &= b + Y \Sigma(I-L \Sigma)^{-1} a + \big( J + Y\Sigma(I-L\Sigma)^{-1}Z  \Big) \Delta x
+\end{flalign*}
+\begin{flalign}
+	\gamma &= b + Y \Sigma(I-L \Sigma)^{-1} a \label{eq_gamma} \\
+	\Gamma &= J + Y\Sigma(I-L\Sigma)^{-1}Z \label{eq_Gamma}
+\end{flalign}
+The gradient can now e calculated as:
+\begin{flalign*}
+	\Delta f(\Delta x) = \gamma + \Gamma \Delta x
+\end{flalign*}
+
+The problem task is to implement a function that calculates $\gamma$ as well as $\Gamma$.
+
 \subsection{Implementation}
+
+\begin{lstlisting}[language=cpp]
+template <typename T>
+void gradient(T *a, T *b, 
+T *Z, T *L, 
+T *J, T *Y,
+T *dz,
+T *Tss, T *I, T *K,
+int m, int n, int s,
+int gridsize, int blocksize,
+T *gamma, T *Gamma)
+//  d_Tss = diag(1) - L * diag(sign(dz))
+initTss <<<gridsize, blocksize >>>(d_Tss,d_L, d_dz, s, s*s);
+//  d_I = diag(1)
+initIdentity <<<gridsize, blocksize >>> (d_I, s);
+//  d_I = d_Tss * X	
+getTriangularInverse(handle, d_Tss, d_I, s);
+//	d_I = d_I * diag(sign(dz))
+multWithDz <<<gridsize, blocksize >>>(d_I, d_dz, s);
+//	d_K = d_Y * d_I
+cublasDgemm(.,d_Y,.,d_I,d_K,));
+//	d_gamma = d_b
+//  d_Gamma = J
+cudaMemcpy(d_gamma, d_b,.);
+cudaMemcpy(d_Gamma, d_J,.);
+//	d_gamma = d_gamma + K*a
+cublasDgemv(.,d_K,., d_a,., d_gamma,.);
+//  d_Gamma = d_Gamma + K*Z
+cublasDgemm(.,d_K,d_Z,d_Gamma,m));
+}
+\end{lstlisting}
+
 \subsection{Performance}
 \subsection{Analysis}
 \subsection{Notes}

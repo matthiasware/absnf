@@ -9,6 +9,7 @@ def mem_eval(s,m,n, size=8):
 
 x_s_intel, y_s_intel = zip(*ed.multiple_serial_1000)
 x_p_gtx, y_p_gtx = zip(*ed.multiple_gtx_1000)
+x_p_tesla, y_p_tesla = zip(*ed.multiple_tesla_1000)
 
 fig = plt.figure()
 ax1 = fig.add_subplot(111)
@@ -19,7 +20,8 @@ ax1.grid(True)
 
 # TODO ADD TESLA
 ax1.plot(x_s_intel, y_s_intel, label="numpy : i5-2500K CPU @ 3.30GHz")
-ax1.plot(x_p_gtx, y_p_gtx, label="parallel: GeForce GTX 780")
+ax1.plot(x_p_gtx, y_p_gtx, label="parallel: GeForce GTX 780 3GB")
+ax1.plot(x_p_tesla, y_p_tesla, label="parallel: Tesla P100-PCIE-16GB")
 
 ax2 = ax1.twiny()
 ax1Xs = ax1.get_xticks()
