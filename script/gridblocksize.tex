@@ -1,0 +1,83 @@
+\section{Gridsize and Blocksize}
+All of our self written kernels have to operate on matrices and vectors. Usually the single entries of the structures do not depend on the others and can be independently and therefore in parallel calculated.
+\begin{center}
+	EXAMPLE + MORE EXAMPLE LISTS
+\end{center}
+The questions while implementing this operation were:
+\begin{enumerate}
+	\item How to step through the data-structures in order to minimize cache-misses?
+	\item How to choose the grid-size?
+	\item How to choose the block-size?
+\end{enumerate}
+
+Obviously the most efficient and preferment answer to this question is to decide problem specific. Unfortunately this is also the most time consuming approach.\\
+In our case we tried to find a generic solution, that performs well enough to not deteriorate the overall performance. \\
+
+The basic idea is:
+\begin{itemize}
+	\item Chose and fix blocksize and gridsize depending on the device properties
+	\item Start kernel with given blocksize and gridsize
+	\item Each thread can be responsible for multiple tasks and chooses its next task after the current one is done or terminates
+\end{itemize}
+
+In the following subsections we answer all of the given questions by example.
+Task is to perform operations on a matrix like we did in kernel xy.
+
+\subsection{Implementation}
+
+We can step through the matrix row-wise or column-wise. While both approaches work, the row-wise traversal was way faster. This can be explained with the reduced number of cache misses in the row-wise implementation.
+
+\noindent\begin{minipage}{.45\textwidth}
+\begin{lstlisting}[caption=code 1,frame=tlrb]{Name}
+template <typename T>
+void _global_ rowwise(T *matrix, int s)
+{
+int i = blockIdx.x;
+int j = threadIdx.x;
+int global_id = blockIdx.x * blockDim.x + threadIdx.x;
+int id = i*s + j;
+int size = s*s;
+while(id < size && i < s)
+{
+	matrix[id] = doSomething();
+	j += blockDim.x;
+	if (j>=s)
+	{
+		j = j % s;
+		i = i + gridDim.x;
+	}
+	id = i*s+j;
+	}
+}
+\end{lstlisting}
+\end{minipage}\hfill
+\begin{minipage}{.45\textwidth}
+\begin{lstlisting}[caption=code 2,frame=tlrb]{Name}
+template <typename T>
+void _global_ colwise(T *matrix, int s)
+{
+int i = threadIdx.x;
+int j = blockIdx.x;
+int id = i*s + j;
+int size = s*s;
+int global_id = threadIdx.x + blockIdx.x * blockDim.x;
+while(id < size && j < s)
+{
+	matrix[id] = doSomething();
+	i +=  blockDim.x;
+	if(i >= s)
+	{
+		i = i % s;
+		j = j + gridDim.x;
+	}
+		id = i*s + j;
+	}
+}
+\end{lstlisting}
+\end{minipage}
+
+\begin{itemize}
+	\item algorithmus vorstellen
+	\item erzählen warum rowwise
+	\item blocksize and gridsize
+\end{itemize}

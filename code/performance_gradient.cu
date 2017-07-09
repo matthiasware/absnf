@@ -240,7 +240,8 @@ int main()
 {	try
 	{
 		// single_execution_series();
-		multiple_execution_series();
+		// multiple_execution_series();
+		multiple_execution(2000, 100);
 	}
 	catch (const std::runtime_error& error)
 	{

@@ -36,9 +36,40 @@ class CudaThread():
         else:
             self.done = True
 
+class CudaThread2():
+    def __init__(self, thread_id, block_id, matrix,
+                 s, block_dim, grid_dim, verbose=False):
+        self.thread_id = thread_id
+        self.verbose = verbose
+        self.block_id = block_id
+        self.matrix = matrix
+        self.s = s
+        self.i = block_id
+        self.j = thread_id
+        self.block_dim = block_dim
+        self.grid_dim = grid_dim
+        # self.id = self.i * self.s + self.j
+        self.done = False
+        self.started = False
+        self.global_id = thread_id + block_id * block_dim
+        self.id = self.i * self.s + self.j
+
+    def execute(self):
+        if self.verbose:
+            print("Execute Thread ", self.global_id, " Block: ", self.block_id)
+        if self.id < (self.s * self.s) and self.i < self.s:
+            self.matrix[self.id] = self.global_id
+            self.j += self.block_dim
+            if self.j >= self.s:
+                self.j = self.j % self.s
+                self.i = self.i + self.grid_dim
+            self.id = self.i * self.s + self.j
+        else:
+            self.done = True
+
 
 class Warp():
-    def __init__(self, warp_id, num_threads_per_warp, verbose=False):
+    def __init__(self, warp_id, num_threads_per_warp, verbose=True):
         if verbose:
             print("Created Warp Unit: ", warp_id)
         self.id = warp_id
@@ -196,9 +227,9 @@ def animate(update_creator, frames, data):
 
 
 # DEVICE
-NUM_MPU = 4
-NUM_WARP_PER_MPU = 16
-NUM_THREADS_PER_WARP = 8
+NUM_MPU = 2
+NUM_WARP_PER_MPU = 4
+NUM_THREADS_PER_WARP = 2
 NUM_CONCURRENT_THREADS = NUM_MPU * NUM_WARP_PER_MPU * NUM_THREADS_PER_WARP
 
 gpu = GPUDevice(NUM_MPU, NUM_WARP_PER_MPU, NUM_THREADS_PER_WARP, "GTX", True)
@@ -207,16 +238,18 @@ gpu = GPUDevice(NUM_MPU, NUM_WARP_PER_MPU, NUM_THREADS_PER_WARP, "GTX", True)
 # BLOCK_DIM = NUM_WARP_PER_MPU * NUM_THREADS_PER_WARP
 # IF BLOCKDIM IS NOT EQUALS TO WARPS * THEADS -> INFINATELY MANY CACHE
 # MISSES!!!
-# BLOCK_DIM = NUM_WARP_PER_MPU * NUM_THREADS_PER_WARP # CAN BE > MAX_THREADS
-BLOCK_DIM = 64
+BLOCK_DIM = NUM_WARP_PER_MPU * NUM_THREADS_PER_WARP # CAN BE > MAX_THREADS
+# BLOCK_DIM = NUM_MPU
 GRID_DIM = NUM_MPU
 
 # Prepare Data
-s = 100
-matrix = np.zeros(s * s) * 100
+s = 6
+matrix = np.zeros(s * s) +1000
+print(matrix)
 
-gpu.setTask(CudaThread, GRID_DIM, BLOCK_DIM, matrix, s)
+gpu.setTask(CudaThread2, GRID_DIM, BLOCK_DIM, matrix, s)
 gpu.execute()
+
 
 # while not gpu.done:
 #     print(matrix.reshape((s,s)))

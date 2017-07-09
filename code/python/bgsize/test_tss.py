@@ -35,28 +35,31 @@ def initTss_flat(blockId, threadId, blockDim, gridDim, L, Tss, dz, s, size):
 				
 	print("abort with id: ", id, "i ",i, "j ", j)
 
+
+def test_Tss(blockId, threadId, blockDim, gridDim, data, s):
+	i = blockId
+	j = threadId
+	global_id = blockId * blockDim + threadId
+	id = i*s + j
+	while id < s*s and i < s:
+		print(id)
+		data[id] = global_id
+		j += blockDim
+		if j >= s:
+			j = j % s
+			i = i + gridDim
+		id = i*s + j
+
 s = 4
-# BLOCK
-blockDim = 3
-gridDim = 6
-L = np.array([[0, 0, 0, 0],
-			  [0, 0, 0, 0],
-			  [0, 0, 0, 0],
-			  [0, 0, 0, 0]])
-dz = np.array([-1, 0, 1, -1])
-eTss = np.diag(np.ones(s)) - L.dot(np.diag(np.sign(dz)))
-Tss = np.zeros(s*s).reshape((s,s))
+matrix = np.zeros((s,s)).flatten()
+print(matrix)
+BLOCK_DIM = 3
+GRID_DIM = 2
+for block_id in range(GRID_DIM):
+	for thread_id in range(BLOCK_DIM):
+		test_Tss(block_id, thread_id, BLOCK_DIM, GRID_DIM, matrix, s)
+		# print(matrix.reshape((s,s)))
+		pass
 
-# for blockId in range(gridDim):
-# 	for threadId in range(blockDim):
-# 		initTss(blockId,threadId, blockDim, gridDim, L, Tss, dz, s, s*s)
-# Tss2 = Tss.reshape((s,s))
-
-# FLAT
-L = L.flatten()
-Tss = np.zeros(s*s)
-eTss = eTss.flatten()
-
-for blockId in range(gridDim):
-	for threadId in range(blockDim):
-		initTss_flat(blockId, threadId, blockDim, gridDim, L, Tss, dz, s, s*s)
+# test_Tss(1,1, BLOCK_DIM, GRID_DIM, matrix, s)
+# print(matrix.reshape((s,s)))

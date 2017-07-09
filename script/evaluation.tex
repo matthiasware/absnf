@@ -34,9 +34,12 @@ a,b,Z,L,J,Y,m,n,s, \Delta x
 \end{flalign*}
 In (\ref{eval_2}) $\Delta z$ depends on the element-wise absolute function of its own and therefore it cannot be calculated with a simple matrix vector dot product. Since the matrix $L$ is lower triangular, the vector $\Delta z$ can be iteratively calculated, by taking the row-wise dot product of $L$ and $|\Delta z|$. \\
 
+To illustrate the process, consider:
 \begin{flalign*}
 k = a + Z \times \Delta x
 \end{flalign*}
+
+Now we calculate $\Delta z$ element wise:
 
 \begin{flalign*}
 \highlightblue{\Delta  z_1}  &= \underbrace{L_1 \times |\Delta z|}_{=0} + k_1 = k_1 \\
@@ -53,9 +56,10 @@ k = a + Z \times \Delta x
 
 \subsection{Implementation}
 Our implementation is highly focused on speed and  demands the device to hold all the required data structures in global memory simultaneously. \\
+Given this premise, the calculation of (\ref{eval_1}) and (\ref{eval_2}) is a series of dot products and therefore is highly parallelize-able. For this we relied mainly on CUBLAS routines. 
+A simplified version of our implementation can be found in fig. (\ref{fig_lst_eval}).
 
-Given this premise, the calculation of (\ref{eval_1}) and (\ref{eval_2}) is a series of dot products and therefore is highly parallelize-able. For this we relied mainly on CUBLAS routines. The implementation is available on [...] with several interfaces in [...]..
-
+\begin{figure}
 \begin{lstlisting}[language=cpp]
 template <typename T>
 void eval(T *a, T *b, 
@@ -84,6 +88,9 @@ cublasDgemv(.,J, ., dx, ., dy, .));
 cublasDgemv(., Y, ., abs_dz, ., dy, .));
 }
 \end{lstlisting}
+\label{fig_lst_eval}
+\caption{Simplified Implementation of the evaluation function}
+\end{figure}
 
 \subsubsection{Performance Experiments}
 For measuring performance and the subsequent analysis, we simplified the process by equalizing the dimensions of the data-structures:
@@ -93,7 +100,7 @@ For measuring performance and the subsequent analysis, we simplified the process
 
 \subsubsection{Single Execution}
 
-In this experiment, we executed the serial python implementation as well as the parallel cuda implementation for different dimensions of $s$ and measured the total runtime of the program. The results can be seen in figure \ref{eval_single_repetition}. Since the results were not as expected in favor of the CUDA implementation, we also dismantled the runtime on the parallel devices and measured the "data-upload-time" and the "execution-time" separately. Those results can be found in figure \ref{eval_memory}. Here we can clearly see, that the transfer time, which is the time that it takes to upload the required datastaructures onto the device is extremely significant and takes a disproportional high share of the total time.
+In this experiment, we executed the serial python- as well as the parallel CUDA implementations for different dimensions of $s$ and measured the runtime (fig. \ref{eval_single_repetition}). Since the results were not as expected in favor of the CUDA implementation, we also dismantled the runtime on the parallel devices and measured the "data-upload-time" and the "execution-only-time" separately (fig. \ref{eval_memory}).
 
 \begin{figure}[ht]
 	\centering
@@ -105,13 +112,13 @@ In this experiment, we executed the serial python implementation as well as the 
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.6\textwidth]{img/eval_memory.png}
-	\caption{Datatransfer and execution time of the parallel implementation}
+	\caption{Data-transfer and execution time of the parallel implementation}
 	\label{eval_memory}
 \end{figure}
 
 \subsubsection{Multiple Executions}
 
-Since the scenario of a single execution of the evaluate function is not quite realistic, we crafted a second experiment, where we uploaded the data to the devices and executed the code 1000 times. Here we only measured the pure execution time without dataupload, which should be marginal with a high enough number of executions. The results can be found in figure \ref{eval_1000}.
+Since the scenario of evaluating the function just once is not quite realistic, we did a second experiment, where we uploaded data to the devices and executed the evaluation routine a 1000 times. Here we only measured the pure execution time without the data-transfer, since the upload time should be marginal with a high enough number of executions. The results can be found in fig. \ref{eval_1000}.
 
 \begin{figure}[ht]
 	\centering
@@ -121,11 +128,15 @@ Since the scenario of a single execution of the evaluate function is not quite r
 \end{figure}
 
 \subsubsection{Analysis}
-The results of the experiment are heavy in favor of the serial implementation.
-For small data structures, that completely fit into the global memory of the device, we couldn't get any performance gains through the cuda implementation on given devices. fig \ref{eval_single_repetition} and  fig. \ref{eval_1000}. 
-If the data structures get big enoguh such that they don't fit into the global memory of the device, we can expect the performance to be even worse, since the data-transfer time, takes a huge part of the overall runtime. figure \ref{eval_memory}.
 
-We therefore came to the conclusion, that the considerable effort of implementing a parallel version of the eval function is not worth the effort.
+ Here we can clearly see, that the transfer time, which is the time that it takes to upload the required data structures onto the device is extremely significant and takes a disproportional high share of the total time.
+
+The results of the experiment are heavy in favor of the serial implementation.\\
+For data, that completely fit into the global memory of the device, we couldn't get any performance gains through the cuda implementation on given devices. (fig \ref{eval_single_repetition} and  fig. \ref{eval_1000}). The simple numpy version even outperforms the cuda version on the tesla P100.
+
+If the data structures get that big such that they don't fit into the global memory of the device, we can expect the performance to be even worse, since the data-transfer time, takes a huge part of the overall runtime. figure \ref{eval_memory}.
+
+We therefore come to the conclusion, that the considerable effort of implementing a parallel version of the eval function is not worth the effort.
 \begin{itemize}
 	\item Memory Complexity $O(s^2)$
 	\item Complexity $O(s^2)$
