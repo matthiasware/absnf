@@ -10,7 +10,7 @@ The questions while implementing this operation were:
 	\item How to choose the block-size?
 \end{enumerate}
 
-Obviously the most efficient and preferment answer to this question is to decide problem specific. Unfortunately this is also the most time consuming approach.\\
+Obviously the most efficient and preferment answer to this question is to decide problem specific and device specific. Unfortunately this is also the most time consuming approach.\\
 In our case we tried to find a generic solution, that performs well enough to not deteriorate the overall performance. \\
 
 The basic idea is:
@@ -20,64 +20,56 @@ The basic idea is:
 	\item Each thread can be responsible for multiple tasks and chooses its next task after the current one is done or terminates
 \end{itemize}
 
-In the following subsections we answer all of the given questions by example.
-Task is to perform operations on a matrix like we did in kernel xy.
+The basic algorithm  for kernels of this type is listed in \ref{lst_bg_size}
 
-\subsection{Implementation}
-
-We can step through the matrix row-wise or column-wise. While both approaches work, the row-wise traversal was way faster. This can be explained with the reduced number of cache misses in the row-wise implementation.
-
-\noindent\begin{minipage}{.45\textwidth}
-\begin{lstlisting}[caption=code 1,frame=tlrb]{Name}
+\begin{lstlisting}[caption={\label{lst_bg_size}}, language=cpp]
 template <typename T>
-void _global_ rowwise(T *matrix, int s)
+void _global_ row_wise_traversal(T *matrix, int s)
 {
-int i = blockIdx.x;
-int j = threadIdx.x;
-int global_id = blockIdx.x * blockDim.x + threadIdx.x;
-int id = i*s + j;
-int size = s*s;
-while(id < size && i < s)
-{
-	matrix[id] = doSomething();
-	j += blockDim.x;
-	if (j>=s)
+	int i = blockIdx.x;
+	int j = threadIdx.x;
+	int global_id = blockIdx.x * blockDim.x + threadIdx.x;
+	int id = i*s + j;
+	int size = s*s;
+	while(id < size && i < s)
 	{
-		j = j % s;
-		i = i + gridDim.x;
-	}
-	id = i*s+j;
+		matrix[id] = doSomething();
+		j += blockDim.x;
+		if (j>=s)
+		{
+			j = j % s;
+			i = i + gridDim.x;
+		}
+		id = i*s+j;
 	}
 }
 \end{lstlisting}
-\end{minipage}\hfill
-\begin{minipage}{.45\textwidth}
-\begin{lstlisting}[caption=code 2,frame=tlrb]{Name}
-template <typename T>
-void _global_ colwise(T *matrix, int s)
-{
-int i = threadIdx.x;
-int j = blockIdx.x;
-int id = i*s + j;
-int size = s*s;
-int global_id = threadIdx.x + blockIdx.x * blockDim.x;
-while(id < size && j < s)
-{
-	matrix[id] = doSomething();
-	i +=  blockDim.x;
-	if(i >= s)
-	{
-		i = i % s;
-		j = j + gridDim.x;
-	}
-		id = i*s + j;
-	}
-}
-\end{lstlisting}
-\end{minipage}
+Here each block is assigned a row of the matrix. Threads operate on these rows and calculate autonomously their next task.
 
-\begin{itemize}
-	\item algorithmus vorstellen
-	\item erzählen warum rowwise
-	\item blocksize and gridsize
-\end{itemize}
+\subsection{Choosing the right blocksize and gridsize}
+
+Ideally we want to achieve the following objectives:
+\begin{enumerate}
+	\item Utilize all the MPUs to capacity
+	\item Minimizing cache misses
+\end{enumerate}
+
+We can minimize cache misses by assigning threads of the same block and and the same warp adjacent matrix entries. This is automatically achieved by assigning matrix rows to blocks.
+To ensure that each Core of the MPU runs on maximal capacity, we start at least as many threads as a MPU can execute in parallel. This obviously finds its limit with the constant max\_threads\_per\_block.
+
+\begin{center}
+	TABLE WHITEPAPERg
+\end{center}
+
+\subsection{Performance}
+
+\begin{center}
+	GRAPHICS
+\end{center}
+
+\begin{center}
+	GRAPHICS 2
+\end{center}
+
+\subsection{Notes}
+Our approach obviously lacks. Device specfications are not taken in consideration. SP, DP.
