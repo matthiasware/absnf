@@ -745,12 +745,14 @@ namespace absnf
 	    // ----------------------------------------
 	    solveQRXeqB(cublas_handle, solver_handle,
 	                d_J, d_TAU, d_devInfo, d_work, h_swork, d_Y, m, s);
+	    // cuutils::printf_vector(d_Y, s*s, "J^{-1}*d_Y");
 	    // ----------------------------------------
 	    // d_b <- d_J^{-1}*d_b
 	    // ----------------------------------------
 	    solveQRXeqB(cublas_handle, solver_handle,
 	                d_J, d_TAU, d_devInfo, d_work, h_swork, d_b, m, 1);
 
+	    // cuutils::printf_vector(d_b, s, "J^{-1}*d_b");
 	    double alpha = -1;
 	    double beta = 1;
 	    // ----------------------------------------

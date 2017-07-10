@@ -310,7 +310,7 @@ bool test_mmp()
 	absnf::mmp(handle, d_Y, d_I, d_K, m, s);
 	// ----------------------------------
 	cudaMemcpy(K, d_K, m*s*sizeof(t_def), cudaMemcpyDeviceToHost);
-	utils::printf_vector(K, m*s, "K");
+	// utils::printf_vector(K, m*s, "K");
 
 	cudaFree(d_K);
 	cudaFree(d_Y);
@@ -525,6 +525,146 @@ bool test_modulus()
 
 	return success;
 }
+bool test_modulus_singular(int s, int maxiter, int seed, double tolerance)
+{
+	bool success = true;
+	t_def *h_a = (t_def *)malloc(s*sizeof(t_def));
+    t_def *h_b = (t_def *)malloc(s*sizeof(t_def));
+    t_def *h_Z = (t_def *)malloc(s*s*sizeof(t_def));
+    t_def *h_L = (t_def *)malloc(s*s*sizeof(t_def));
+    t_def *h_J = (t_def *)malloc(s*s*sizeof(t_def));
+    t_def *h_Y = (t_def *)malloc(s*s*sizeof(t_def));
+    t_def *h_dx = (t_def *)malloc(s*s*sizeof(t_def));
+    t_def *h_dz = (t_def *)malloc(s*sizeof(t_def));
+    t_def *h_dz_solve = (t_def *)malloc(s*sizeof(t_def));
+    t_def *h_dy = (t_def *)malloc(s*sizeof(t_def));
+
+    t_def *d_a; cudaMalloc((void **)&d_a, s*sizeof(t_def));
+    t_def *d_b; cudaMalloc((void **)&d_b, s*sizeof(t_def));
+    t_def *d_Z; cudaMalloc((void **)&d_Z, s*s*sizeof(t_def));
+    t_def *d_L; cudaMalloc((void **)&d_L, s*s*sizeof(t_def));
+    t_def *d_J; cudaMalloc((void **)&d_J, s*s*sizeof(t_def));
+    t_def *d_Y; cudaMalloc((void **)&d_Y, s*s*sizeof(t_def));       
+    t_def *d_dx; cudaMalloc((void **)&d_dx, s*sizeof(t_def));
+    t_def *d_dz; cudaMalloc((void **)&d_dz, s*sizeof(t_def));
+    t_def *d_dz_solve; cudaMalloc((void **)&d_dz_solve, s*sizeof(t_def));
+    t_def *d_dz_old; cudaMalloc((void **)&d_dz_old, s*sizeof(t_def));
+    t_def *d_abs_dz; cudaMalloc((void **)&d_abs_dz, s*sizeof(t_def));
+    t_def *d_dy; cudaMalloc((void **)&d_dy, s*sizeof(t_def));
+
+    t_def *d_S; cudaMalloc((void **)&d_S, s*s*sizeof(t_def));
+    t_def *d_c; cudaMalloc((void **)&d_c, s*sizeof(t_def));
+
+    utils::fillRandVector(h_a, s,-1,1, seed, utils::VALUEOP::REAL);
+    utils::fillRandVector(h_b, s, -1,1, seed, utils::VALUEOP::REAL);
+    utils::fillRandVector(h_Z, s*s,-1,1,seed, utils::VALUEOP::REAL);
+    utils::fillRandVector(h_Y, s*s,-1,1,seed, utils::VALUEOP::REAL);
+    utils::fillRandVector(h_dx, s,-1,1,seed, utils::VALUEOP::REAL);
+    utils::fillRandMatrix(h_J, s,s,-1,1,seed, utils::MATRIXOPT::INVERTIBLE, utils::VALUEOP::REAL);
+    utils::fillVector(h_L, s*s,0.0);
+
+
+    // utils::printf_vector(h_a, s, "a");
+    // utils::printf_vector(h_b, s, "b");
+    // utils::printf_matrix(h_Z, s, s, "Z");
+    // utils::printf_matrix(h_L, s, s, "L");
+    // utils::printf_matrix(h_J, s, s, "J");
+    // utils::printf_matrix(h_Y, s, s, "Y");
+    // utils::printf_vector(h_dx, s, "dx");
+
+    utils::rowColConversion(h_Z, s, s, true);
+    utils::rowColConversion(h_Y, s, s, true);
+    utils::rowColConversion(h_J, s, s, true);
+
+    cudaMemcpy(d_a, h_a,  s*sizeof(t_def), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_b, h_b,  s*sizeof(t_def), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_Z, h_Z,  s*s*sizeof(t_def), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_L, h_L,  s*s*sizeof(t_def), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_J, h_J,  s*s*sizeof(t_def), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_Y, h_Y,  s*s*sizeof(t_def), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_dx, h_dx, s*sizeof(t_def), cudaMemcpyHostToDevice);
+    cudaMemcpy(d_dz_solve, h_a, s*sizeof(t_def), cudaMemcpyHostToDevice);
+
+    cublasHandle_t cublas_handle;
+    cublasCreate(&cublas_handle);
+
+    cusolverDnHandle_t solver_handle;
+    cusolverDnCreate(&solver_handle);
+
+    int gridsize, blocksize;
+    cuutils::getGridBlockSize(&gridsize, &blocksize);
+
+    // EVALUATE ABSNF
+    absnf::eval_core(cublas_handle, d_a, d_b,
+                         d_Z, d_L,
+                         d_J, d_Y,
+                         d_dx,
+                         s, s, s,
+                         d_dz, d_dy,
+                         d_abs_dz);
+
+    // cuutils::printf_vector(d_dz, s, "d_dz_eval");
+    // SOLVE ABSNF
+    // ADJUST b
+    cuutils::vvSub<<<gridsize, blocksize>>>(d_b, d_dy, d_b, s);
+    // cuutils::printf_vector(d_b, s, "d_b");
+    
+    absnf::calculate_S_and_c(cublas_handle, solver_handle,
+                      d_a, d_b, d_Z, d_L, d_J, d_Y, 
+                      s, s,
+                      d_c, d_S);
+
+    // cuutils::printf_vector(d_S, s*s, "d_S");
+    // cuutils::printf_vector(d_c, s, "d_c");
+
+    absnf::modulus(cublas_handle, d_S, d_c, d_dz_solve,
+            d_abs_dz, d_dz_old, s, s,blocksize, gridsize,
+            maxiter, tolerance, false);
+
+    // cuutils::printf_vector(d_dz, 10, "d_dz");
+    // cuutils::printf_vector(d_dz_solve, 10, "d_dz_solve");
+
+    cudaMemcpy(h_dz_solve, d_dz_solve, s*sizeof(t_def), cudaMemcpyDeviceToHost);
+    cudaMemcpy(h_dz, d_dz, s*sizeof(t_def), cudaMemcpyDeviceToHost);
+	if(!utils::vectors_almost_equal(h_dz, h_dz_solve, s, 1e-4, false))
+    	success = false;
+
+    free(h_a);
+    free(h_b);
+    free(h_Z);
+    free(h_L);
+    free(h_J);
+    free(h_Y);
+    free(h_dx);
+    free(h_dz_solve);
+
+    cudaFree(d_a); 
+    cudaFree(d_b);
+    cudaFree(d_Z);
+    cudaFree(d_L);
+    cudaFree(d_S);
+    cudaFree(d_c);
+    cudaFree(d_J);
+    cudaFree(d_Y);
+    cudaFree(d_dx);
+    cudaFree(d_dz);
+    cudaFree(d_dz_solve);
+    cudaFree(d_dz_old);
+    cudaFree(d_abs_dz);
+    cudaFree(d_dy);
+
+    cublasDestroy(cublas_handle);
+    return success;
+}
+bool test_eval_modulos()
+{
+	for(int i=100; i<= 1000; i+=100)
+	{
+		if(!test_modulus_singular(i, 1000, 0, 1e-5))
+			return false;
+	}
+	return true;
+}
 
 int main()
 {	
@@ -535,6 +675,6 @@ int main()
 	assert(test_gradient());
 	assert(test_calculate_S_and_c());
 	assert(test_modulus());
-	// test_modulus();
+	assert(test_eval_modulos());
 	return 0;
 }

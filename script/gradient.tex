@@ -145,7 +145,7 @@ Additionally we profiled a 100 executions of the gradient function with nvprof (
 \end{table}
 
 \subsection{Analysis}
-In contrast to the evaluate function, the parallel cuda version of the gradient function was magnitudes faster than the serial numpy version fig. (\ref{fig_grad_mult_executions}). It is important to note, that the numpy version is not optimized but rather a quick and dirty implementation to establish a baseline and should therefore not be considered as fastest serial approach.  \\
+In contrast to the evaluate function, the parallel cuda version of the gradient function was magnitudes faster than the serial numpy version fig. (\ref{fig_grad_mult_executions}). It is important to note, that the numpy version is not optimized but rather a quick and dirty implementation to establish a baseline and should therefore not be considered as the fastest serial approach.  \\
 We can also see that the Tesla device here operates much faster than the GTX which can be deduced to the better double precision support. \\
 
 In figure \ref{fig_grad_memory} a much better data-transfer to runtime ratio for both the GTX, as well as the Tesla are perceptible. This is important, since a batched version for data structures of size bigger than the global gpu memory may be worthwhile. \\

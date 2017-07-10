@@ -18,7 +18,8 @@ namespace utils
 		PSD,
 		LOWER,
 		UPER,
-		SYMM
+		SYMM,
+		INVERTIBLE
 	};
 	enum VALUEOP
 	{
@@ -49,6 +50,11 @@ namespace utils
 	void fillRandMatrixLowerCM(T *matrix, int rows, int cols,
 							 std::mt19937 gen, int first, int last, VALUEOP vo=REAL);
 
+	template <typename T>
+	void fillRandMatrixInvertible(T *matrix, int rows, int cols,
+							 std::mt19937 gen,
+							 int first, int last,
+							 VALUEOP vo=REAL);
 	template <typename T>
 	void fillRandMatrix(T *matrix, int rows, int cols, 
 						int first=0, int last=10,
@@ -182,6 +188,48 @@ namespace utils
 		}
 	}
 	template <typename T>
+	void fillRandMatrixInvertible(T *matrix, int rows, int cols,
+							 std::mt19937 gen,
+							 int first, int last,
+							 VALUEOP vo)
+	{
+		std::uniform_real_distribution<> dis(first, last);
+		if(vo==REAL)
+		{
+			for(int i=0; i<rows; i++)
+			{
+				for(int j=0; j<cols; j++)
+				{
+					int idx = i * cols + j;
+					matrix[idx] = (T) dis(gen);
+					if (i == j)
+					{
+						matrix[idx] = (T) 1000;
+					}
+				}
+			}
+		}
+		else if(vo == INT)
+		{
+			for(int i=0; i<rows; i++)
+			{
+				for(int j=0; j<cols; j++)
+				{
+					int idx = i * cols + j;
+					matrix[idx] = (T) (int) dis(gen);
+					if (i == j)
+					{
+						matrix[idx] = (T) 1000;
+					}
+				}
+			}			
+		}
+		else
+		{
+			throw "NOT IMPLEMENTED";
+		}
+	}
+	template <typename T>
 	void fillRandMatrixLowerCM(T *matrix, int rows, int cols,
 							 std::mt19937 gen,
 							 int first, int last,
@@ -233,6 +281,9 @@ namespace utils
 				break;
 			case MATRIXOPT::LOWER : 
 				fillRandMatrixLower(matrix, rows, cols, gen, first, last, vo);
+				break;
+			case MATRIXOPT::INVERTIBLE:
+				fillRandMatrixInvertible(matrix, rows, cols, gen, first, last, vo);
 				break;
 			default: 
 				throw "NOT IMPLEMENTED";
