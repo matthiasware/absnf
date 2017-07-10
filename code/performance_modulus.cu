@@ -5,7 +5,10 @@
 #include "absnf.h"
 #include "utils.hpp"
 #include <vector>
+#include <chrono>
 #define t_def double
+
+typedef std::chrono::high_resolution_clock::time_point TimeVar;
 
 // template <typename T>
 // void modulus_core(cublasHandle_t &cublas_handle,
@@ -56,11 +59,8 @@
 //             i++;
 //         }
 // }
-int main()
+void modulus_singular(int s, int maxiter, int seed, double tolerance)
 {
-    int seed = 1;
-    // int s = 5; // works seed=1
-    int s = 1200; // works
     t_def *h_a = (t_def *)malloc(s*sizeof(t_def));
     t_def *h_b = (t_def *)malloc(s*sizeof(t_def));
     t_def *h_Z = (t_def *)malloc(s*s*sizeof(t_def));
@@ -69,6 +69,7 @@ int main()
     t_def *h_Y = (t_def *)malloc(s*s*sizeof(t_def));
     t_def *h_dx = (t_def *)malloc(s*s*sizeof(t_def));
     t_def *h_dz = (t_def *)malloc(s*sizeof(t_def));
+    t_def *h_dz_solve = (t_def *)malloc(s*sizeof(t_def));
     t_def *h_dy = (t_def *)malloc(s*sizeof(t_def));
 
     t_def *d_a; cudaMalloc((void **)&d_a, s*sizeof(t_def));
@@ -95,14 +96,6 @@ int main()
     utils::fillRandMatrix(h_J, s,s,-1,1,seed, utils::MATRIXOPT::INVERTIBLE, utils::VALUEOP::REAL);
     utils::fillVector(h_L, s*s,0.0);
 
-
-    // utils::printf_vector(h_a, s, "a");
-    // utils::printf_vector(h_b, s, "b");
-    // utils::printf_matrix(h_Z, s, s, "Z");
-    // utils::printf_matrix(h_L, s, s, "L");
-    // utils::printf_matrix(h_J, s, s, "J");
-    // utils::printf_matrix(h_Y, s, s, "Y");
-    // utils::printf_vector(h_dx, s, "dx");
 
     utils::rowColConversion(h_Z, s, s, true);
     utils::rowColConversion(h_Y, s, s, true);
@@ -135,27 +128,29 @@ int main()
                          d_dz, d_dy,
                          d_abs_dz);
 
-    // cuutils::printf_vector(d_dz, s, "d_dz_eval");
     // SOLVE ABSNF
     // ADJUST b
     cuutils::vvSub<<<gridsize, blocksize>>>(d_b, d_dy, d_b, s);
-    // cuutils::printf_vector(d_b, s, "d_b");
     
+    TimeVar t_0 = std::chrono::high_resolution_clock::now();
     absnf::calculate_S_and_c(cublas_handle, solver_handle,
                       d_a, d_b, d_Z, d_L, d_J, d_Y, 
                       s, s,
                       d_c, d_S);
 
-    // cuutils::printf_vector(d_S, s*s, "d_S");
-    // cuutils::printf_vector(d_c, s, "d_c");
 
     absnf::modulus(cublas_handle, d_S, d_c, d_dz_solve,
             d_abs_dz, d_dz_old, s, s,blocksize, gridsize,
-            10000, 1e-4, true);
+            maxiter, tolerance, false);
+    cudaDeviceSynchronize();
+    TimeVar t_1 = std::chrono::high_resolution_clock::now();
+    cudaMemcpy(h_dz_solve, d_dz_solve, s*sizeof(t_def), cudaMemcpyDeviceToHost);
+    cudaMemcpy(h_dz, d_dz, s*sizeof(t_def), cudaMemcpyDeviceToHost);
+    if(!utils::vectors_almost_equal(h_dz, h_dz_solve, s, 1e-4, false))
+        throw "ERROR";
 
-    cuutils::printf_vector(d_dz, 10, "d_dz");
-    cuutils::printf_vector(d_dz_solve, 10, "d_dz_solve");
-
+    auto int_time = std::chrono::duration_cast<std::chrono::milliseconds>( t_1 - t_0 ).count();
+    std::cout << s << ": " << int_time << std::endl;
     free(h_a);
     free(h_b);
     free(h_Z);
@@ -163,6 +158,7 @@ int main()
     free(h_J);
     free(h_Y);
     free(h_dx);
+    free(h_dz_solve);
 
     cudaFree(d_a); 
     cudaFree(d_b);
@@ -179,7 +175,18 @@ int main()
     cudaFree(d_abs_dz);
     cudaFree(d_dy);
 
-    cublasDestroy(cublas_handle);   
+    cublasDestroy(cublas_handle);
+}
+int main()
+{
+    int seed = 2;
+    // int s = 5; // works seed=1
+    int maxiter = 1000;
+    double tolerance = 1e-5;
+    for(int i = 100; i<= 1200; i+=100)
+        modulus_singular(i,maxiter,seed, tolerance);
+
+
 
 	return 0;
 }
