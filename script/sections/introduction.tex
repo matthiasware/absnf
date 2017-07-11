@@ -1,0 +1,100 @@
+\section{Introduction}
+TODO
+\begin{itemize}
+	\item in jedem kapitel bezug auf introduction fragen nehmen
+	\item double vs singleprecision with the gtx
+	\item Header + Footer
+	\item Titlepage with graphics
+	\item Double and No float
+	\item speichermangaer
+	\item multidevice
+	\item sparsity
+	\item C++ SYNTAX HIGHLIGHTING
+	\item Project structure
+	\item Additional information in den Anhang
+	\item FLIPS for Double Precision
+	\item Plot of eval where mismeasured
+	\item Literaturverzeichniss
+\end{itemize}
+
+
+This is an documentation and project review. blabla
+
+\subsection{The ABS-Normal Form}
+The abs-normal form is a representation of piecewise linear (PL) functions. Any PL function can be transformed and represented within this form. The process of transforming a PL function into abs-normal form is described in \cite{Griewank2013} and \cite{Griewank2017}. Applications and properties of the abs-normal form is not subject of this document but can be found in \cite{Griewank2017}.
+
+\begin{mydef*}
+	ABS-Normal Form \\
+	For a PL function $f:\mathbb{R}^n \rightarrow \mathbb{R}^m$ the abs-normal representation takes the following form:
+	\begin{flalign} \label{absnf}
+	\begin{pmatrix}
+	\Delta z \\
+	\Delta y
+	\end{pmatrix}
+	= 
+	\begin{pmatrix}
+	a \\
+	b
+	\end{pmatrix}
+	+
+	\begin{pmatrix}
+	Z & L \\
+	J & Y 
+	\end{pmatrix}
+	\times
+	\begin{pmatrix}
+	\Delta x \\
+	|\Delta z |
+	\end{pmatrix}
+	\end{flalign}
+	where:
+	\begin{flalign*}
+		n,m,s \in \mathbb{R}, \Delta x \in \mathbb{R}^n, \Delta z \in \mathbb{R}^s, \Delta y \in \mathbb{R}^m, a \in \mathbb{R}^s, b \in \mathbb{R}^{m}, Z \in \mathbb{R}^{s\times n}, L \in \mathbb{R}^{s \times s}, Y \in \mathbb{R}^{m \times s}, J \in \mathbb{R}^{m \times n}
+	\end{flalign*}
+	and 
+	\begin{flalign*}
+		|\Delta z|
+	\end{flalign*}
+	is the element-wise absolute vector of $\Delta z$. $L$ is a lower triangular matrix.
+\end{mydef*}
+Note that this representation is almost a linear system of equations. The non-linear parts of the function are all captured in $|\Delta z|$.
+
+\subsection{Problems}
+Given a PL function in abs-normal form. The following problems were given:
+\begin{enumerate}
+	\item Evaluate a function in abs-normal form:
+	\begin{itemize}
+		\item Given: $a,b,Z,L,J,Y,\Delta x$
+		\item Wanted: $\Delta z, \Delta y$
+	\end{itemize}
+	\item Calculate the gradient of a function in abs-normal form:
+	\begin{itemize}
+		\item Given: $a,b,Z,L,J,Y, \Delta z$
+		\item Wanted: Gradient $\gamma, \Gamma$
+	\end{itemize}
+	\item Solve the system of equations of a function in abs-normal form:
+	\begin{itemize}
+		\item Given: $a,b,Z,L,J,Y,\Delta y$
+		\item Wanted: $\Delta x, \Delta Z$
+	\end{itemize}
+\end{enumerate}
+
+\subsection{Tasks}
+The aim of this project was to solve each of these problems by using parallel computing with CUDA C++ to boost performance.
+In particular, for each of the problems the following questions had to answered:
+\begin{enumerate}[{(}I{)}]
+	\item How can the problem be solved theoretically?
+	\item How can the problems be implemented with CUDA C++?
+	\item Is there a benefit of using parallel computing?
+	\item How does the implementation perform on different devices?
+\end{enumerate}
+
+\subsection{Outline}
+In the following sections we answer each questions for all of the given problems.
+Section \ref{sec_evaluation} deals with the evaluation of functions in abs-normal form, where we show that a parallel implementation might not be beneficial. In section \ref{sec_gradient} we address the problem of calculating the gradient. Those results were quite promising. In section \ref{sec_solve} we show one possibility of solving a function in abs-normal form. Additionally in section \ref{sec_blockgridsize} we describe out approach of choosing the optimal gridsize and blocksize for our self-written CUDA kernels.
+
+Last but not least we discuss our solution and give some final thoughts and possible improvements and further questions.
+
+In the appendix we listed all devices, that we used to benchmark our implementation \ref{sec_devides}. Used software libraries are described in \ref{sec_libraries} and the structure of software project is listed in \ref{sec_project}.
+
+In \ref{sec_notation} we documented our notation as well as the abbreviations and symbols. 

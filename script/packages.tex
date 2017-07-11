@@ -1,0 +1,159 @@
+\usepackage{animate} % needed for animations and videos
+\usepackage[utf8]{inputenc}	% für Umlaute ect.
+\usepackage{fancyhdr} % für header
+\usepackage{lastpage} % für footer
+\usepackage{extramarks} % für header und footer
+\usepackage{amsthm} % math stuff
+\usepackage{amsmath} % math stuff
+\usepackage{amssymb} % math stuff
+\usepackage{color}
+\usepackage{listings} % code listings
+\usepackage{graphicx} % für graphics
+\usepackage{color}
+\usepackage{tikz}
+\usepackage[absolute,overlay]{textpos} %to translate graphics through space
+\usepackage{soul}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{textpos}
+\usepackage{caption}
+\usepackage{parcolumns}
+\usepackage{enumerate}
+\usepackage[english]{babel}
+\usepackage[section]{placeins} %forces placeins to stay in section
+\usepackage{datetime} % cusom dates
+\usepackage{afterpage}
+
+%===========================================================
+% Dates
+%===========================================================
+
+\newdateformat{monthyeardate}{%
+	\monthname[\THEMONTH] \THEYEAR}
+
+%===========================================================
+% Matrixhighlightning
+%===========================================================
+
+\newcommand{\highlightred}[1]{%
+	\colorbox{red!50}{$\displaystyle#1$}}
+\newcommand{\highlightgreen}[1]{%
+	\colorbox{green!50}{$\displaystyle#1$}}
+\newcommand{\highlightblue}[1]{%
+	\colorbox{blue!50}{$\displaystyle#1$}}
+\newcommand{\highlightyellow}[1]{%
+	\colorbox{yellow!50}{$\displaystyle#1$}}
+
+%===========================================================
+% Codelistings
+%===========================================================
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{dred}{rgb}{0.545,0,0}
+\definecolor{dblue}{rgb}{0,0,0.545}
+\definecolor{lgrey}{rgb}{0.9,0.9,0.9}
+\definecolor{gray}{rgb}{0.4,0.4,0.4}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.6}
+\lstdefinelanguage{cpp}{
+	backgroundcolor=\color{lgrey},  
+	basicstyle=\footnotesize \ttfamily \color{black} \bfseries,   
+	breakatwhitespace=false,       
+	breaklines=true,               
+	captionpos=b,                   
+	commentstyle=\color{dkgreen},   
+	deletekeywords={...},          
+	escapeinside={\%*}{*)},                  
+	frame=single,                  
+	language=C++,                
+	keywordstyle=\color{purple},  
+	morekeywords={BRIEFDescriptorConfig,string,TiXmlNode,DetectorDescriptorConfigContainer,istringstream,cerr,exit},
+	ndkeywords={cudaMemcpy, cudaMemcpyDeviceToDevice, cublasDgemv, cublasDgemm},
+	ndkeywordstyle=\color{blue},
+	identifierstyle=\color{black},
+	stringstyle=\color{blue},      
+	numbers=left,                 
+	numbersep=5pt,                  
+	numberstyle=\tiny\color{black}, 
+	rulecolor=\color{black},        
+	showspaces=false,               
+	showstringspaces=false,        
+	showtabs=false,                
+	stepnumber=1,                   
+	tabsize=2,                     
+	title=\lstname,                 
+}
+
+%===========================================================
+% Package:
+%===========================================================
+% Allows vertical lines in matrices
+\makeatletter
+\renewcommand*\env@matrix[1][*\c@MaxMatrixCols c]{%
+	\hskip -\arraycolsep
+	\let\@ifnextchar\new@ifnextchar
+	\array{#1}}
+\makeatother
+
+
+%===========================================================
+% Package:
+%===========================================================
+
+% An environment for stpes, cases ect. 
+% From: http://tex.stackexchange.com/questions/32798/a-step-by-step-environment
+\newenvironment{steps}[1]{\begin{enumerate}[label=#1 \arabic*]}{\end{enumerate}}
+\makeatletter%
+\def\step{%
+	\@ifnextchar[ \@step{\@noitemargtrue\@step[\@itemlabel]}}
+\def\@step[#1]{\item[#1]\mbox{}\\\hspace*{\dimexpr-\labelwidth-\labelsep}}
+\makeatother
+
+%http://tex.stackexchange.com/questions/10669/how-to-enumerate-equations
+\def\Item$#1${\item $\displaystyle#1$
+	\hfill\refstepcounter{equation}(\theequation)}
+
+%===========================================================
+% Package:
+%==========================================================
+% Theoreme
+\theoremstyle{definition}
+\newtheorem{mydef}{Definition}
+\newtheorem*{mydef*}{Definition}
+\newtheorem{mybei}{Beispiel}
+\newtheorem*{mybei*}{Beispiel}
+%------------------------------------------------------------------------
+\newtheorem{mysatz}{Satz}
+\newtheorem*{mysatz*}{Satz}
+\newtheorem{mybew}{Beweis}
+
+\newtheorem*{mybew*}{Beweis}
+\newtheorem{myfolg}{Folgerung}
+\newtheorem*{myfolg*}{Folgerung}
+\newtheorem{mybemerk}{Bemerkung}
+\newtheorem*{mybemerk*}{Bemerkung}
+
+% Boxed Theoreme
+
+\newenvironment{fmylemma*}
+{\begin{mdframed}\begin{mylemma*}}
+		{\end{mylemma*}\end{mdframed}}
+
+\newenvironment{fmykorollar*}
+{\begin{mdframed}\begin{mykorollar*}}
+		{\end{mykorollar*}\end{mdframed}}
+
+\newenvironment{fmysatz*}
+{\begin{mdframed}\begin{mysatz*}}
+		{\end{mysatz*}\end{mdframed}}
+
+\newenvironment{fmylemma}
+{\begin{mdframed}\begin{mylemma}}
+		{\end{mylemma}\end{mdframed}}
+
+\newenvironment{fmykorollar}
+{\begin{mdframed}\begin{mykorollar}}
+		{\end{mykorollar}\end{mdframed}}
+
+\newenvironment{fmysatz}
+{\begin{mdframed}\begin{mysatz}}
+		{\end{mysatz}\end{mdframed}}

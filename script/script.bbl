@@ -1,0 +1,18 @@
+\begin{thebibliography}{1}
+
+\bibitem{tesla_p100_whitepaper}
+N.~Corporation.
+\newblock {NVIDIA Tesla P100} whitepaper, 1999.
+
+\bibitem{Griewank2013}
+A.~Griewank.
+\newblock On stable piecewise linearization and generalized algorithmic
+  differentiation.
+\newblock {\em Optimization Methods Software}, 28(6):1139--1178, Dec. 2013.
+
+\bibitem{Griewank2017}
+A.~{Griewank}, J.~U. {Bernt}, M.~{Radons}, and T.~{Streubel}.
+\newblock {Solving piecewise linear equations in abs-normal form}.
+\newblock {\em ArXiv e-prints}, Jan. 2017.
+
+\end{thebibliography}

@@ -1,0 +1,55 @@
+\section{Software Libraries} \label{sec_libraries}
+All the plots, prototypes and a serial implementations were done using Python 3.6 and the numpy library. For the CUDA C++ implementation, we used the following libraries:
+\begin{itemize}
+	\item cuBLAS (cuda Basic Linear Algebra Subprograms)
+	\begin{itemize}
+		\item Matrix Vector operations
+		\item Matrix Matrix operations
+	\end{itemize}
+	\item cuSOLVER
+	\begin{itemize}
+		\item Matrix factorization
+		\item Triangular solve
+	\end{itemize}
+	\item C++ STL
+\end{itemize}
+
+\section{Devices} \label{sec_devides}
+We tested our code on the following devices, which were also used for performance benchmarks:
+\begin{itemize}
+	\item NVIDIA Tesla P100 16GB RAM
+	\item NVIDIA Geforce GTX 780, 3GB RAM
+	\item Intel Core i5-2500 CPU, 16GB RAM
+\end{itemize}
+The device specification of the Tesla P100 model can be found in \cite{tesla_p100_whitepaper}. Also the compute capability of different NVIDIA GPU architectures is listed there.
+
+\section{Notation and Symbols} \label{sec_notation}
+\subsection{Symbols}
+\begin{tabular}{c|l}
+	Symbols & Description \\
+	\hline \\
+	 $m,n,s$ & Dimensions of the data structures of a function in abs-normal (\ref{absnf}). \\
+	 $\Delta x$ & Vector $\Delta x \in \mathbb{R}^n$ \\
+	 $\Delta z$ & Vector $\Delta z \in \mathbb{R}^s$ \\
+	 $\Delta y$ & Vector $\Delta y \in \mathbb{R}^m$ \\
+	 $a$		& Vector $a \in \mathbb{R}^s$ \\
+	 $b$		& Vector $b \in \mathbb{R}^{m}$ \\
+	 $Z$		& Matrix $Z \in \mathbb{R}^{s\times n}$ \\
+	 $L$	    & Lower triangular matrix $L \in \mathbb{R}^{s \times s}$ \\
+	 $Y$		& $Y \in \mathbb{R}^{m \times s}$ \\
+	 $Z$		& $Y \in \mathbb{R}^{m \times s}, J \in \mathbb{R}^{m \times n}$ \\
+	 $|\circ|$  & the absolute value of $\circ$ if $\circ$ is a scalar and the element-wise absolute vector if $\circ$ is a vector.
+\end{tabular} \\
+
+\subsection{Abbreviation}
+\begin{tabular}{c|l}
+	Abbreviation & Description \\
+	\hline \\
+	Tesla & NVIDIA Tesla P100 16GB RAM \\
+	GTX & NVIDIA Geforce GTX 780, 3GB RAM \\
+	i-5 & Intel Core i5-2500 CPU, 16GB RAM
+\end{tabular}
+
+\section{Project structure} \label{sec_project}
+The code of the implementation as well as its corresponding unit-tests can be found ...
+Plots, Serial implementation, Performance tests, raw data of performance ....
