@@ -14,7 +14,7 @@
 \headsep=0.25in
 %Header und Footer
 \pagestyle{fancy}
-\chead{\moduleTitle}  
+%\chead{\moduleTitle}  
 \rhead{}
 \lfoot{\lastxmark}
 \cfoot{} 
@@ -44,16 +44,21 @@
 		\centering
 		\input{sections/titlepage}
 	\end{titlepage}
+	\leavevmode\thispagestyle{empty}\newpage
 	\tableofcontents
-	\thispagestyle{empty}
-	\newpage
+	%\leavevmode\thispagestyle{empty}\newpage
+	%\thispagestyle{empty}
+	%\thispagestyle{empty}
+	%\leavevmode\thispagestyle{empty}\newpage
+	%\clearpage\null\newpage
+	\cleardoublepage
 	\include{sections/gliederung}
 	\include{sections/introduction}
 	\include{sections/evaluation}
 	\include{sections/gradient}
 	\include{sections/gridblocksize}
 	\include{sections/solve}
-	\include{inclusion}
+	\include{sections/conclusion}
 	\appendix
 	\include{sections/additionals}
 	\newpage

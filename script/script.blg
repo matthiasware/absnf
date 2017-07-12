@@ -1,21 +1,21 @@
 This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: script.aux
-A level-1 auxiliary file: gliederung.aux
-A level-1 auxiliary file: introduction.aux
-A level-1 auxiliary file: evaluation.aux
-A level-1 auxiliary file: gradient.aux
-A level-1 auxiliary file: gridblocksize.aux
-A level-1 auxiliary file: solve.aux
-A level-1 auxiliary file: additionals.aux
-A level-1 auxiliary file: operations.aux
+A level-1 auxiliary file: sections/gliederung.aux
+A level-1 auxiliary file: sections/introduction.aux
+A level-1 auxiliary file: sections/evaluation.aux
+A level-1 auxiliary file: sections/gradient.aux
+A level-1 auxiliary file: sections/gridblocksize.aux
+A level-1 auxiliary file: sections/solve.aux
+A level-1 auxiliary file: sections/conclusion.aux
+A level-1 auxiliary file: sections/additionals.aux
 The style file: abbrv.bst
-Database file #1: lit.bib
+Database file #1: sections/lit.bib
 Warning--entry type for "tesla_p100_whitepaper" isn't style-file defined
---line 26 of file lit.bib
+--line 26 of file sections/lit.bib
 You've used 3 entries,
             2118 wiz_defined-function locations,
-            524 strings with 4217 characters,
+            524 strings with 4298 characters,
 and the built_in function-call counts, 838 in all, are:
 = -- 78
 > -- 37
