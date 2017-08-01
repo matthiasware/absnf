@@ -1,6 +1,4 @@
-This is BibTeX, Version 0.99d (TeX Live 2015/Debian)
-Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
-The top-level auxiliary file: script.aux
+This is BibTeX, Version 0.99dThe top-level auxiliary file: script.aux
 A level-1 auxiliary file: sections/gliederung.aux
 A level-1 auxiliary file: sections/introduction.aux
 A level-1 auxiliary file: sections/evaluation.aux
@@ -13,45 +11,4 @@ The style file: abbrv.bst
 Database file #1: sections/lit.bib
 Warning--entry type for "tesla_p100_whitepaper" isn't style-file defined
 --line 26 of file sections/lit.bib
-You've used 3 entries,
-            2118 wiz_defined-function locations,
-            524 strings with 4298 characters,
-and the built_in function-call counts, 838 in all, are:
-= -- 78
-> -- 37
-< -- 0
-+ -- 15
-- -- 12
-* -- 57
-:= -- 149
-add.period$ -- 8
-call.type$ -- 3
-change.case$ -- 15
-chr.to.int$ -- 0
-cite$ -- 3
-duplicate$ -- 28
-empty$ -- 69
-format.name$ -- 12
-if$ -- 167
-int.to.chr$ -- 0
-int.to.str$ -- 3
-missing$ -- 2
-newline$ -- 17
-num.names$ -- 6
-pop$ -- 18
-preamble$ -- 1
-purify$ -- 12
-quote$ -- 0
-skip$ -- 22
-stack$ -- 0
-substring$ -- 46
-swap$ -- 3
-text.length$ -- 0
-text.prefix$ -- 0
-top$ -- 0
-type$ -- 12
-warning$ -- 0
-while$ -- 8
-width$ -- 4
-write$ -- 31
 (There was 1 warning)

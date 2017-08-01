@@ -72,7 +72,7 @@ We did an experiment to benchmark the performance of our implementation. Obvious
 	\item Randomly generate a function in abs-normal form: $a,b,Z,L,J,Y, \Delta x$ according to (\ref{absnf}).
 	\item Evaluate given function to obtain: $\Delta y$ and $\Delta z$
 	\item Solve the system for $\Delta x$ and $\Delta z$ with the results of the previous step
-	\item Verify if resulting the $\Delta x$ and $\Delta z$ match the original ones.
+	\item Verify if the resulting $\Delta x$ and $\Delta z$ match the original ones.
 \end{enumerate}
 
 We measured the runtime of the solve function in given context. To make sure, that each device works with the same data, we fixed the seed for the pseudo-random number generator. The results of this experiment can be found in fig \ref{fig_modulus_runtime}. 
@@ -85,9 +85,9 @@ We measured the runtime of the solve function in given context. To make sure, th
 \end{figure}
 
 \subsection{Analysis and Notes}
-The implementation performs correctly and the runtime results in fig. \ref{fig_modulus_runtime} behave as expected. We did not include the runtime of the serial version on purpose. This was for two reasons:
+The implementation works correctly and the runtime results in fig. \ref{fig_modulus_runtime} behave as expected. We did not include the runtime of the serial version on purpose. This was for two reasons:
 \begin{enumerate}
-	\item The numpy implementation calculates the inverse of $J$ directly, which behaves differently.
-	\item We had to make sure, that each version operates on the exact same data.
+	\item The numpy implementation calculates the inverse of $J$ directly.
+	\item We had to make sure, that each version operates on the exact same data, which we didn't
 \end{enumerate}
 

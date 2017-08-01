@@ -1,6 +1,6 @@
 \section{The gradient of a function in the abs-normal form} \label{sec_gradient}
 \subsection{Problem Specification}
-The problem here is to calculate the gradient of a PL function $f$ in abs-normal form, given the following structures:
+The problem is to calculate the gradient of a PL function $f$ in abs-normal form, given the following structures:
 \begin{flalign*}
 	a,b,Z,L,J,Y,m,n,s,\Delta z
 \end{flalign*}
@@ -27,7 +27,7 @@ The gradient can now be calculated as:
 \subsection{Implementation}
 
 For the implementation we heavily relied on CUBLAS routines. 
-A simplified version of the core-function can be found in fig. \ref{fig_lst_grad}. The attentive reader might note that gridsize and blocksize are fixed for all the kernels. We discuss our approach of choosing these parameters in section \ref{sec_blockgridsize}. Like in the implementation of the evaluate function, we require the the device to hold all the data-structures in global memory.
+A simplified version of the core-function can be found in fig. \ref{fig_lst_grad}. Like in the implementation of the evaluate function, we require the the device to hold all the data-structures in global memory.
 
 \begin{figure}
 \begin{lstlisting}[language=cpp]

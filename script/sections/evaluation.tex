@@ -9,15 +9,13 @@ where the following structures are given:
 \begin{flalign*}
 a,b,Z,L,J,Y,m,n,s, \Delta x
 \end{flalign*}
-In (\ref{eval_2}) $\Delta z$ depends on the element-wise absolute function of its own and therefore it cannot be calculated with a simple matrix vector dot product. The matrix $L$ is lower triangular and therefore the vector $\Delta z$ can be iteratively calculated, by taking the row-wise dot product of $L$ and $|\Delta z|$. \\
+In (\ref{eval_2}) $\Delta z$ depends on the element-wise absolute function of its own and therefore it cannot be calculated with a simple matrix vector dot product. The matrix $L$ is lower triangular and therefore $\Delta z$ can be iteratively calculated, by taking the row-wise dot product of $L$ and $|\Delta z|$. \\
 
 To illustrate the process, consider:
 \begin{flalign*}
 k = a + Z \times \Delta x
 \end{flalign*}
-
 Now we calculate $\Delta z$ element-wise:
-
 \begin{flalign*}
 \highlightblue{\Delta  z_1}  &= \underbrace{L_1 \times |\Delta z|}_{=0} + k_1 = k_1 \\
 \highlightyellow{\Delta z_2} &= L_2 \times |\Delta z| + k_2 \\
@@ -60,7 +58,7 @@ void eval(T *a, T *b, T *Z, T *L, T *J, T *Y, T *dx,
 	cublasDgemv(., Y, ., abs_dz, ., dy, .));
 }
 \end{lstlisting}
-\caption{Simplified version of the evaluation implementation \label{fig_lst_eval}}
+\caption{Simplified version of the  CUDA C++ evaluation implementation \label{fig_lst_eval}}
 \end{figure}
 
 \subsection{Performance Experiments}
@@ -89,7 +87,7 @@ In this experiment, we executed the serial python- as well as the parallel CUDA 
 
 \subsubsection{Multiple Executions of the evaluation function}
 
-Since the scenario of evaluating the function just once is not quite realistic, we did a second experiment, where we uploaded data onto the devices and executed the evaluation routine a 1000 times. Here we only measured the pure execution time without the data-transfer, since the upload time should be marginal with a high enough number of executions. The results can be found in fig. \ref{eval_1000}.
+Since the scenario of evaluating the function just once is not quite realistic, we did a second experiment, where we uploaded data onto the devices and executed the evaluation routine a 1000 times. Here we only measured the pure execution time, since the upload time should be marginal with a high enough number of executions. The results can be found in fig. \ref{eval_1000}.
 
 \begin{figure}[ht]
 	\centering
@@ -100,14 +98,12 @@ Since the scenario of evaluating the function just once is not quite realistic, 
 
 \subsection{Experiment Analysis}
 
-Here we can clearly see, that the transfer time, which is the time that it takes to upload the required data structures onto the device is extremely significant and takes a disproportional high share of the total time.
+The transfer time, which is the time that it takes to upload the required data structures onto the device is extremely significant and takes a disproportional high share of the total time.
 
 The results of the experiment are heavy in favor of the serial implementation.\\
-For data, that completely fits into the global memory of the device, we couldn't measure any performance gains through the CUDA implementation on given devices (fig \ref{eval_single_repetition} and  fig. \ref{eval_1000}). The simplistic and serial numpy version even outperforms the cuda version running on the tesla device.
+For data, that completely fits into the global memory of the device, we couldn't measure any performance gains through the CUDA implementation on given devices (fig \ref{eval_single_repetition} and  fig. \ref{eval_1000}). The simplistic and serial numpy version even outperforms the CUDA version running on the tesla device.
 
 If the data structures get that big, such that they don't fit into the global memory of the device, we can expect the parallel versions' performance to be even worse, since the data-transfer time takes a disproportional high share of the overall runtime (fig. \ref{eval_memory}).
 
-The complexity of the evaluation function is $O(s^2)$. The memory also grows quadratic depending on the variable $s$ and therefore we get a memory complexity of $O(s^2)$, which may explain the bad results of the experiment.
-
-We therefore come to the conclusion, that the considerable effort of implementing a parallel version of the evaluation function is not worth the effort.
+The complexity of the evaluation function is $O(s^2)$. The memory also grows quadratic depending on the variable $s$ and therefore we get a memory complexity of $O(s^2)$, which may explain the results of the experiment.
 
