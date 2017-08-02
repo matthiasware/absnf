@@ -1,2 +1,0 @@
-all:
-	nvcc -std=c++11 eval.cu utils.cpp -lcublas -o main
