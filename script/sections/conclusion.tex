@@ -1,5 +1,7 @@
 \section{Conclusion}
-We implemented the basic operations to deal with functions in abs-normal form. Where the parallel version of the evaluation routine might not lead to additional performance, the parallel gradient and solve functions worked fast on given devices. For serious applications, the question of whether the CUDA implementation performs better than a serial version is still pending due to a lack of a competitive serial implementation. Additionally there are several more problems and questions that we didn't look into:
+We implemented the basic operations to deal with functions in abs-normal form. Where the parallel version of the evaluation routine might not lead to additional performance, the parallel gradient and solve functions worked fast on given devices. For serious applications, the question of whether the CUDA implementation performs better than a serial version is still pending due to a lack of a competitive serial implementation.
+For all of our functions we wrote unit-tests, s.t. our results are not affected by flawed calculations.
+Additionally there are several more problems and questions that we didn't look into:
 
 \subsubsection{Sparsity}
 Some of the data-structures follow certain sparsity patters. Especially for operations where the global memory is a bottleneck (e.g. evaluation), we might gain additional performance by exploiting these patterns.
@@ -9,10 +11,10 @@ In our implementation we only worked with double precision. For devices like the
 Unfortunately this means reworking almost all of the core-routines, since libraries like cuBLAS and cuSOLVE offer different interfaces depending on the desired precision.
 
 \subsubsection{Kernel-tuning}
-In none of the implementations we could observe an loss in overall performance through the simplistic nature of our self implemented kernels. However for serious applications there is enough space to tune these kernels. Especially when also considering sparsity, an overhaul of these kernels will be necessary.
+In none of the implementations we could observe a loss in overall performance through the simplistic nature of our self implemented kernels. However for serious applications there is enough space to tune these kernels. Especially when also considering sparsity, an overhaul of these kernels will be necessary.
 
 \subsubsection{Multi device support}
 Our implementation works with only one device at a time. For all of our functions, its is possible to distribute tasks over multiple devices.
 
 \subsubsection{Memory-manager}
-For all of our functions, memory is a huge problem. We always required the device to hold all the data-structures in global memory, but this assumption does not scale. In this case one has to introduce an additional layer of abstraction, that deals with this problem. 
+For all of our functions, memory is a huge problem. We always required the device to hold all the data-structures in global memory, but this assumption does not scale. In this case one has to introduce an additional layer of abstraction, that deals with this problem.

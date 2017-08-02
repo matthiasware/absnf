@@ -1,4 +1,4 @@
-\section{The gradient of a function in the abs-normal form} \label{sec_gradient}
+\section{The gradient of a function in abs-normal form} \label{sec_gradient}
 \subsection{Problem Specification}
 The problem is to calculate the gradient of a PL function $f$ in abs-normal form, given the following structures:
 \begin{flalign*}
@@ -25,9 +25,9 @@ The gradient can now be calculated as:
 \end{flalign*}
 
 \subsection{Implementation}
-
-For the implementation we heavily relied on CUBLAS routines. 
-A simplified version of the core-function can be found in fig. \ref{fig_lst_grad}. Like in the implementation of the evaluate function, we require the the device to hold all the data-structures in global memory.
+Again we implemented a serial version with numpy and a parallel version using CUDA C++.
+We heavily relied on CUBLAS routines. 
+A simplified version of the core-function can be found in fig. \ref{fig_lst_grad}. Like in the implementation of the evaluate function, we require the device to hold all the data-structures in global memory.
 
 \begin{figure}
 \begin{lstlisting}[language=cpp]
@@ -60,7 +60,7 @@ void gradient(T *a, T *b, T *Z, T *L, T *J, T *Y,
 
 \subsection{Performance Experiments}
 \subsubsection{Single execution of the gradient function}
-In this experiment we executed the gradient implementation on the GTX- as well as on the Tesla device once and measured the data-upload time as well as the execution time of the function (fig. \ref{fig_grad_memory}).
+In this experiment we executed the parallel gradient implementation on the GTX- as well as on the Tesla device once and measured the data-upload time as well as the execution time of the function (fig. \ref{fig_grad_memory}).
 \begin{figure}[ht]
 	\centering
 	\includegraphics[width=0.7\textwidth]{img/gradient_memory.png}
@@ -78,7 +78,7 @@ In this experiment we measured the runtime of the serial numpy implementation as
 \begin{table}
 	\centering
 \begin{tabular}{c|c|c|c}
-	$s=m=s$ & numpy (ms) & GTX (ms) & Tesla (ms) \\
+	$s=m=s$ & i-5 (ms) & GTX (ms) & Tesla (ms) \\
 	\hline
 	1000 & 20008 & 3372 & 282 \\
 	2000 & 144644 & 23122 & 1223 \\
@@ -122,4 +122,4 @@ In figure \ref{fig_grad_memory} a much better data-transfer to runtime ratio for
 
 The profile in table  \ref{tab_gradient_nvprof} shows, that the majority of the runtime goes into the calculation of matrix-matrix products. The self-implemented kernels "initTss", "multWithDz" and "initIdentity" do not preponderate.
 
-We therefore conclude that the parallel version of the gradient function payed off quite nicely. Yet a optimized serial version , running on a CPU of comparable class like the Tesla should be done. 
+We therefore conclude that the parallel version of the gradient function payed off quite nicely.

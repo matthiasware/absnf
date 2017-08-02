@@ -14,7 +14,7 @@ For deducing this algorithm we first and foremost assume:
 \begin{flalign*}
 	\Delta y = 0
 \end{flalign*}
-It this is not the case, we can replace $b$ with $b'$:
+If this condition is not fulfilled, we can replace $b$ with $b'$:
 \begin{flalign*}
 	b' = b - \Delta y
 \end{flalign*}
@@ -66,7 +66,7 @@ The key problem here is the calculation of $J^{-1}$, since this is the most expe
 The calculation of $S$ follows the same  pattern. After convergence $\Delta x$ can be calculated according to (\ref{eq_modulus_dx}).
 
 \subsection{Performance Experiment}
-
+We implemented a serial version in numpy and a parallel version in CUDA C++, but in the following we focus on the CUDA implementation.
 We did an experiment to benchmark the performance of our implementation. Obviously this only made sense as long as the results were correct. To verify this, we preceded as follows:
 \begin{enumerate}
 	\item Randomly generate a function in abs-normal form: $a,b,Z,L,J,Y, \Delta x$ according to (\ref{absnf}).

@@ -9,7 +9,7 @@ where the following structures are given:
 \begin{flalign*}
 a,b,Z,L,J,Y,m,n,s, \Delta x
 \end{flalign*}
-In (\ref{eval_2}) $\Delta z$ depends on the element-wise absolute function of its own and therefore it cannot be calculated with a simple matrix vector dot product. The matrix $L$ is lower triangular and therefore $\Delta z$ can be iteratively calculated, by taking the row-wise dot product of $L$ and $|\Delta z|$. \\
+In (\ref{eval_2}) $\Delta z$ depends on the element-wise absolute function of its own and cannot be calculated with a simple matrix vector dot product. The matrix $L$ is lower triangular and therefore $\Delta z$ can be iteratively calculated, by taking the row-wise dot product of $L$ and $|\Delta z|$. \\
 
 To illustrate the process, consider:
 \begin{flalign*}
@@ -30,8 +30,10 @@ Now we calculate $\Delta z$ element-wise:
 \end{flalign*}
 
 \subsection{Implementation}
-Our implementation is focused on speed and  demands the device to hold all the required data structures in global memory simultaneously. \\
-Given this premise, the calculation of (\ref{eval_1}) and (\ref{eval_2}) is a series of dot products and therefore is highly parallelize-able. For this we relied mainly on CUBLAS routines. 
+For reference, we implemented a serial version of this function in numpy and a parallel version in CUDA C++.
+Our CUDA implementation is focused on speed and  demands the device to hold all the required data structures in global memory simultaneously. \\
+Given this premise, the calculation of (\ref{eval_1}) and (\ref{eval_2}) is a series of dot products and therefore is highly parallelize-able.
+For this we relied mainly on CUBLAS routines. 
 A simplified version of our implementation can be found in fig. \ref{fig_lst_eval}.
 
 \begin{figure}
@@ -98,12 +100,12 @@ Since the scenario of evaluating the function just once is not quite realistic, 
 
 \subsection{Experiment Analysis}
 
-The transfer time, which is the time that it takes to upload the required data structures onto the device is extremely significant and takes a disproportional high share of the total time.
+The data transfer time, which is the time that it takes to upload the required data structures onto the device is extremely significant and takes a disproportional high share of the total time.
 
 The results of the experiment are heavy in favor of the serial implementation.\\
 For data, that completely fits into the global memory of the device, we couldn't measure any performance gains through the CUDA implementation on given devices (fig \ref{eval_single_repetition} and  fig. \ref{eval_1000}). The simplistic and serial numpy version even outperforms the CUDA version running on the tesla device.
 
-If the data structures get that big, such that they don't fit into the global memory of the device, we can expect the parallel versions' performance to be even worse, since the data-transfer time takes a disproportional high share of the overall runtime (fig. \ref{eval_memory}).
+If the data structures get that huge, such that they don't fit into the global memory of the device, we can expect the parallel versions' performance to be even worse, since the data-transfer time takes a disproportional high share of the overall runtime (fig. \ref{eval_memory}).
 
 The complexity of the evaluation function is $O(s^2)$. The memory also grows quadratic depending on the variable $s$ and therefore we get a memory complexity of $O(s^2)$, which may explain the results of the experiment.
 

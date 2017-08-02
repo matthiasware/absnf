@@ -1,20 +1,11 @@
 \section{Introduction}
-TODO
-\begin{itemize}
-	\item in jedem kapitel bezug auf introduction fragen nehmen
-	\item Titlepage with graphics
-	\item Plot of eval where mismeasured
-\end{itemize}
-
-
-This is an documentation and project review. blabla
 
 \subsection{The ABS-Normal Form}
 The abs-normal form is a representation of piecewise linear (PL) functions. Any PL function can be transformed and represented within this form. The process of transforming a PL function into abs-normal form is described in \cite{Griewank2013} and \cite{Griewank2017}. Applications and properties of the abs-normal form is not subject of this document but can be found in \cite{Griewank2017}.
 
 \begin{mydef*}
 	ABS-Normal Form \\
-	For a PL function $f:\mathbb{R}^n \rightarrow \mathbb{R}^m$ the abs-normal representation takes the following form:
+	For a PL function $f:\mathbb{R}^n \rightarrow \mathbb{R}^m$, the abs-normal representation takes the following form:
 	\begin{flalign} \label{absnf}
 	\begin{pmatrix}
 	\Delta z \\
@@ -73,15 +64,15 @@ The aim of this project was to solve each of these problems by using parallel co
 In particular, for each of the problems the following questions had to answered:
 \begin{enumerate}[{(}I{)}]
 	\item How can the problem be solved theoretically?
-	\item How can the problems be implemented with CUDA C++?
+	\item How can the problems be implemented in CUDA C++?
 	\item Is there a benefit of using parallel computing?
 	\item How does the implementation perform on different devices?
 \end{enumerate}
 
 \subsection{Outline}
 In the following sections we answer each question for all of the given problems.
-Section \ref{sec_evaluation} deals with the evaluation of functions in abs-normal form, where we show that a parallel implementation might not be beneficial. In section \ref{sec_gradient} we address the problem of calculating the gradient. Those results were quite promising. In section \ref{sec_solve} we show one possibility of solving a function in abs-normal form.
+Section \ref{sec_evaluation} deals with the evaluation of functions in abs-normal form. In section \ref{sec_gradient} we address the problem of calculating the gradient and in section \ref{sec_solve} we show one possibility of solving a function in abs-normal form.
 
-Last but not least we discuss our solution and give some final thoughts and possible improvements and further questions.
+Last but not least we discuss our solution and give some final thoughts about possible improvements.
 
-In the appendix we listed all devices, that we used to benchmark our implementation \ref{sec_devides}. Used software libraries are described in \ref{sec_libraries} and our notations as well abbrevations and symbols are documented in \ref{sec_notation}.
+In the appendix we listed all devices, that we used to benchmark our implementation \ref{sec_devides}. Used software libraries are described in \ref{sec_libraries} and our notations as well abbreviations and symbols are documented in \ref{sec_notation}.
