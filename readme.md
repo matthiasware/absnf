@@ -1,13 +1,16 @@
 # ABS-NF
-A python and CUDA/C++ implementation of the following operations to deal with picewise linear functions in abs-normal form:
+This project contrains a Python and CUDA/C++ implementation of the following operations to deal with picewise linear functions in abs-normal form:
 
  * Evaluate
  * Gradient
  * Solve
 
- Theory: https://arxiv.org/abs/1701.00753
+We were specifically interested, to what extend performance boost through massive parallelization could be achieved.
 
-## Results
+A theoretical workout can be found [here](/script/script.pdf).
+
+
+## Result overview.
 
 ### Gradient: CPU vs GPU 
 ![gradient](presentation/img/grad-100.png)
